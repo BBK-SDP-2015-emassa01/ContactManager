@@ -14,39 +14,38 @@ import java.util.ArrayList;
  * @author Esha
  */
 public class ContactManagerImpl {//implements ContactManager {
-    private ArrayList<Contacts> contacts;
+    private Set<Contact> contacts;
     private Calendar date; 
     private int id;
     private String text;//notes about meeting
-    private String name;//of contact
-    private String notes; //about contact
+    
     
     
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
         
     }
     
-    PastMeeting getPastMeeting(int id){
+    public PastMeeting getPastMeeting(int id){
         
     }
     
-    FutureMeeting getFutureMeeting(int id){
+    public FutureMeeting getFutureMeeting(int id){
         
     }
     
-    Meeting getMeeting(int id){
+    public Meeting getMeeting(int id){
         
     }
     
-    List<Meeting> getFutureMeetingList(Contact contact){
+    public List<Meeting> getFutureMeetingList(Contact contact){
         
     }
     
-    List<Meeting> getFutureMeetingList(Calendar date){
+    public List<Meeting> getFutureMeetingList(Calendar date){
         
     }
     
-    List<PastMeeting> getPastMeetingList(Contact contact){
+    public List<PastMeeting> getPastMeetingList(Contact contact){
         
     }
     
@@ -62,11 +61,11 @@ public class ContactManagerImpl {//implements ContactManager {
         
     }
     
-    Set<Contact> getContacts(int... ids){
+    public Set<Contact> getContacts(int... ids){
         
     }
     
-    Set<Contact> getContacts(String name){
+    public Set<Contact> getContacts(String name){
         
     }
     
