@@ -14,14 +14,64 @@ import java.util.ArrayList;
  * @author Esha
  */
 public class ContactManagerImpl {//implements ContactManager {
-    private ArrayList<String> contacts;
-    private Calendar date; //stored as a 6 digit integer DDMMYY
+    private ArrayList<Contacts> contacts;
+    private Calendar date; 
     private int id;
+    private String text;//notes about meeting
+    private String name;//of contact
+    private String notes; //about contact
+    
     
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
-        this.date = date;
         
-        return ;
+    }
+    
+    PastMeeting getPastMeeting(int id){
+        
+    }
+    
+    FutureMeeting getFutureMeeting(int id){
+        
+    }
+    
+    Meeting getMeeting(int id){
+        
+    }
+    
+    List<Meeting> getFutureMeetingList(Contact contact){
+        
+    }
+    
+    List<Meeting> getFutureMeetingList(Calendar date){
+        
+    }
+    
+    List<PastMeeting> getPastMeetingList(Contact contact){
+        
+    }
+    
+    public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
+        
+    }
+    
+    public void addMeetingNotes(int id, String text){
+        
+    }
+    
+    public void addNewContact(String name, String notes){
+        
+    }
+    
+    Set<Contact> getContacts(int... ids){
+        
+    }
+    
+    Set<Contact> getContacts(String name){
+        
+    }
+    
+    public void flush(){
+        
     }
     
     
