@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class MeetingImpl implements Meeting{
     private static int id;
-    private Calendar scheduledDate;
+    private Calendar date;
     /**
      * Meetings have unique IDs so using Set interace for additional Set stipulations,
      * that no two Meeting objects (e.g., m1 and m2) are equal (ie. it is never true 
@@ -21,4 +21,24 @@ public class MeetingImpl implements Meeting{
      * **/
     private Set<Contact> contacts;
     
+    
+    public int getId(){
+        return this.id;
+    }
+    
+    public Calendar getDate(){
+        return this.date;
+    }
+    
+    /**
+     * Return the details of people that attended the meeting.
+     * The list contains a minimum of one contact (if there were
+     * just two people: the user and the contact) and may contain an
+     * arbitrary number of them.
+     * @return the details of people that attended the meeting.
+     */
+    public Set<Contact> getContacts(){
+        return this.contacts; //check this implementation fits the documentation at a later stage.
+    }
+
 }
