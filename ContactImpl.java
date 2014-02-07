@@ -13,7 +13,7 @@ package ContactManager;
 public class ContactImpl implements Contact{
     private String name;//of contact
     private String notes; //about contact
-    private int id;//contact's id number
+    private static int id;//contact's id number
     
     public int getId(){
         return this.id;
