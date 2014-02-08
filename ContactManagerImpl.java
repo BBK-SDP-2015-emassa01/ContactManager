@@ -13,8 +13,13 @@ import java.util.ArrayList;//may need this import.
  * Class to manage contacts and meetings
  * @author Esha
  */
-public class ContactManagerImpl {//implements ContactManager {
+public class ContactManagerImpl implements ContactManager {
     private Set<Contact> contacts;
+    private Set<Meeting> meetings;
+    private Set<FutureMeeting> futureMeetings;
+    private Set<PastMeeting> PastMeetings;
+    private List<Meeting> listMeetings;
+    private List<PastMeeting> listPastMeetings;
     private Calendar date; 
     private int id;
     private String text;//notes about meeting
@@ -39,7 +44,7 @@ public class ContactManagerImpl {//implements ContactManager {
             System.out.println("Try again: ");
         }
         // constructor
-        Meeting futureMeeting = new FutureMeetingImpl(id, contacts, date);
+        Meeting futureMeeting = new FutureMeetingImpl(/*MEETING*/id, contacts, date, text);
         return futureMeeting.getId();
     }
     
@@ -51,13 +56,34 @@ public class ContactManagerImpl {//implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the future
     */
     public PastMeeting getPastMeeting(int id){
-        
+        //if id is not null, (else return null
+        //and is a type of past meeting//else throw exception that is future meeting
+        //return past meeting name/hashcode
+        if(meetings.contains(id)){
+            if(id.getFutureMeeting().instanceOf(FutureMeeting)){
+                throw new IllegalArgumentException("The id is already used for a future meeting.");
+            } return id.getPastMeeting();
+            
+        } else return null;
     }
     
+    /**
+    * Returns the FUTURE meeting with the requested ID, or null if there is none.
+    *
+    * @param id the ID for the meeting
+    * @return the meeting with the requested ID, or null if it there is none.
+    * @throws IllegalArgumentException if there is a meeting with that ID happening in the past
+    */
     public FutureMeeting getFutureMeeting(int id){
         
     }
     
+    /**
+    * Returns the meeting with the requested ID, or null if it there is none.
+    *
+    * @param id the ID for the meeting
+    * @return the meeting with the requested ID, or null if it there is none.
+    */
     public Meeting getMeeting(int id){
         
     }
@@ -85,17 +111,30 @@ public class ContactManagerImpl {//implements ContactManager {
     * @throws NullPointerException if any of the arguments is null
     */
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
-        try{
+        
             if(this.date.getTime().after(date.getTime())){
                 System.out.println("You need to enter a time in the past to add a new past meeting.");
             }
-        }catch (IllegalArgumentException e){
-                    System.out.println("Try again: ");
-                    }
-        Meeting pastMeeting = new PastMeetingImpl(id, contacts, date, text);
+            else throw new IllegalArgumentException("Try again: ");
+            
+            Meeting pastMeeting = new PastMeetingImpl(id, contacts, date, text);
+            throw new NullPointerException("Value is null. ");
         }
     
-    
+    /**
+    * Add notes to a meeting.
+    *
+    * This method is used when a future meeting takes place, and is
+    * then converted to a past meeting (with notes).
+    *
+    * It can be also used to add notes to a past meeting at a later date.
+    *
+    * @param id the ID of the meeting
+    * @param text messages to be added about the meeting.
+    * @throws IllegalArgumentException if the meeting does not exist
+    * @throws IllegalStateException if the meeting is set for a date in the future
+    * @throws NullPointerException if the notes are null
+    */
     public void addMeetingNotes(int id, String text){
         
     }
