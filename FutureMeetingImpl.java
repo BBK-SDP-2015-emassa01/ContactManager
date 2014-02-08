@@ -6,10 +6,16 @@
 
 package ContactManager;
 
+import java.util.Calendar;
+import java.util.Set;
+
 /**
  *
  * @author Esha
  */
 public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting {
-    
+
+    FutureMeetingImpl(int id, Set<Contact> contacts, Calendar date){
+        super(id, contacts, date);
+    }
 }

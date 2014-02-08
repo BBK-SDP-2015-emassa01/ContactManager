@@ -14,6 +14,7 @@ import java.util.Set;
 public class MeetingImpl implements Meeting{
     private static int id;
     private Calendar date;
+    private String notes;
     
     
     /**
@@ -23,11 +24,11 @@ public class MeetingImpl implements Meeting{
      * **/
     private Set<Contact> contacts;
     
-    public MeetingImpl(int id, Set<Contact> contacts, Calendar date){
+    public MeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
         setId(id);
         setDate(date);
-        setContacts(contacts);
-        
+        setContacts(contacts);  
+        addNotes(notes);
     }
     
     
@@ -60,6 +61,16 @@ public class MeetingImpl implements Meeting{
     
     public void setContacts(Set<Contact> contacts){
         this.contacts=contacts;
+    }
+    
+    public String getNotes(){
+        if (notes ==null){//must return notes even if no notes available (in which case returns emply string).
+            return "";
+        }
+        return this.notes;
+    }
+    public void addNotes(String note){
+        this.notes = note;
     }
     
 

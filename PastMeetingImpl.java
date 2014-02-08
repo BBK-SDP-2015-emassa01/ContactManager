@@ -6,6 +6,9 @@
 
 package ContactManager;
 
+import java.util.Calendar;
+import java.util.Set;
+
 /**
  *
  * @author Esha
@@ -14,12 +17,19 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
     
     private String notes;//notes about what happened at the meeting
     
-    PastMeetingImpl(){
-        super();
+    PastMeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
+        super(id, contacts, date, notes);
     }
     
     public String getNotes(){
+        if (this.notes == null){
+            return "";
+        }
     return this.notes;
+    }
+    
+    public void addNotes(String note){
+        this.notes = note;
     }
     
 }

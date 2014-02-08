@@ -43,6 +43,13 @@ public class ContactManagerImpl {//implements ContactManager {
         return futureMeeting.getId();
     }
     
+    /**
+    * Returns the PAST meeting with the requested ID, or null if it there is none.
+    *
+    * @param id the ID for the meeting
+    * @return the meeting with the requested ID, or null if it there is none.
+    * @throws IllegalArgumentException if there is a meeting with that ID happening in the future
+    */
     public PastMeeting getPastMeeting(int id){
         
     }
@@ -67,9 +74,27 @@ public class ContactManagerImpl {//implements ContactManager {
         
     }
     
+    /**
+    * Create a new record for a meeting that took place in the past.
+    *
+    * @param contacts a list of participants
+    * @param date the date on which the meeting took place
+    * @param text messages to be added about the meeting.
+    * @throws IllegalArgumentException if the list of contacts is
+    * empty, or any of the contacts does not exist
+    * @throws NullPointerException if any of the arguments is null
+    */
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
-        
-    }
+        try{
+            if(this.date.getTime().after(date.getTime())){
+                System.out.println("You need to enter a time in the past to add a new past meeting.");
+            }
+        }catch (IllegalArgumentException e){
+                    System.out.println("Try again: ");
+                    }
+        Meeting pastMeeting = new PastMeetingImpl(id, contacts, date, text);
+        }
+    
     
     public void addMeetingNotes(int id, String text){
         
