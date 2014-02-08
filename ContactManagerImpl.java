@@ -8,9 +8,9 @@ package ContactManager;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
+import java.util.ArrayList;//may need this import.
 /**
- *
+ * Class to manage contacts and meetings
  * @author Esha
  */
 public class ContactManagerImpl {//implements ContactManager {
@@ -20,9 +20,27 @@ public class ContactManagerImpl {//implements ContactManager {
     private String text;//notes about meeting
     
     
-    
+    /**
+    * Add a new meeting to be held in the future.
+    *
+    * @param contacts a list of contacts that will participate in the meeting
+    * @param date the date on which the meeting will take place
+    * @return the ID for the meeting
+    * @throws IllegalArgumentException if the meeting is set for a time in the past,
+    * of if any contact is unknown / non-existent
+    */
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
-        
+        //check that the meeting is actually a future meeting (i.e., that time is valid). Use calendar class to validate the date
+        try{
+            if (date.getTime().before(this.date.getTime())){
+            System.out.println("Please enter a date in the Future");
+            }
+        } catch (IllegalArgumentException e){
+            System.out.println("Try again: ");
+        }
+        // constructor
+        Meeting futureMeeting = new FutureMeetingImpl(id, contacts, date);
+        return futureMeeting.getId();
     }
     
     public PastMeeting getPastMeeting(int id){

@@ -14,6 +14,8 @@ import java.util.Set;
 public class MeetingImpl implements Meeting{
     private static int id;
     private Calendar date;
+    
+    
     /**
      * Meetings have unique IDs so using Set interface for additional Set stipulations,
      * that no two Meeting objects (e.g., m1 and m2) are equal (ie. it is never true 
@@ -21,13 +23,28 @@ public class MeetingImpl implements Meeting{
      * **/
     private Set<Contact> contacts;
     
+    public MeetingImpl(int id, Set<Contact> contacts, Calendar date){
+        setId(id);
+        setDate(date);
+        setContacts(contacts);
+        
+    }
+    
     
     public int getId(){
         return this.id;
     }
     
+    public void setId(int id){
+        this.id = id;
+    }
+    
     public Calendar getDate(){
         return this.date;
+    }
+    
+    public void setDate(Calendar date){
+        this.date = date;
     }
     
     /**
@@ -40,5 +57,10 @@ public class MeetingImpl implements Meeting{
     public Set<Contact> getContacts(){
         return this.contacts; //check this implementation fits the documentation at a later stage.
     }
+    
+    public void setContacts(Set<Contact> contacts){
+        this.contacts=contacts;
+    }
+    
 
 }

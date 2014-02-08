@@ -24,7 +24,7 @@ public class ContactImpl implements Contact{
     }
     
     public String getNotes(){
-        if (notes ==null){
+        if (notes ==null){//must return notes even if no notes available (in which case returns emply string).
             return "";
         }
         return this.notes;
