@@ -8,6 +8,7 @@ package ContactManager;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+import java.util.HashMap;
 import java.util.ArrayList;//may need this import.
 /**
  * Class to manage contacts and meetings
@@ -22,6 +23,7 @@ public class ContactManagerImpl implements ContactManager {
     private List<PastMeeting> listPastMeetings;
     private Calendar date; 
     private int id;
+    private HashMap<Integer, Meeting> meetingID;
     private String text;//notes about meeting
     
     
@@ -59,8 +61,9 @@ public class ContactManagerImpl implements ContactManager {
         //if id is not null, (else return null
         //and is a type of past meeting//else throw exception that is future meeting
         //return past meeting name/hashcode
-        if(meetings.contains(id)){
-            if(id.getFutureMeeting().instanceOf(FutureMeeting)){
+        if(meetingID.containsKey(id)){
+           // if(meetingID.containsValue(id)); containsValue or containsID? tbd.
+                if(meetingID.get(id).instanceof(listMeetings)){
                 throw new IllegalArgumentException("The id is already used for a future meeting.");
             } return id.getPastMeeting();
             
