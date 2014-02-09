@@ -44,10 +44,11 @@ public class Organiser {
       * Performs action depending on the user's input.
       * @param selection of the user input
       */
-     private void menuAction(int selection){
+     public void menuAction(int selection){
          
          switch(selection){
              case 1://user.upcomingMeetings();
+                 System.out.println("Thanks!");
                  break;
              case 2://user.previousMeetings();
                  break;
@@ -60,7 +61,7 @@ public class Organiser {
              case 6: //SAVE DATA user.save();
                  System.out.println("Thank you for using the Contact Manager.");
                  break;
-             default: System.out.println("Please enter a choice between 1 and 6.");
+             default: throw new IllegalArgumentException("Please enter a choice between 1 and 6.");
                        
          }
      }

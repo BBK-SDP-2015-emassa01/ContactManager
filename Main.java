@@ -29,10 +29,10 @@ public class Main {
     
     String newline = System.getProperty("line.separator");
     
-    public static void main(String[] args) throws IOException{
+    //public static void main(String[] args) throws IOException{
         Main mainScript = new Main();
         mainScript.launch();
-    }
+    //}
     
     public void launch() throws FileNotFoundException, IOException{
     

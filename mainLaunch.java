@@ -32,11 +32,14 @@ public class mainLaunch {
     private String text;//notes about meeting
     
     public static void main(String[] args) throws IOException{
-        Main mainScript = new Main();
+        mainLaunch mainScript = new mainLaunch();
         mainScript.launch();
     }
     
     public void launch() throws FileNotFoundException, IOException{
+        Organiser one = new Organiser();
+        one.menuAction(one.displayMenu());
+        
         
     }
     
