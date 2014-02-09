@@ -63,10 +63,10 @@ public class ContactManagerImpl implements ContactManager {
         //return past meeting name/hashcode
         if(meetingID.containsKey(id)){
            // if(meetingID.containsValue(id)); containsValue or containsID? tbd.
-                if(meetingID.get(id).instanceof(listMeetings)){
+                if(id.getPastMeeting().contains(id))
                 throw new IllegalArgumentException("The id is already used for a future meeting.");
             } return id.getPastMeeting();
-            
+        
         } else return null;
     }
     
