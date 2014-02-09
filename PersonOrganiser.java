@@ -16,5 +16,35 @@ import java.util.Scanner;
  * @author Esha
  */
 public class PersonOrganiser {
+    ContactManager contactManager;
+    Scanner temp;
+    String name;
+    String notes;
     
+    PersonOrganiser (ContactManager contactManager){
+        temp = new Scanner(System.in);
+        this.contactManager = contactManager;
+    }
+    
+    public String requestName(){
+        System.out.println("What is the name of the contact?");
+        Scanner aName = new Scanner(System.in);
+        name = aName.nextLine();
+        return name;
+    }
+    
+    public String requestNotes(){
+        System.out.println("Please enter your notes: ");
+        Scanner aNote = new Scanner(System.in);
+        notes = aNote.nextLine();
+        return notes;
+    }
+    
+    public void addPerson(){
+        requestName();
+        requestNotes();
+        
+        //use method in ContactManagerImpl
+        contactManager.addNewContact(name, notes);   
+    }
 }

@@ -17,7 +17,6 @@ import java.util.Scanner;
  * @author Esha
  */
 public class Organiser {
-    private PersonOrganiser user = new PersonOrganiser();
     
     private HashMap<Integer, Meeting> meetingID;
     
