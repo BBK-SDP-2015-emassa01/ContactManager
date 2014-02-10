@@ -26,7 +26,15 @@ public class ContactManagerImpl implements ContactManager {
     private HashMap<Integer, Meeting> meetingID;
     private String text;//notes about meeting
     
+    /**
+     * Contructor
+     * 
+     **/
+    ContactManagerImpl(PersonOrganiser user){
     
+    }
+        
+            
     /**
     * Add a new meeting to be held in the future.
     *
@@ -35,7 +43,7 @@ public class ContactManagerImpl implements ContactManager {
     * @return the ID for the meeting
     * @throws IllegalArgumentException if the meeting is set for a time in the past,
     * of if any contact is unknown / non-existent
-    */
+    **/
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
         //check that the meeting is actually a future meeting (i.e., that time is valid). Use calendar class to validate the date
         try{
