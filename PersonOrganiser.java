@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.*;
 /**
  *
  * @author Esha
@@ -43,8 +44,14 @@ public class PersonOrganiser {
     public void addPerson(){
         requestName();
         requestNotes();
-        
         //use method in ContactManagerImpl
         contactManager.addNewContact(name, notes);   
     }
+
+    public void save(){
+        contactManager.flush();
+    }
+    
+    
+    
 }

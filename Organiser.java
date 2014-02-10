@@ -17,6 +17,7 @@ import java.util.Scanner;
  * @author Esha
  */
 public class Organiser {
+    private PersonOrganiser user;
     
     private HashMap<Integer, Meeting> meetingID;
     
@@ -33,7 +34,8 @@ public class Organiser {
                  + "-->Press '3' for contact details for your next meetings.\n"
                  + "-->Press '4' to add notes about your past meetings.\n"
                  + "-->Press '5' to add notes to a previous meeting.\n"
-                 + "-->Press '6' to EXIT.");
+                 + "-->Press '6' to add a person.\n"
+                 + "-->Press '7' to EXIT.");
          Scanner choice = new Scanner(System.in);
          int selection = choice.nextInt();
          return selection;
@@ -57,11 +59,14 @@ public class Organiser {
                  break;
              case 5: //user.addNotes();
                  break;
-             case 6: //SAVE DATA user.save();
-                 System.out.println("Thank you for using the Contact Manager.");
+             case 6: user.addPerson();
                  break;
-             default: throw new IllegalArgumentException("Please enter a choice between 1 and 6.");
-                       
-         }
+             case 7: //SAVE DATA 
+                 //user.save();
+                 System.out.println("Thank you for using the Contact Manager.");
+                 System.exit(0);
+                 break;
+             default: throw new IllegalArgumentException ("Something strange happened, try entering a number between 1 and 6.");
+         }           
      }
 }

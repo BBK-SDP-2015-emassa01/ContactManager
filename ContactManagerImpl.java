@@ -214,8 +214,10 @@ public class ContactManagerImpl implements ContactManager {
     * This method must be executed when the program is
     * closed and when/if the user requests it.
     */
+
     public void flush(){
-        
+        //contactManager.close();
+
     }
     
     

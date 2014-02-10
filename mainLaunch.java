@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Scanner;
 
 /**
  *
@@ -37,8 +38,13 @@ public class mainLaunch {
     }
     
     public void launch() throws FileNotFoundException, IOException{
-        Organiser one = new Organiser();
-        one.menuAction(one.displayMenu());
+        System.out.println("Please choose/enter your login:");
+        Scanner username = new Scanner(System.in);
+        String login = username.nextLine();
+
+        Organiser loginName = new Organiser();
+
+        loginName.menuAction(loginName.displayMenu());
         
         
     }
