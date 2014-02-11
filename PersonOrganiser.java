@@ -17,24 +17,18 @@ import java.io.*;
  * @author Esha
  */
 public class PersonOrganiser {
-    ContactManager contactManager;
-    Scanner temp;
-    String name;
-    String notes;
+   ContactManager contactManager = new ContactManagerImpl();
     
-    PersonOrganiser (ContactManager contactManager){
-        temp = new Scanner(System.in);
-        this.contactManager = contactManager;
-    }
-    
-    public String requestName(){
+    public String addName(){
+        String name;
         System.out.println("What is the name of the contact?");
         Scanner aName = new Scanner(System.in);
         name = aName.nextLine();
         return name;
     }
     
-    public String requestNotes(){
+    public String addNotes(){
+        String notes;
         System.out.println("Please enter your notes: ");
         Scanner aNote = new Scanner(System.in);
         notes = aNote.nextLine();
@@ -42,10 +36,10 @@ public class PersonOrganiser {
     }
     
     public void addPerson(){
-        requestName();
-        requestNotes();
+       // addName();
+        //addNotes();
         //use method in ContactManagerImpl
-        contactManager.addNewContact(name, notes);   
+         contactManager.addNewContact(addName(), addNotes());   
     }
 
     public void save(){

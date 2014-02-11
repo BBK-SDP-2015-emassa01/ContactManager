@@ -17,6 +17,7 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
     
     private String notes;//notes about what happened at the meeting
     private Set<PastMeetingImpl> pastMeetings;
+    private int id;
     
     PastMeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
         super(id, contacts, date, notes);
@@ -31,6 +32,10 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
     
     public void addNotes(String note){
         this.notes = note;
+    }
+    
+    public int getId(){
+        return this.id;
     }
     
 }

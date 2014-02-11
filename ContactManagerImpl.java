@@ -10,29 +10,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.ArrayList;//may need this import.
+import java.util.HashSet;
 /**
  * Class to manage contacts and meetings
  * @author Esha
  */
 public class ContactManagerImpl implements ContactManager {
-    private Set<Contact> contacts;
-    private Set<Meeting> meetings;
-    private Set<FutureMeeting> futureMeetings;
-    private Set<PastMeeting> PastMeetings;
-    private List<Meeting> listMeetings;
-    private List<PastMeeting> listPastMeetings;
+    private Set<Contact> contactSet;
+    private Set<Meeting> meetingSet;
+    private Set<FutureMeeting> futureMeetingSet;
+    private Set<PastMeeting> pastMeetingSet;
+    private List<Meeting> meetingList;
+    private List<PastMeeting> pastMeetingList;
     private Calendar date; 
     private int id;
     private HashMap<Integer, Meeting> meetingID;
     private String text;//notes about meeting
-    
-    /**
-     * Contructor
-     * 
-     **/
-    ContactManagerImpl(PersonOrganiser user){
-    
-    }
+
         
             
     /**
@@ -76,7 +70,7 @@ public class ContactManagerImpl implements ContactManager {
             } return id.getPastMeeting();
         
         } else return null;
-    }
+    
     
     /**
     * Returns the FUTURE meeting with the requested ID, or null if there is none.
@@ -191,7 +185,8 @@ public class ContactManagerImpl implements ContactManager {
     * @throws NullPointerException if the name or the notes are null
     */
     public void addNewContact(String name, String notes){
-        
+        contactSet.add(name);
+
     }
     
     /**

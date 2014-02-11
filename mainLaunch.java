@@ -38,12 +38,13 @@ public class mainLaunch {
     }
     
     public void launch() throws FileNotFoundException, IOException{
-        System.out.println("Please choose/enter your login:");
+        System.out.println("Please enter your name:");
         Scanner username = new Scanner(System.in);
         String login = username.nextLine();
 
         Organiser loginName = new Organiser();
-
+        
+        System.out.println("Hello "+ login + ",");
         loginName.menuAction(loginName.displayMenu());
         
         

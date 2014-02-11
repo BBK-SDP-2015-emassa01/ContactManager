@@ -27,7 +27,7 @@ public class Organiser {
       * Organiser application.
       */
      public int displayMenu(){
-         System.out.println("Hello & welcome to your personal organiser. \n"
+         System.out.println("Welcome to your personal Contact Manager. \n"
                  + "How would you like to update/query your organiser? \n"
                  + "-->Press '1' for a list of your upcoming meetings.\n"
                  + "-->Press '2' for a list of your previous meetings.\n"
@@ -46,6 +46,7 @@ public class Organiser {
       * @param selection of the user input
       */
      public void menuAction(int selection){
+         PersonOrganiser user = new PersonOrganiser();
          
          switch(selection){
              case 1://user.upcomingMeetings();
@@ -57,9 +58,10 @@ public class Organiser {
                  break;
              case 4: //user.meetingNotes();
                  break;
-             case 5: //user.addNotes();
+             case 5: user.addNotes();
                  break;
-             case 6: user.addPerson();
+             case 6:
+                    user.addPerson();
                  break;
              case 7: //SAVE DATA 
                  //user.save();
