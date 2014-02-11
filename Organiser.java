@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class Organiser {
     private PersonOrganiser user;
     
-    private HashMap<Integer, Meeting> meetingID;
+    //private HashMap<Integer, Meeting> meetingID;
     
      /**
       * Displays a menu to ask user for what action they would like to perform.
