@@ -16,6 +16,7 @@ public class MeetingImpl implements Meeting{
     private Calendar date;
     private String notes;
     
+    private Set<Meeting> meetingSet;
     
     /**
      * Meetings have unique IDs so using Set interface for additional Set stipulations,
@@ -24,12 +25,12 @@ public class MeetingImpl implements Meeting{
      * **/
     private Set<Contact> contacts;
     
-    public MeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
-        setId(id);
-        setDate(date);
-        setContacts(contacts);  
-        addNotes(notes);
-    }
+//    public MeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
+//        setId(id);
+//        setDate(date);
+//        setContacts(contacts);  
+////        addNotes(notes);
+//    }
     
     
     public int getId(){
@@ -63,15 +64,15 @@ public class MeetingImpl implements Meeting{
         this.contacts=contacts;
     }
     
-    public String getNotes(){
-        if (notes ==null){//must return notes even if no notes available (in which case returns emply string).
-            return "";
-        }
-        return this.notes;
-    }
-    public void addNotes(String note){
-        this.notes = note;
-    }
+//    public String getNotes(){
+//        if (notes ==null){//must return notes even if no notes available (in which case returns emply string).
+//            return "";
+//        }
+//        return this.notes;
+//    }
+//    public void addNotes(String note){
+//        this.notes = note;
+//    }
     
 
 }

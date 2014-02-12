@@ -15,27 +15,24 @@ import java.util.Set;
  */
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
     
-    private String notes;//notes about what happened at the meeting
-    private Set<PastMeetingImpl> pastMeetings;
+    private String notes = "";//notes about what happened at the meeting
+    //private Set<PastMeetingImpl> pastMeetings;
     private int id;
     
-    PastMeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
-        super(id, contacts, date, notes);
-    }
+//    PastMeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
+//        super(id, contacts, date, notes);
+//    }
     
     public String getNotes(){
-        if (this.notes == null){
+        if (this.notes.equals("")){
             return "";
         }
     return this.notes;
     }
     
     public void addNotes(String note){
-        this.notes = note;
+        this.notes = notes + note;
     }
     
-    public int getId(){
-        return this.id;
-    }
     
 }

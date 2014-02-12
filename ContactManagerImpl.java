@@ -185,8 +185,14 @@ public class ContactManagerImpl implements ContactManager {
     * @throws NullPointerException if the name or the notes are null
     */
     public void addNewContact(String name, String notes){
-        contactSet.add(name);
-
+        try{
+        ContactImpl newContact = new ContactImpl();//why can't I use the interface here?
+        newContact.setName(name);
+        newContact.addNotes(notes);
+        contactSet.add(newContact);
+        }catch (NullPointerException e){
+                e.printStackTrace();
+                }
     }
     
     /**

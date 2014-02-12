@@ -10,17 +10,32 @@ package ContactManager;
  *
  * @author Esha
  */
-public class ContactImpl implements Contact{
+public class ContactImpl implements Contact {
     private String name;//of contact
     private String notes; //about contact
-    private static int id;//contact's id number
+    private static int id = 1;//contact's id number
+    
+    public ContactImpl(int id, String name, String notes){
+        setID(id);
+        setName(name);
+        addNotes(notes);
+        id++;
+    }
     
     public int getId(){
         return this.id;
     }
     
+    public void setID(int id){
+        this.id = id;
+    }
+    
     public String getName(){
         return this.name;
+    }
+    
+    public void setName(String name){
+        this.name = name;
     }
     
     public String getNotes(){
