@@ -16,7 +16,7 @@ import java.util.HashSet;
  * @author Esha
  */
 public class ContactManagerImpl implements ContactManager {
-    private Set<Contact> contactSet;
+        private Set<Contact> contactSet = new HashSet<>();
     private Set<Meeting> meetingSet;
     private Set<FutureMeeting> futureMeetingSet;
     private Set<PastMeeting> pastMeetingSet;
@@ -48,7 +48,7 @@ public class ContactManagerImpl implements ContactManager {
             System.out.println("Try again: ");
         }
         // constructor
-        Meeting futureMeeting = new FutureMeetingImpl(/*MEETING*/id, contacts, date, text);
+        Meeting futureMeeting = new FutureMeetingImpl();
         return futureMeeting.getId();
     }
     
@@ -68,8 +68,8 @@ public class ContactManagerImpl implements ContactManager {
                 if(id.getPastMeeting().contains(id))
                 throw new IllegalArgumentException("The id is already used for a future meeting.");
             } return id.getPastMeeting();
-        
-        } else return null;
+        else return null;
+        } 
     
     
     /**
@@ -155,7 +155,7 @@ public class ContactManagerImpl implements ContactManager {
             }
             else throw new IllegalArgumentException("Try again: ");
             
-            Meeting pastMeeting = new PastMeetingImpl(id, contacts, date, text);
+            Meeting pastMeeting = new PastMeetingImpl();
             throw new NullPointerException("Value is null. ");
         }
     
@@ -186,9 +186,9 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addNewContact(String name, String notes){
         try{
-        ContactImpl newContact = new ContactImpl();//why can't I use the interface here?
-        newContact.setName(name);
-        newContact.addNotes(notes);
+        Contact newContact = new ContactImpl(name,  notes);
+//        newContact.setName(name); - this is done in the constructor.
+//        newContact.addNotes(notes);
         contactSet.add(newContact);
         }catch (NullPointerException e){
                 e.printStackTrace();

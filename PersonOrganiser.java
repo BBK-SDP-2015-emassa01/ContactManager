@@ -39,7 +39,7 @@ public class PersonOrganiser {
        // addName();
         //addNotes();
         //use method in ContactManagerImpl
-         contactManager.addNewContact(addName(), addNotes());   
+         contactManager.addNewContact(addName(), addNotes()); 
     }
 
     public void save(){

@@ -15,7 +15,7 @@ public class ContactImpl implements Contact {
     private String notes; //about contact
     private static int id = 1;//contact's id number
     
-    public ContactImpl(int id, String name, String notes){
+    public ContactImpl(String name, String notes){
         setID(id);
         setName(name);
         addNotes(notes);
@@ -47,5 +47,6 @@ public class ContactImpl implements Contact {
     public void addNotes(String note){
         this.notes = note;
     }
+    
     
 }
