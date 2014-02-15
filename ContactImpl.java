@@ -13,7 +13,7 @@ package ContactManager;
 public class ContactImpl implements Contact {
     private String name;//of contact
     private String notes; //about contact
-    private static int id = 1;//contact's id number
+    private int id = 1;//contact's id number - static doesnt work her because we implement ID numbers in the Set Class.
     
     public ContactImpl(String name, String notes){
         setID(id);

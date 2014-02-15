@@ -6,17 +6,32 @@
 
 package ContactManager;
 import java.io.*;
+import java.util.Set;
 /**
  *
  * @author Esha
  */
 public class SaveDataIO {
     
-    //create output stream
-    OutputStream contactManagerContacts;
+    Set<Contact> contactSet;
 
-    public SaveDataIO() throws FileNotFoundException {
-        this.contactManagerContacts = new FileOutputStream("contacts.txt");
+    public SaveDataIO(Set<Contact> contactsSet) throws FileNotFoundException {
+        this.contactSet = contactsSet;
+    }
+    
+    public void writeSetToFile(String filename) throws IOException{
+        filename = "contacts.csv";
+        FileWriter write = new FileWriter(filename);
+        BufferedWriter bufferWriter = new BufferedWriter(write);
+        
+        for (Contact s:contactSet){
+            write.append(s.getName()+",");
+            write.append(s.getId()+",");
+            write.append(s.getNotes());
+            write.append("\n");
+        }
+
+        bufferWriter.close();
     }
     
 }

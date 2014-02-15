@@ -5,12 +5,16 @@
  */
 
 package ContactManager;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.ArrayList;//may need this import.
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  * Class to manage contacts and meetings
  * @author Esha
@@ -184,15 +188,26 @@ public class ContactManagerImpl implements ContactManager {
     * @param notes notes to be added about the contact.
     * @throws NullPointerException if the name or the notes are null
     */
-    public void addNewContact(String name, String notes){
+    public void addNewContact(String name, String notes) {
         try{
-        Contact newContact = new ContactImpl(name,  notes);
-//        newContact.setName(name); - this is done in the constructor.
-//        newContact.addNotes(notes);
-        contactSet.add(newContact);
-        }catch (NullPointerException e){
-                e.printStackTrace();
-                }
+    ContactImpl newContact = new ContactImpl(name, notes);// Don't know why it isn't compiling using Contact esha = new ContactImpl(name, notes);
+
+    newContact.setID(1);
+    newContact.setName(name);
+    newContact.addNotes(notes);
+    contactSet.add(newContact);
+    }catch (NullPointerException e){
+        e.printStackTrace();
+    }
+    try{
+    SaveDataIO saveData  = new SaveDataIO(contactSet);
+    saveData.writeSetToFile();
+    }catch (FileNotFoundException e){
+        e.printStackTrace();
+    }       catch (IOException ex) {
+                Logger.getLogger(ContactManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    
     }
     
     /**
