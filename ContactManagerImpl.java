@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author Esha
  */
 public class ContactManagerImpl implements ContactManager {
-        private Set<Contact> contactSet = new HashSet<>();
+    private Set<Contact> contactSet = new HashSet<>();
     private Set<Meeting> meetingSet;
     private Set<FutureMeeting> futureMeetingSet;
     private Set<PastMeeting> pastMeetingSet;
@@ -230,6 +230,19 @@ public class ContactManagerImpl implements ContactManager {
     */
     public Set<Contact> getContacts(String name){
         
+        Set<Contact> theseContacts = null;
+        try{
+        for (Contact c: contactSet){
+            if (c.getName().contentEquals(name)){
+            theseContacts.add(c);
+                
+            }
+        } 
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }return theseContacts;
+        
+        
     }
     
     /**
@@ -243,6 +256,17 @@ public class ContactManagerImpl implements ContactManager {
         //contactManager.close();
 
     }
+    
+    public void getContactIdFromSet(Set<Contact> nameOfContactSetToSearch, Contact name){
+        try{
+        if (nameOfContactSetToSearch.contains(name)){
+            System.out.println("The ID of contact "+name.getName() + " is "+name.getId());
+        }
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+    
+}
     
     
 }

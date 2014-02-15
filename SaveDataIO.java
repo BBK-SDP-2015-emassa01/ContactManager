@@ -19,8 +19,8 @@ public class SaveDataIO {
         this.contactSet = contactsSet;
     }
     
-    public void writeSetToFile(String filename) throws IOException{
-        filename = "contacts.csv";
+    public void writeSetToFile() throws IOException{
+        String filename = "contacts.csv";
         FileWriter write = new FileWriter(filename);
         BufferedWriter bufferWriter = new BufferedWriter(write);
         
@@ -33,5 +33,6 @@ public class SaveDataIO {
 
         bufferWriter.close();
     }
+    
     
 }
