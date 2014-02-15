@@ -218,6 +218,20 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if any of the IDs does not correspond to a real contact
     */
     public Set<Contact> getContacts(int... ids){
+    Set<Contact> theseContacts = null;
+        try{
+        for (int id:ids){
+        for (Contact c: contactSet){
+            if (c.getId() == id){
+                    //.contentEquals(ids)){
+            theseContacts.add(c);
+            }  
+            }
+        } 
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }return theseContacts;
+        
         
     }
     
