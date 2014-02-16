@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.ArrayList;//may need this import.
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -21,14 +22,15 @@ import java.util.logging.Logger;
  */
 public class ContactManagerImpl implements ContactManager {
     private Set<Contact> contactSet = new HashSet<>();
-    private Set<Meeting> meetingSet;
-    private Set<FutureMeeting> futureMeetingSet;
-    private Set<PastMeeting> pastMeetingSet;
+    private Set<Meeting> meetingSet; 
+    //private Set<FutureMeeting> futureMeetingSet;
+    //private Set<PastMeeting> pastMeetingSet;
     private List<Meeting> meetingList;
     private List<PastMeeting> pastMeetingList;
+    private List<FutureMeetingImpl> futureMeetingList;
     private Calendar date; 
     private int id;
-    private HashMap<Integer, Meeting> meetingID;
+   // private HashMap<Integer, Meeting> meetingID;
     private String text;//notes about meeting
 
         
@@ -45,7 +47,7 @@ public class ContactManagerImpl implements ContactManager {
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
         //check that the meeting is actually a future meeting (i.e., that time is valid). Use calendar class to validate the date
         try{
-            if (date.getTime().before(this.date.getTime())){
+            if (date.before(this.date)){
             System.out.println("Please enter a date in the Future");
             }
         } catch (IllegalArgumentException e){
@@ -64,17 +66,21 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the future
     */
     public PastMeeting getPastMeeting(int id){
-        //if id is not null, (else return null
-        //and is a type of past meeting//else throw exception that is future meeting
-        //return past meeting name/hashcode
-        if(meetingID.containsKey(id)){
-           // if(meetingID.containsValue(id)); containsValue or containsID? tbd.
-                if(id.getPastMeeting().contains(id))
-                throw new IllegalArgumentException("The id is already used for a future meeting.");
-            } return id.getPastMeeting();
-        else return null;
-        } 
-    
+        PastMeeting pastMeeting = null;
+        for (int i = 0; i<futureMeetingList.size();i++){
+        if ((futureMeetingList.get(i).contains(id)){
+            throw new IllegalArgumentException("The id is already used for a future meeting.");
+            }
+        else for(PastMeeting p: pastMeetingList){
+            if(p.getId()==id){
+                return p;
+            }
+        } return pastMeeting;
+    }
+    }
+
+                
+
     
     /**
     * Returns the FUTURE meeting with the requested ID, or null if there is none.
@@ -139,7 +145,19 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if the contact does not exist
     */
     public List<PastMeeting> getPastMeetingList(Contact contact){
+        List<PastMeeting> pastMeetingList = null;
         
+        for (Contact c: contactSet){
+            if(c.equals(contact)){
+                int tempId = c.getId();
+                
+                //then need to search the meetingList to find the meetings that this contact id has participated in.
+
+            }
+            
+        }
+        
+       // return pastMeetingList;
     }
     
     /**
@@ -154,7 +172,7 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
         
-            if(this.date.getTime().after(date.getTime())){
+            if(this.date.after(date)){
                 System.out.println("You need to enter a time in the past to add a new past meeting.");
             }
             else throw new IllegalArgumentException("Try again: ");
@@ -178,7 +196,23 @@ public class ContactManagerImpl implements ContactManager {
     * @throws NullPointerException if the notes are null
     */
     public void addMeetingNotes(int id, String text){
-        
+        if (text.equals(null)){
+            throw new NullPointerException(); 
+        }
+        try{
+        for (Meeting m:meetingSet){
+           if (m.getId()==id){
+              // check the meetingSet for the id/date and throw exception if the date is in the future.
+              //   catch(IllegalStateException e){
+               m.
+               m.addNotes(text);
+           
+           } else { 
+               System.out.println("No ID found.");
+           } 
+        }} catch (IllegalArgumentException e){
+            System.out.println("Meeting does not exist.");
+        }   
     }
     
     /**
@@ -223,10 +257,9 @@ public class ContactManagerImpl implements ContactManager {
         for (int id:ids){
         for (Contact c: contactSet){
             if (c.getId() == id){
-                    //.contentEquals(ids)){
             theseContacts.add(c);
             }  
-            }
+        }
         } 
         }catch (NullPointerException e){
             e.printStackTrace();
