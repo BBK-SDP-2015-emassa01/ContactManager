@@ -12,8 +12,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.ArrayList;//may need this import.
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -21,19 +23,17 @@ import java.util.logging.Logger;
  * @author Esha
  */
 public class ContactManagerImpl implements ContactManager {
-    private Set<Contact> contactSet = new HashSet<>();
+    private Set<Contact> contactSet;
     private Set<Meeting> meetingSet; 
-    //private Set<FutureMeeting> futureMeetingSet;
-    //private Set<PastMeeting> pastMeetingSet;
     private List<Meeting> meetingList;
     private List<PastMeeting> pastMeetingList;
     private List<FutureMeetingImpl> futureMeetingList;
     private Calendar date; 
     private int id;
-   // private HashMap<Integer, Meeting> meetingID;
     private String text;//notes about meeting
-
-        
+    // private HashMap<Integer, Meeting> meetingID;
+    //private Set<FutureMeeting> futureMeetingSet;
+    //private Set<PastMeeting> pastMeetingSet;
             
     /**
     * Add a new meeting to be held in the future.
@@ -45,17 +45,34 @@ public class ContactManagerImpl implements ContactManager {
     * of if any contact is unknown / non-existent
     **/
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
-        //check that the meeting is actually a future meeting (i.e., that time is valid). Use calendar class to validate the date
-        try{
-            if (date.before(this.date)){
-            System.out.println("Please enter a date in the Future");
-            }
-        } catch (IllegalArgumentException e){
-            System.out.println("Try again: ");
+        Meeting futureMeeting = null;
+        int generatedID = 0;
+        // check that the contacts are not null.
+        if (contacts == null){
+            throw new IllegalArgumentException("One (possibly more), contact(s) are unknown or non-existant.");
         }
-        // constructor
-        Meeting futureMeeting = new FutureMeetingImpl();
-        return futureMeeting.getId();
+        //check that the meeting is actually a future meeting (i.e., that time is valid). Use calendar class to validate the date
+        this.date = new GregorianCalendar();
+        if (date.before(this.date)){
+            throw new IllegalArgumentException ("You entered a date in the past. Please try again: ");
+        }
+        //go through the entire Set of contacts and check that each and every one of them exists
+            if (contactSet.containsAll(contacts)){
+                Random random = new Random();
+                generatedID = random.nextInt();
+                
+                for (Contact c:contactSet){
+                    if(c.getId()!=generatedID){
+                        // constructor, after all checks, create a future meeting.
+                        futureMeeting = new FutureMeetingImpl(generatedID, contacts, date); 
+                    }
+                }
+            }
+            if (generatedID == 0){
+                throw new IllegalArgumentException("You have not successfully assigned an ID for that meeting.");
+            } else {
+                return generatedID;
+            }
     }
     
     /**
@@ -66,8 +83,8 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the future
     */
     public PastMeeting getPastMeeting(int id){
-        PastMeeting pastMeeting = null;
-        for (int i = 0; i<futureMeetingList.size();i++){
+        Meeting m = null;
+        for (int i = 0; i<meetingList.size();i++){
         if ((futureMeetingList.get(i).contains(id)){
             throw new IllegalArgumentException("The id is already used for a future meeting.");
             }

@@ -19,9 +19,9 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
     //private Set<PastMeetingImpl> pastMeetings;
     private int id;
     
-//    PastMeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
-//        super(id, contacts, date, notes);
-//    }
+    PastMeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
+        super(id, contacts, date);
+    }
     
     public String getNotes(){
         if (this.notes.equals("")){

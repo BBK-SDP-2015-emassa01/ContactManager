@@ -25,12 +25,12 @@ public class MeetingImpl implements Meeting{
      * **/
     
     
-//    public MeetingImpl(int id, Set<Contact> contacts, Calendar date, String notes){
-//        setId(id);
-//        setDate(date);
-//        setContacts(contacts);  
-////        addNotes(notes);
-//    }
+    public MeetingImpl(int id, Set<Contact> contacts, Calendar date){
+        setId(id);
+        setDate(date);
+        setContacts(contacts);  
+//        addNotes(notes);
+    }
     
     
     public int getId(){
