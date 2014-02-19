@@ -27,7 +27,7 @@ public class ContactManagerImpl implements ContactManager {
     private Set<Meeting> meetingSet; 
     private List<Meeting> meetingList;
     private List<PastMeeting> pastMeetingList;
-    private List<FutureMeetingImpl> futureMeetingList;
+    private List<FutureMeeting> futureMeetingList;
     private Calendar date; 
     private int id;
     private String text;//notes about meeting
@@ -89,12 +89,12 @@ public class ContactManagerImpl implements ContactManager {
     */
     public PastMeeting getPastMeeting(int id){
         //iterate through the list of meetings
-        for (int i = 0; i<meetingList.size();i++){
+        for (int i = 0; i<futureMeetingList.size();i++){
         if (futureMeetingList.get(i).getId()==id){
             //throw exception if a future meeting contains that id number
             throw new IllegalArgumentException("The id is already used for a future meeting.");
-            }
-        //iterate through the past meeting list and reutn the id, if a pastmeeting is found
+        }
+        //iterate through the past meeting list and return the id, if a pastmeeting is found
         for(PastMeeting p: pastMeetingList){
             if(p.getId()==id){
                 return p;
@@ -117,7 +117,21 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the past
     */
     public FutureMeeting getFutureMeeting(int id){
-        
+        //iterate through the list of pastMeetings to ensure thhere is no meeting with that ID in the past
+        for (int i = 0; i <pastMeetingList.size(); i++){
+            if (pastMeetingList.get(i).getId()==id){
+                //throw IllegalArgumentException if there is a meeting with that id in the past
+                throw new IllegalArgumentException("The id is already used for a past meeting.");
+            }
+            //iterate through the list of future meetings and return the id if a future meeting is found
+            for (FutureMeeting f: futureMeetingList){
+                if( f.getId()==id){
+                    return f;
+                }
+            }
+        }
+        System.out.println("There is no future meeting with that id number.");
+        return null;
     }
     
     /**
