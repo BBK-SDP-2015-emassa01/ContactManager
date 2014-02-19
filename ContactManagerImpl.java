@@ -57,21 +57,23 @@ public class ContactManagerImpl implements ContactManager {
             throw new IllegalArgumentException ("You entered a date in the past. Please try again: ");
         }
         //go through the entire Set of contacts and check that each and every one of them exists
-        NEEDS BOOLEAN TO CONSIDER IF THE GENERATED ID IS TAKEN
+                
+            boolean generatedIDNotTaken = false;
+            
             if (contactSet.containsAll(contacts)){
+                
+                while(!generatedIDNotTaken){
                 Random random = new Random();
                 generatedID = random.nextInt();
                 
                 for (Contact c:contactSet){
                     if(c.getId()!=generatedID){
+                        generatedIDNotTaken = true;
+                    }
                         // constructor, after all checks, create a future meeting.
                         futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
-                        
-                        /* Still need to consider how this meeting that is being constructed gets 
-                        *  onto a list that stores all futureMeetings, to be able to return them later on.
-                        AND what happens if the ID is already taken? BOOLEAN
-                        */
-                        
+                        //add meeting to list of meetings
+                        meetingList.add(futureMeeting);
                     }
                 }
             }
@@ -91,15 +93,15 @@ public class ContactManagerImpl implements ContactManager {
     */
     public PastMeeting getPastMeeting(int id){
         //iterate through the list of meetings
-        for (int i = 0; i<futureMeetingList.size();i++){
-        if (futureMeetingList.get(i).getId()==id){
+        for (int i = 0; i<meetingList.size();i++){
+        if (meetingList.get(i).getId()==id){
             //throw exception if a future meeting contains that id number
+            if (meetingList.get(i) instanceof FutureMeeting){
             throw new IllegalArgumentException("The id is already used for a future meeting.");
-        }
-        //iterate through the past meeting list and return the id, if a pastmeeting is found
-        for(PastMeeting p: pastMeetingList){
-            if(p.getId()==id){
-                return p;
+            }
+            else if (meetingList.get(i) instanceof PastMeeting){
+                PastMeeting toReturn = (PastMeeting) meetingList.get(i);
+                return toReturn;
             }
         }
         }
@@ -108,9 +110,7 @@ public class ContactManagerImpl implements ContactManager {
         return null;
     }
 
-                
 
-    
     /**
     * Returns the FUTURE meeting with the requested ID, or null if there is none.
     *
@@ -119,19 +119,19 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the past
     */
     public FutureMeeting getFutureMeeting(int id){
-        //iterate through the list of pastMeetings to ensure thhere is no meeting with that ID in the past
-        for (int i = 0; i <pastMeetingList.size(); i++){
-            if (pastMeetingList.get(i).getId()==id){
+        //iterate through the list of meeting
+        for (int i = 0; i <meetingList.size(); i++){
+            if (meetingList.get(i).getId()==id){
                 //throw IllegalArgumentException if there is a meeting with that id in the past
+                if (meetingList.get(i) instanceof PastMeeting){
                 throw new IllegalArgumentException("The id is already used for a past meeting.");
             }
-            //iterate through the list of future meetings and return the id if a future meeting is found
-            for (FutureMeeting f: futureMeetingList){
-                if( f.getId()==id){
-                    return f;
-                }
+            } else if (meetingList.get(i) instanceof FutureMeeting){
+                FutureMeeting toReturn = (FutureMeeting) meetingList.get(i);
+                return toReturn;
             }
         }
+        //otherwise return null.
         System.out.println("There is no future meeting with that id number.");
         return null;
     }
