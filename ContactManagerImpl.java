@@ -31,7 +31,7 @@ public class ContactManagerImpl implements ContactManager {
     private Calendar date; 
     private int id;
     private String text;//notes about meeting
-    // private HashMap<Integer, Meeting> meetingID;
+    //private HashMap<Integer, Meeting> meetingID;
     //private Set<FutureMeeting> futureMeetingSet;
     //private Set<PastMeeting> pastMeetingSet;
             
@@ -64,7 +64,12 @@ public class ContactManagerImpl implements ContactManager {
                 for (Contact c:contactSet){
                     if(c.getId()!=generatedID){
                         // constructor, after all checks, create a future meeting.
-                        futureMeeting = new FutureMeetingImpl(generatedID, contacts, date); 
+                        futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
+                        
+                        /* Still need to consider how this meeting that is being constructed gets 
+                        *  onto a list that stores all futureMeetings, to be able to return them later on.
+                        */
+                        
                     }
                 }
             }
@@ -83,17 +88,22 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the future
     */
     public PastMeeting getPastMeeting(int id){
-        Meeting m = null;
+        //iterate through the list of meetings
         for (int i = 0; i<meetingList.size();i++){
-        if ((futureMeetingList.get(i).contains(id)){
+        if (futureMeetingList.get(i).getId()==id){
+            //throw exception if a future meeting contains that id number
             throw new IllegalArgumentException("The id is already used for a future meeting.");
             }
-        else for(PastMeeting p: pastMeetingList){
+        //iterate through the past meeting list and reutn the id, if a pastmeeting is found
+        for(PastMeeting p: pastMeetingList){
             if(p.getId()==id){
                 return p;
             }
-        } return pastMeeting;
-    }
+        }
+        }
+        //otherwise return null.
+        System.out.println("There is no past meeting with that id number.");
+        return null;
     }
 
                 
@@ -117,11 +127,18 @@ public class ContactManagerImpl implements ContactManager {
     * @return the meeting with the requested ID, or null if it there is none.
     */
     public Meeting getMeeting(int id){
-      
+        //if there are no meetings in the list.
+        if (meetingList.isEmpty()){
+            System.out.println("The meeting list is currently empty");
+            return null;
+        } else {
+            //return the meeting with the given id
         for (Meeting m: meetingList){
         if (m.getId()==id){
          return m;   
         }
+        }
+        //else return null without a message
       } return null;   
     }
     
@@ -226,7 +243,7 @@ public class ContactManagerImpl implements ContactManager {
            if (m.getId()==id){
               // check the meetingSet for the id/date and throw exception if the date is in the future.
               //   catch(IllegalStateException e){
-               m.
+               
                m.addNotes(text);
            
            } else { 
