@@ -57,6 +57,7 @@ public class ContactManagerImpl implements ContactManager {
             throw new IllegalArgumentException ("You entered a date in the past. Please try again: ");
         }
         //go through the entire Set of contacts and check that each and every one of them exists
+        NEEDS BOOLEAN TO CONSIDER IF THE GENERATED ID IS TAKEN
             if (contactSet.containsAll(contacts)){
                 Random random = new Random();
                 generatedID = random.nextInt();
@@ -68,6 +69,7 @@ public class ContactManagerImpl implements ContactManager {
                         
                         /* Still need to consider how this meeting that is being constructed gets 
                         *  onto a list that stores all futureMeetings, to be able to return them later on.
+                        AND what happens if the ID is already taken? BOOLEAN
                         */
                         
                     }
@@ -143,7 +145,7 @@ public class ContactManagerImpl implements ContactManager {
     public Meeting getMeeting(int id){
         //if there are no meetings in the list.
         if (meetingList.isEmpty()){
-            System.out.println("The meeting list is currently empty");
+            System.out.println("The meeting list is currently empty.");
             return null;
         } else {
             //return the meeting with the given id
@@ -152,7 +154,8 @@ public class ContactManagerImpl implements ContactManager {
          return m;   
         }
         }
-        //else return null without a message
+        //else return null with a message
+        System.out.println("There is no meeting with the requested id.");
       } return null;   
     }
     
@@ -225,14 +228,24 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
         
-            if(this.date.after(date)){
-                System.out.println("You need to enter a time in the past to add a new past meeting.");
-            }
-            else throw new IllegalArgumentException("Try again: ");
-            
-            Meeting pastMeeting = new PastMeetingImpl();
-            throw new NullPointerException("Value is null. ");
+        if (contacts==null|| date==null || text==null){
+            throw new NullPointerException("There are no contacts to add. ");
         }
+        
+        //go through the entire Set of contacts and check that each and every one of them exists
+        if (!contactSet.containsAll(contacts)){
+            throw new IllegalArgumentException("One (possibly more) of the contacts entered does not exist.");
+        }
+        
+        this.date = new GregorianCalendar();
+        if(this.date.before(date)){
+                System.out.println("You need to enter a time in the past to add a new past meeting.");
+            throw new IllegalArgumentException("Try again: ");
+        }
+        
+        Meeting pastMeeting = new PastMeetingImpl(, contacts, date, text);
+        meetingList.add(pastMeeting);
+    }
     
     /**
     * Add notes to a meeting.
