@@ -223,7 +223,19 @@ public class ContactManagerImpl implements ContactManager {
     * @return the list of meetings
     */
     public List<Meeting> getFutureMeetingList(Calendar date){
+        //create a list of future meetings to return
+        List<Meeting> listOfFutureMeetings = new ArrayList<Meeting>();
         
+        /* Now get the list of meetings and search within each meeting (at index 'i') for the contacts of those individual meetings.
+        *  If the contacts of those meetings contains the searched for contact, add the meeting to the list of future meetings for that contact.
+        */
+        for (int i = 0; i <meetingList.size(); i++){
+            if (meetingList.get(i).getDate().after(date)){
+                listOfFutureMeetings.add(meetingList.get(i));
+            }
+        }
+        // else, if no meetings scheduled -- will return null.
+        return listOfFutureMeetings;
     }
     
     /**
