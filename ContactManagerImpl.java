@@ -10,11 +10,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
-import java.util.HashMap;
 import java.util.ArrayList;//may need this import.
 import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -184,9 +182,6 @@ public class ContactManagerImpl implements ContactManager {
     * @return the list of future meeting(s) scheduled with this contact (maybe empty).
     * @throws IllegalArgumentException if the contact does not exist
     */
-    
-    CHRONOLOGICAL SORT?
-    
     public List<Meeting> getFutureMeetingList(Contact contact){
         Calendar dateToday = new GregorianCalendar();
         //create a list of future meetings to return
@@ -253,9 +248,6 @@ public class ContactManagerImpl implements ContactManager {
     * @return the list of past meeting(s) scheduled with this contact (maybe empty).
     * @throws IllegalArgumentException if the contact does not exist
     */
-    
-    CHRONOLOGICAL SORT?
-    
     public List<PastMeeting> getPastMeetingList(Contact contact){
         Calendar dateToday = new GregorianCalendar();
         //create a list of past meetings to return
@@ -429,8 +421,6 @@ public class ContactManagerImpl implements ContactManager {
         }catch (NullPointerException e){
             e.printStackTrace();
         }return theseContacts;
-        
-        
     }
     
     /**
@@ -442,7 +432,6 @@ public class ContactManagerImpl implements ContactManager {
 
     public void flush(){
         //contactManager.close();
-
     }
     
     public void getContactIdFromSet(Set<Contact> nameOfContactSetToSearch, Contact name){
@@ -453,8 +442,6 @@ public class ContactManagerImpl implements ContactManager {
         }catch(NullPointerException e){
             e.printStackTrace();
         }
-    
-}
-    
-    
+    }
+
 }
