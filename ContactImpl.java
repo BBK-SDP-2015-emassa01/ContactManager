@@ -6,6 +6,8 @@
 
 package ContactManager;
 
+import java.util.Set;
+
 /**
  *
  * @author Esha
@@ -14,8 +16,9 @@ public class ContactImpl implements Contact {
     private String name;//of contact
     private String notes; //about contact
     private int id = 1;//contact's id number - static doesnt work her because we implement ID numbers in the Set Class.
+    private Set<Meeting> setOfMeetings;
     
-    public ContactImpl(String name, String notes){
+    public ContactImpl(int id, String name, String notes){
         setID(id);
         setName(name);
         addNotes(notes);
@@ -36,6 +39,14 @@ public class ContactImpl implements Contact {
     
     public void setName(String name){
         this.name = name;
+    }
+    
+     public void setMeetings(Set<Meeting> meetingSet){
+        this.setOfMeetings = meetingSet;
+    }
+     
+      public Set<Meeting> getMeetings(){
+        return this.setOfMeetings;
     }
     
     public String getNotes(){

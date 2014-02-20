@@ -14,9 +14,8 @@ import java.util.Set;
 public class MeetingImpl implements Meeting{
     private static int id;
     private Calendar date;
-    private String notes;
-    private Set<Contact> meetingContacts;
-    private Set<Meeting> meetingSet;
+    private Set<Contact> setOfContacts;
+
     
     /**
      * Meetings have unique IDs so using Set interface for additional Set stipulations,
@@ -29,7 +28,6 @@ public class MeetingImpl implements Meeting{
         setId(id);
         setDate(date);
         setContacts(contacts);  
-//        addNotes(notes);
     }
     
     
@@ -57,22 +55,10 @@ public class MeetingImpl implements Meeting{
      * @return the details of people that attended the meeting.
      */
     public Set<Contact> getContacts(){
-        return this.meetingContacts; //check this implementation fits the documentation at a later stage.
+        return this.setOfContacts; //check this implementation fits the documentation at a later stage.
     }
     
     public void setContacts(Set<Contact> contacts){
-        this.meetingContacts=contacts;
+        this.setOfContacts=contacts;
     }
-    
-//    public String getNotes(){
-//        if (notes ==null){//must return notes even if no notes available (in which case returns emply string).
-//            return "";
-//        }
-//        return this.notes;
-//    }
-//    public void addNotes(String note){
-//        this.notes = note;
-//    }
-    
-
 }

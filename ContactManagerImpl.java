@@ -24,16 +24,19 @@ import java.util.logging.Logger;
  */
 public class ContactManagerImpl implements ContactManager {
     private Set<Contact> contactSet;
-    private Set<Meeting> meetingSet; 
     private List<Meeting> meetingList;
-    private List<PastMeeting> pastMeetingList;
-    private List<FutureMeeting> futureMeetingList;
     private Calendar date; 
+
     private int id;
     private String text;//notes about meeting
     //private HashMap<Integer, Meeting> meetingID;
-    //private Set<FutureMeeting> futureMeetingSet;
-    //private Set<PastMeeting> pastMeetingSet;
+
+    
+    public ContactManagerImpl(){
+        contactSet = new HashSet<Contact>(); 
+        meetingList = new ArrayList<Meeting>(); //How will I get this to be ordered when I print out the list of meetings? Collections.sort() does not work on Objects?
+        date = new GregorianCalendar();
+    }
             
     /**
     * Add a new meeting to be held in the future.
@@ -92,6 +95,11 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the future
     */
     public PastMeeting getPastMeeting(int id){
+        //if there are no meetings in the list.
+        if (meetingList.isEmpty()){
+            System.out.println("The meeting list is currently empty.");
+            return null;
+        }
         //iterate through the list of meetings
         for (int i = 0; i<meetingList.size();i++){
         if (meetingList.get(i).getId()==id){
@@ -119,6 +127,11 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the past
     */
     public FutureMeeting getFutureMeeting(int id){
+        //if there are no meetings in the list.
+        if (meetingList.isEmpty()){
+            System.out.println("The meeting list is currently empty.");
+            return null;
+        }
         //iterate through the list of meeting
         for (int i = 0; i <meetingList.size(); i++){
             if (meetingList.get(i).getId()==id){
@@ -171,6 +184,9 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if the contact does not exist
     */
     public List<Meeting> getFutureMeetingList(Contact contact){
+        contact.
+        
+        
         
     }
     
@@ -266,9 +282,9 @@ public class ContactManagerImpl implements ContactManager {
             throw new NullPointerException(); 
         }
         try{
-        for (Meeting m:meetingSet){
+        for (Meeting m:meetingList){
            if (m.getId()==id){
-              // check the meetingSet for the id/date and throw exception if the date is in the future.
+              // check the meetingList for the id/date and throw exception if the date is in the future.
               //   catch(IllegalStateException e){
                
                m.addNotes(text);
