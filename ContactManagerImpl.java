@@ -184,10 +184,25 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if the contact does not exist
     */
     public List<Meeting> getFutureMeetingList(Contact contact){
-        contact.
+        //create a list of future meetings to return
+        List<Meeting> listOfFutureMeetings = new ArrayList<Meeting>();
         
+        //check that the contact exists
+        if(!contactSet.contains(contact)){
+            throw new IllegalArgumentException("This contact does not exist. ");
+        }
         
-        
+        /* Now get the list of meetings and search within each meeting (at index 'i') the contacts of those individual meetings.
+        *  If the contacts of those meetings contains the searched for contact, add the meeting to the list of future meetings for that contact.
+        */
+        for (int i = 0; i <meetingList.size(); i++){
+            Set<Contact> contactsForTempMeeting = meetingList.get(i).getContacts();
+            if (contactsForTempMeeting.contains(contact)){
+                listOfFutureMeetings.add(meetingList.get(i));
+            }
+        }
+        // else, if no meetings scheduled -- will return null.
+        return listOfFutureMeetings;  
     }
     
     /**
@@ -307,10 +322,7 @@ public class ContactManagerImpl implements ContactManager {
     public void addNewContact(String name, String notes) {
         try{
     ContactImpl newContact = new ContactImpl(name, notes);// Don't know why it isn't compiling using Contact esha = new ContactImpl(name, notes);
-
-    newContact.setID(1);
-    newContact.setName(name);
-    newContact.addNotes(notes);
+    
     contactSet.add(newContact);
     }catch (NullPointerException e){
         e.printStackTrace();
