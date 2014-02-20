@@ -16,6 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -189,8 +190,9 @@ public class ContactManagerImpl implements ContactManager {
     public List<Meeting> getFutureMeetingList(Contact contact){
         Calendar dateToday = new GregorianCalendar();
         //create a list of future meetings to return
-        List<Meeting> listOfFutureMeetings = new ArrayList<Meeting>();
-        
+        //List<Meeting> listOfFutureMeetings = new ArrayList<Meeting>(); 
+        Set<Meeting> chronologicalTreeFutureMeetings = new TreeSet<Meeting>();
+        List<Meeting> chronoOrderFutureMeetings = null;
         //check that the contact exists
         if(!contactSet.contains(contact)){
             throw new IllegalArgumentException("This contact does not exist. ");
@@ -203,12 +205,14 @@ public class ContactManagerImpl implements ContactManager {
             if (meetingList.get(i).getDate().after(dateToday)){
             Set<Contact> contactsForTempMeeting = meetingList.get(i).getContacts();
             if (contactsForTempMeeting.contains(contact)){
-                listOfFutureMeetings.add(meetingList.get(i));
+                //listOfFutureMeetings.add(meetingList.get(i));
+                chronologicalTreeFutureMeetings.add(meetingList.get(i));
+                chronoOrderFutureMeetings = new ArrayList<Meeting>(chronologicalTreeFutureMeetings);
             }
             }
         }
         // else, if no meetings scheduled -- will return null.
-        return listOfFutureMeetings;  
+        return chronoOrderFutureMeetings;  
     }
     
     /**
@@ -254,28 +258,31 @@ public class ContactManagerImpl implements ContactManager {
     
     public List<PastMeeting> getPastMeetingList(Contact contact){
         Calendar dateToday = new GregorianCalendar();
-        //create a list of future meetings to return
-        List<PastMeeting> listOfPastMeetings = new ArrayList<PastMeeting>();
-        
+        //create a list of past meetings to return
+        //List<Meeting> listOfPastMeetings = new ArrayList<Meeting>(); 
+        Set<PastMeeting> chronologicalTreePastMeetings = new TreeSet<PastMeeting>();
+        List<PastMeeting> chronoOrderPastMeetings = null;
         //check that the contact exists
         if(!contactSet.contains(contact)){
             throw new IllegalArgumentException("This contact does not exist. ");
         }
         
         /* Now get the list of meetings and search within each meeting (at index 'i') for the contacts of those individual meetings.
-        *  If the contacts of those meetings contains the searched for contact, add the meeting to the list of future meetings for that contact.
+        *  If the contacts of those meetings contains the searched for contact, add the meeting to the list of past meetings for that contact.
         */
         for (int i = 0; i <meetingList.size(); i++){
-            if (meetingList.get(i).getDate().before(dateToday)){
+            if (meetingList.get(i).getDate().after(dateToday)){
             Set<Contact> contactsForTempMeeting = meetingList.get(i).getContacts();
             if (contactsForTempMeeting.contains(contact)){
+                //listOfPastMeetings.add(meetingList.get(i));
                 PastMeeting meetingToAdd = (PastMeeting) meetingList.get(i);
-                listOfPastMeetings.add(meetingToAdd);
+                chronologicalTreePastMeetings.add(meetingToAdd);
+                chronoOrderPastMeetings = new ArrayList<PastMeeting>(chronologicalTreePastMeetings);
             }
             }
         }
         // else, if no meetings scheduled -- will return null.
-        return listOfPastMeetings;  
+        return chronoOrderPastMeetings;  
     }
     
     /**
