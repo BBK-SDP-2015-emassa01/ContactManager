@@ -183,7 +183,11 @@ public class ContactManagerImpl implements ContactManager {
     * @return the list of future meeting(s) scheduled with this contact (maybe empty).
     * @throws IllegalArgumentException if the contact does not exist
     */
+    
+    CHRONOLOGICAL SORT?
+    
     public List<Meeting> getFutureMeetingList(Contact contact){
+        Calendar dateToday = new GregorianCalendar();
         //create a list of future meetings to return
         List<Meeting> listOfFutureMeetings = new ArrayList<Meeting>();
         
@@ -196,9 +200,11 @@ public class ContactManagerImpl implements ContactManager {
         *  If the contacts of those meetings contains the searched for contact, add the meeting to the list of future meetings for that contact.
         */
         for (int i = 0; i <meetingList.size(); i++){
+            if (meetingList.get(i).getDate().after(dateToday)){
             Set<Contact> contactsForTempMeeting = meetingList.get(i).getContacts();
             if (contactsForTempMeeting.contains(contact)){
                 listOfFutureMeetings.add(meetingList.get(i));
+            }
             }
         }
         // else, if no meetings scheduled -- will return null.
@@ -228,23 +234,36 @@ public class ContactManagerImpl implements ContactManager {
     * duplicates.
     *
     * @param contact one of the user’s contacts
-    * @return the list of future meeting(s) scheduled with this contact (maybe empty).
+    * @return the list of past meeting(s) scheduled with this contact (maybe empty).
     * @throws IllegalArgumentException if the contact does not exist
     */
+    
+    CHRONOLOGICAL SORT?
+    
     public List<PastMeeting> getPastMeetingList(Contact contact){
-        List<PastMeeting> pastMeetingList = null;
+        Calendar dateToday = new GregorianCalendar();
+        //create a list of future meetings to return
+        List<PastMeeting> listOfPastMeetings = new ArrayList<PastMeeting>();
         
-        for (Contact c: contactSet){
-            if(c.equals(contact)){
-                int tempId = c.getId();
-                
-                //then need to search the meetingList to find the meetings that this contact id has participated in.
-
-            }
-            
+        //check that the contact exists
+        if(!contactSet.contains(contact)){
+            throw new IllegalArgumentException("This contact does not exist. ");
         }
         
-       // return pastMeetingList;
+        /* Now get the list of meetings and search within each meeting (at index 'i') for the contacts of those individual meetings.
+        *  If the contacts of those meetings contains the searched for contact, add the meeting to the list of future meetings for that contact.
+        */
+        for (int i = 0; i <meetingList.size(); i++){
+            if (meetingList.get(i).getDate().before(dateToday)){
+            Set<Contact> contactsForTempMeeting = meetingList.get(i).getContacts();
+            if (contactsForTempMeeting.contains(contact)){
+                PastMeeting meetingToAdd = (PastMeeting) meetingList.get(i);
+                listOfPastMeetings.add(meetingToAdd);
+            }
+            }
+        }
+        // else, if no meetings scheduled -- will return null.
+        return listOfPastMeetings;  
     }
     
     /**
