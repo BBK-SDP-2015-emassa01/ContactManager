@@ -192,7 +192,7 @@ public class ContactManagerImpl implements ContactManager {
             throw new IllegalArgumentException("This contact does not exist. ");
         }
         
-        /* Now get the list of meetings and search within each meeting (at index 'i') the contacts of those individual meetings.
+        /* Now get the list of meetings and search within each meeting (at index 'i') for the contacts of those individual meetings.
         *  If the contacts of those meetings contains the searched for contact, add the meeting to the list of future meetings for that contact.
         */
         for (int i = 0; i <meetingList.size(); i++){
@@ -321,7 +321,7 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addNewContact(String name, String notes) {
         try{
-    ContactImpl newContact = new ContactImpl(name, notes);// Don't know why it isn't compiling using Contact esha = new ContactImpl(name, notes);
+    Contact newContact = new ContactImpl(name, notes);// Don't know why it isn't compiling using Contact esha = new ContactImpl(name, notes);
     
     contactSet.add(newContact);
     }catch (NullPointerException e){
@@ -346,20 +346,29 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if any of the IDs does not correspond to a real contact
     */
     public Set<Contact> getContacts(int... ids){
-    Set<Contact> theseContacts = null;
-        try{
+        boolean foundId = false;
+        Set<Contact> theseContacts = null;
+        
+        //check that all the id's entered exist.
+        for (int checkedId:ids){
+            for (Contact checkContactId: contactSet){
+                if (checkContactId.getId() == checkedId){
+                foundId = true;
+                } else throw new IllegalArgumentException("The id: "+ checkedId + "does not correspond to a real contact. ");
+            } 
+        }
+        
+        /*(...) in method means it can take a variable number of type 'int' values in its signature, 
+        * and will store them as ab array ready to iterate through.
+        */ 
         for (int id:ids){
         for (Contact c: contactSet){
             if (c.getId() == id){
             theseContacts.add(c);
-            }  
+            } 
         }
         } 
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }return theseContacts;
-        
-        
+        return theseContacts;
     }
     
     /**
