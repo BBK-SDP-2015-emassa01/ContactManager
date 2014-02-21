@@ -5,9 +5,6 @@
  */
 
 package ContactManager;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import static java.lang.Math.random;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +13,6 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  * Class to manage contacts and meetings
  * @author Esha
@@ -45,7 +40,7 @@ public class ContactManagerImpl implements ContactManager {
     * of if any contact is unknown / non-existent
     **/
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
-        Meeting futureMeeting = null;
+        Meeting futureMeeting;
         int generatedID = 0;
         // check that the contacts are not null.
         if (contacts == null){
