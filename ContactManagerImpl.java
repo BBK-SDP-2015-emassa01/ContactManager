@@ -65,12 +65,12 @@ public class ContactManagerImpl implements ContactManager {
                     if(c.getId()!=generatedID){
                         generatedIDNotTaken = true;
                     }
-                        // constructor, after all checks, create a future meeting.
-                        futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
-                        //add meeting to list of meetings
-                        meetingList.add(futureMeeting);
-                    }
                 }
+                }
+            // constructor, after all checks, create a future meeting.
+            futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
+            //add meeting to list of meetings
+            meetingList.add(futureMeeting);
             }
             if (generatedID == 0){
                 throw new IllegalArgumentException("You have not successfully assigned an ID for that meeting.");
@@ -399,10 +399,9 @@ public class ContactManagerImpl implements ContactManager {
                     if (c.getId()!= contactID)
                         contactIdNotTaken = true;
                 }
-                Contact newContact = new ContactImpl(contactID, name, notes);
-                contactSet.add(newContact);
-                
             }
+            Contact newContact = new ContactImpl(contactID, name, notes);
+            contactSet.add(newContact);
             
         }
     } else throw new NullPointerException("Please enter a name and some notes for your contact. ");
