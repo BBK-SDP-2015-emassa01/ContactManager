@@ -333,7 +333,7 @@ public class ContactManagerImpl implements ContactManager {
         } return false;
     }
     public boolean checkArgumentIsNotNull(String text){
-        if (text.equals(null)){
+        if (text==null){
             return true;
         } return false;
     }
@@ -354,19 +354,28 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addMeetingNotes(int id, String text){
         //check there are notes to add.
-        if (text.equals(null)){
+        if (text==null){
             throw new NullPointerException("Please enter a note for the past meeting: "); 
         }
         //iterate through meeting list to find meeting id
         for (Meeting m:meetingList){
            if (m.getId()==id){
+               
+               //get current date and compare it to meeting date
                Calendar dateNow = new GregorianCalendar();
                if (m.getDate().after(dateNow)){
                    throw new IllegalStateException ("That meeting is set for a date in the future "
                            + "so cannot be converted into a future meeting yet. ");
                } 
+
+               /* If I use the interface to construct here, I do not have the 'addNotes' method available. 
+               *  Why? Is there an dependency between casting when using interfacees to construct?
+               *  What happens if 'm' is already a pastMeeting, will there be an 'unable to cast' error?
+               */
+               //else cast to PastMeetingImpl to be able to addNotes
                PastMeetingImpl convertToPastMeeting = (PastMeetingImpl) m;
-               convertToPastMeeting.addNotes(text);
+               convertToPastMeeting.addNotes(text);  
+               
            } else throw new IllegalArgumentException("That meeting ID does not exist. ");  
         }
     }
