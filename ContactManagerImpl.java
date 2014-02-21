@@ -7,6 +7,7 @@
 package ContactManager;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import static java.lang.Math.random;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -388,22 +389,28 @@ public class ContactManagerImpl implements ContactManager {
     * @throws NullPointerException if the name or the notes are null
     */
     public void addNewContact(String name, String notes) {
-        try{
-    Contact newContact = new ContactImpl(name, notes);// Don't know why it isn't compiling using Contact esha = new ContactImpl(name, notes);
-    
-    contactSet.add(newContact);
-    }catch (NullPointerException e){
-        e.printStackTrace();
-    }
-    try{
-    SaveDataIO saveData  = new SaveDataIO(contactSet);
-    saveData.writeSetToFile();
-    }catch (FileNotFoundException e){
-        e.printStackTrace();
-    }       catch (IOException ex) {
-                Logger.getLogger(ContactManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        int contactID = 0;
+        
+        if (checkArgumentIsNotNull(name)){
+        if (checkArgumentIsNotNull(notes)){
+            //do something
+            
+            boolean contactIdNotTaken = false;
+            while (!contactIdNotTaken){
+                Random idNumber = new Random();
+                contactID = idNumber.nextInt();
+                
+                for (Contact c:contactSet){
+                    if (c.getId()!= contactID)
+                        contactIdNotTaken = true;
+                }
+                Contact newContact = new ContactImpl(contactID, name, notes);
+                contactSet.add(newContact);
+                
             }
-    
+            
+        }
+    } else throw new NullPointerException("Please enter a name and some notes for your contact. ");
     }
     
     /**

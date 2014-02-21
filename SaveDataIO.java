@@ -36,3 +36,8 @@ public class SaveDataIO {
     
     
 }
+
+
+//    POSSIBLE USE OF CLASS
+//    SaveDataIO saveData  = new SaveDataIO(contactSet);
+//    saveData.writeSetToFile();
