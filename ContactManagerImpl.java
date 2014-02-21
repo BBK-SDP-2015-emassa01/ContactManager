@@ -322,10 +322,6 @@ public class ContactManagerImpl implements ContactManager {
         } else throw new NullPointerException(" Please check that you have entered your contacts, the date, and notes for this meeting. ");
     }
 
-        
-    
-   
-    
     public boolean checkArgumentIsNotNull(Set<Contact> contacts){
         if (contacts!=null){
             return true;
@@ -357,23 +353,22 @@ public class ContactManagerImpl implements ContactManager {
     * @throws NullPointerException if the notes are null
     */
     public void addMeetingNotes(int id, String text){
+        //check there are notes to add.
         if (text.equals(null)){
-            throw new NullPointerException(); 
+            throw new NullPointerException("Please enter a note for the past meeting: "); 
         }
-        try{
+        //iterate through meeting list to find meeting id
         for (Meeting m:meetingList){
            if (m.getId()==id){
-              // check the meetingList for the id/date and throw exception if the date is in the future.
-              //   catch(IllegalStateException e){
-               
-               m.addNotes(text);
-           
-           } else { 
-               System.out.println("No ID found.");
-           } 
-        }} catch (IllegalArgumentException e){
-            System.out.println("Meeting does not exist.");
-        }   
+               Calendar dateNow = new GregorianCalendar();
+               if (m.getDate().after(dateNow)){
+                   throw new IllegalStateException ("That meeting is set for a date in the future "
+                           + "so cannot be converted into a future meeting yet. ");
+               } 
+               PastMeetingImpl convertToPastMeeting = (PastMeetingImpl) m;
+               convertToPastMeeting.addNotes(text);
+           } else throw new IllegalArgumentException("That meeting ID does not exist. ");  
+        }
     }
     
     /**
