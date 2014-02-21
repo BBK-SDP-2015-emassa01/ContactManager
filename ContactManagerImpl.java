@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;//may need this import.
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Random;
@@ -25,15 +25,12 @@ public class ContactManagerImpl implements ContactManager {
     private Set<Contact> contactSet;
     private List<Meeting> meetingList;
     private Calendar date; 
-
     private int id;
     private String text;//notes about meeting
-    //private HashMap<Integer, Meeting> meetingID;
 
-    
     public ContactManagerImpl(){
         contactSet = new HashSet<Contact>(); 
-        meetingList = new ArrayList<Meeting>(); //How will I get this to be ordered when I print out the list of meetings? Collections.sort() does not work on Objects?
+        meetingList = new ArrayList<Meeting>(); 
         date = new GregorianCalendar();
     }
             
@@ -288,24 +285,61 @@ public class ContactManagerImpl implements ContactManager {
     * @throws NullPointerException if any of the arguments is null
     */
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
+        //make a new pastMeeting id number
+        int generatePastMeetingID = 0;
+        if(checkArgumentIsNotNull(contacts)){
+            if (checkArgumentIsNotNull(date)){
+                if (checkArgumentIsNotNull(text)){
+
+                    //go through the entire Set of contacts and check that each and every one of them exists
+                    if (!contactSet.containsAll(contacts)){
+                        throw new IllegalArgumentException("One (possibly more) of the contacts entered does not exist.");
+                    }
+                    
+                    this.date = new GregorianCalendar();
+                    if(this.date.before(date)){
+                        System.out.println("You need to enter a time in the past to add a new past meeting.");
+                        throw new IllegalArgumentException("Try again: ");
+                    }
+                }
+                //create boolean to check the meetingID does not exist.
+                boolean generatedPastMeetingIDNotTaken = false;
+                
+                while(!generatedPastMeetingIDNotTaken){
+                    Random random = new Random();
+                    generatePastMeetingID = random.nextInt();
+                    for (Meeting m: meetingList){
+                    if (m.getId()!=generatePastMeetingID){
+                        generatedPastMeetingIDNotTaken = true;
+                    }
+                    }
+                }
+                //contruct a new past meeting with the ID, contacts, date and notes
+                Meeting pastMeeting = new PastMeetingImpl(generatePastMeetingID, contacts, date, text);
+                //add meeting to the meeting list.
+                meetingList.add(pastMeeting);
+            }
+        } else throw new NullPointerException(" Please check that you have entered your contacts, the date, and notes for this meeting. ");
+    }
+
         
-        if (contacts==null|| date==null || text==null){
-            throw new NullPointerException("There are no contacts to add. ");
-        }
-        
-        //go through the entire Set of contacts and check that each and every one of them exists
-        if (!contactSet.containsAll(contacts)){
-            throw new IllegalArgumentException("One (possibly more) of the contacts entered does not exist.");
-        }
-        
-        this.date = new GregorianCalendar();
-        if(this.date.before(date)){
-                System.out.println("You need to enter a time in the past to add a new past meeting.");
-            throw new IllegalArgumentException("Try again: ");
-        }
-        
-        Meeting pastMeeting = new PastMeetingImpl(, contacts, date, text);
-        meetingList.add(pastMeeting);
+    
+   
+    
+    public boolean checkArgumentIsNotNull(Set<Contact> contacts){
+        if (contacts!=null){
+            return true;
+        } return false;
+    }
+    public boolean checkArgumentIsNotNull(Calendar date){
+        if (date!=null){
+            return true;
+        } return false;
+    }
+    public boolean checkArgumentIsNotNull(String text){
+        if (text.equals(null)){
+            return true;
+        } return false;
     }
     
     /**
