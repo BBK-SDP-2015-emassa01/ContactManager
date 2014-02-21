@@ -329,7 +329,7 @@ public class ContactManagerImpl implements ContactManager {
         } return false;
     }
     public boolean checkArgumentIsNotNull(String text){
-        if (text==null){
+        if (text!=null){
             return true;
         } return false;
     }
