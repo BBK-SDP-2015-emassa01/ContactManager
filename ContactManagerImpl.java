@@ -293,9 +293,9 @@ public class ContactManagerImpl implements ContactManager {
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
         //make a new pastMeeting id number
         int generatePastMeetingID = 0;
-        if(checkArgumentIsNotNull(contacts)){
-            if (checkArgumentIsNotNull(date)){
-                if (checkArgumentIsNotNull(text)){
+        checkArgumentIsNotNull(contacts);
+        checkArgumentIsNotNull(date);
+        checkArgumentIsNotNull(text);
 
                     //go through the entire Set of contacts and check that each and every one of them exists
                     if (!contactSet.containsAll(contacts)){
@@ -307,7 +307,7 @@ public class ContactManagerImpl implements ContactManager {
                         System.out.println("You need to enter a time in the past to add a new past meeting.");
                         throw new IllegalArgumentException("Try again: ");
                     }
-                }
+                
                 //create boolean to check the meetingID does not exist.
                 boolean generatedPastMeetingIDNotTaken = false;
                 
@@ -324,24 +324,22 @@ public class ContactManagerImpl implements ContactManager {
                 Meeting pastMeeting = new PastMeetingImpl(generatePastMeetingID, contacts, date, text);
                 //add meeting to the meeting list.
                 meetingList.add(pastMeeting);
-            }
-        } else throw new NullPointerException(" Please check that you have entered your contacts, the date, and notes for this meeting. ");
     }
 
-    public boolean checkArgumentIsNotNull(Set<Contact> contacts){
-        if (contacts!=null){
-            return true;
-        } return false;
+    public void checkArgumentIsNotNull(Set<Contact> contacts){
+        if (contacts==null){
+            throw new NullPointerException("Please enter the contacts. "); 
+        } 
     }
-    public boolean checkArgumentIsNotNull(Calendar date){
-        if (date!=null){
-            return true;
-        } return false;
+    public void checkArgumentIsNotNull(Calendar date){
+        if (date==null){
+            throw new NullPointerException("Please enter a date for the meeting."); 
+        }
     }
-    public boolean checkArgumentIsNotNull(String text){
-        if (text!=null){
-            return true;
-        } return false;
+    public void checkArgumentIsNotNull(String text){
+        if (text==null){
+            throw new NullPointerException("Please enter a note for the meeting: "); 
+        }
     }
     
     /**
@@ -396,13 +394,8 @@ public class ContactManagerImpl implements ContactManager {
     public void addNewContact(String name, String notes) {
         int contactID = 0;
         boolean contactIdIsTaken = false;
-        
-        if (name==null){
-            throw new NullPointerException("Please enter a name and some notes for your contact. ");
-        }
-        if (notes == null){
-            throw new NullPointerException("Please enter a name and some notes for your contact. ");
-        }
+        checkArgumentIsNotNull(name);
+        checkArgumentIsNotNull(notes);
             
             while (!contactIdIsTaken){
                 Random idNumber = new Random();
