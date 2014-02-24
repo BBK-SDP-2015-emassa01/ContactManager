@@ -23,14 +23,14 @@ import java.util.Scanner;
  * @author Esha
  */
 public class mainLaunch {
-    private HashMap<Integer, Meeting> meetingID;
+    //private HashMap<Integer, Meeting> meetingID;
    // private HashMap<Set<Contact>, Calendar> id;
     
-    private Set<Contact> contacts;
-    private Set<Meeting> meetings;
-    private Calendar date; 
-    private int id;
-    private String text;//notes about meeting
+//    private Set<Contact> contacts;
+//    private Set<Meeting> meetings;
+//    private Calendar date; 
+//    private int id;
+//    private String text;//notes about meeting
     
     public static void main(String[] args) throws IOException{
         mainLaunch mainScript = new mainLaunch();
@@ -38,14 +38,14 @@ public class mainLaunch {
     }
     
     public void launch() throws FileNotFoundException, IOException{
-        System.out.println("Please enter your name:");
-        Scanner username = new Scanner(System.in);
-        String login = username.nextLine();
-
-        Organiser loginName = new Organiser();
-        
-        System.out.println("Hello "+ login + ",");
-        loginName.menuAction(loginName.displayMenu());
+         ContactManager contactManager = new ContactManagerImpl();
+         
+         contactManager.addNewContact("Esha", "Good");
+         contactManager.addNewContact( "Manoj", "Friendly");
+         contactManager.addNewContact( "Mum", "Employee of the Month");
+         contactManager.addNewContact( "Esha", "Hardworking");
+         contactManager.addNewContact("Raju", "Bossy");
+         
         
         
     }

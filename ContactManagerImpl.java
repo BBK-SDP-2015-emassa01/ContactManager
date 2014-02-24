@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.TreeSet;
 /**
@@ -23,11 +25,19 @@ public class ContactManagerImpl implements ContactManager {
     private Calendar date; 
     private int id;
     private String text;//notes about meeting
+    
+    // Structures to store meetingIDs and contactSets
+    Map<Integer, Meeting> meetingIDMap;
+    Map<Integer, Contact> contactIDMap;
+    Map<Integer,Set< Contact>> meetingIDAndContactSet;
 
     public ContactManagerImpl(){
         contactSet = new HashSet<Contact>(); 
         meetingList = new ArrayList<Meeting>(); 
         date = new GregorianCalendar();
+        meetingIDMap = new HashMap<Integer, Meeting>(); //ids to meetings
+        contactIDMap = new HashMap<Integer, Contact>(); //ids to contacts
+        meetingIDAndContactSet = new HashMap<Integer,Set<Contact>>(); //links a meeting ID to a set of contacts.
     }
             
     /**
@@ -385,26 +395,27 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addNewContact(String name, String notes) {
         int contactID = 0;
+        boolean contactIdIsTaken = false;
         
-        if (checkArgumentIsNotNull(name)){
-        if (checkArgumentIsNotNull(notes)){
-            //do something
+        if (name==null){
+            throw new NullPointerException("Please enter a name and some notes for your contact. ");
+        }
+        if (notes == null){
+            throw new NullPointerException("Please enter a name and some notes for your contact. ");
+        }
             
-            boolean contactIdNotTaken = false;
-            while (!contactIdNotTaken){
+            while (!contactIdIsTaken){
                 Random idNumber = new Random();
                 contactID = idNumber.nextInt();
+                System.out.println("Assined " + name + " ID NUMBER: \n" + contactID);
                 
-                for (Contact c:contactSet){
-                    if (c.getId()!= contactID)
-                        contactIdNotTaken = true;
+                if (!contactSet.contains(contactID)){
+                    contactIdIsTaken= true;
                 }
+                
             }
             Contact newContact = new ContactImpl(contactID, name, notes);
             contactSet.add(newContact);
-            
-        }
-    } else throw new NullPointerException("Please enter a name and some notes for your contact. ");
     }
     
     /**
