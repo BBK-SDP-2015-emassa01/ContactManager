@@ -20,7 +20,7 @@ import java.util.TreeSet;
  * @author Esha
  */
 public class ContactManagerImpl implements ContactManager {
-    private Set<Contact> contactSet;
+    Set<Contact> contactSet;
     private List<Meeting> meetingList;
     private Calendar date; 
     private int id;
@@ -52,31 +52,27 @@ public class ContactManagerImpl implements ContactManager {
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
         Meeting futureMeeting;
         int generatedID = 0;
+        boolean generatedIDIsNotTaken = false;
         // check that the contacts are not null.
-        if (contacts == null){
-            throw new IllegalArgumentException("One (possibly more), contact(s) are unknown or non-existant.");
-        }
+        checkArgumentIsNotNull(contacts);
         //check that the meeting is actually a future meeting (i.e., that time is valid). Use calendar class to validate the date
         this.date = new GregorianCalendar();
         if (date.before(this.date)){
             throw new IllegalArgumentException ("You entered a date in the past. Please try again: ");
         }
         //go through the entire Set of contacts and check that each and every one of them exists
+
+            if (!contactSet.containsAll(contacts)){
+                throw new IllegalArgumentException ("Unknown/non-existant contacts. ");
+        }
                 
-            boolean generatedIDNotTaken = false;
-            
-            if (contactSet.containsAll(contacts)){
-                
-                while(!generatedIDNotTaken){
+                while(!generatedIDIsNotTaken){
                 Random random = new Random();
                 generatedID = random.nextInt();
-                
-                for (Contact c:contactSet){
-                    if(c.getId()!=generatedID){
-                        generatedIDNotTaken = true;
+                System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
+                if (!meetingList.contains(generatedID)){
+                        generatedIDIsNotTaken = true;
                     }
-                }
-                }
             // constructor, after all checks, create a future meeting.
             futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
             //add meeting to list of meetings
@@ -188,8 +184,8 @@ public class ContactManagerImpl implements ContactManager {
     public List<Meeting> getFutureMeetingList(Contact contact){
         Calendar dateToday = new GregorianCalendar();
         //create a list of future meetings to return
-        //List<Meeting> listOfFutureMeetings = new ArrayList<Meeting>(); 
-        Set<Meeting> chronologicalTreeFutureMeetings = new TreeSet<Meeting>();
+        List<Meeting> listOfFutureMeetings = new ArrayList<Meeting>(); 
+        //Set<Meeting> chronologicalTreeFutureMeetings = new TreeSet<Meeting>();
         List<Meeting> chronoOrderFutureMeetings = null;
         //check that the contact exists
         if(!contactSet.contains(contact)){
@@ -203,12 +199,19 @@ public class ContactManagerImpl implements ContactManager {
             if (meetingList.get(i).getDate().after(dateToday)){
             Set<Contact> contactsForTempMeeting = meetingList.get(i).getContacts();
             if (contactsForTempMeeting.contains(contact)){
-                //listOfFutureMeetings.add(meetingList.get(i));
-                chronologicalTreeFutureMeetings.add(meetingList.get(i));
-                chronoOrderFutureMeetings = new ArrayList<Meeting>(chronologicalTreeFutureMeetings);
+                listOfFutureMeetings.add(meetingList.get(i));
+                //chronologicalTreeFutureMeetings.add(meetingList.get(i));
+                //chronoOrderFutureMeetings = new ArrayList<Meeting>(chronologicalTreeFutureMeetings);
+                chronoOrderFutureMeetings = new ArrayList<Meeting>(listOfFutureMeetings);
             }
             }
         }
+        System.out.println(chronoOrderFutureMeetings.toString());
+        for (int i = 0; i <meetingList.size(); i++){
+            System.out.println("ID: "+meetingList.get(i).getId());
+            System.out.println("Contacts: "+meetingList.get(i).getContacts());
+        }
+        
         // else, if no meetings scheduled -- will return null.
         return chronoOrderFutureMeetings;  
     }
@@ -485,6 +488,10 @@ public class ContactManagerImpl implements ContactManager {
         }catch(NullPointerException e){
             e.printStackTrace();
         }
+    }
+    
+    public Set<Contact> getContactSet(){
+        return this.contactSet;
     }
 
 }

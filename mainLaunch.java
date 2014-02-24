@@ -5,46 +5,34 @@
  */
 
 package ContactManager;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
+import java.util.GregorianCalendar;
 import java.util.Set;
-import java.util.Scanner;
-
 /**
  *
  * @author Esha
  */
 public class mainLaunch {
-    //private HashMap<Integer, Meeting> meetingID;
-   // private HashMap<Set<Contact>, Calendar> id;
-    
-//    private Set<Contact> contacts;
-//    private Set<Meeting> meetings;
-//    private Calendar date; 
-//    private int id;
-//    private String text;//notes about meeting
-    
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args){
         mainLaunch mainScript = new mainLaunch();
         mainScript.launch();
     }
     
-    public void launch() throws FileNotFoundException, IOException{
-         ContactManager contactManager = new ContactManagerImpl();
-         
+    public void launch() {
+         ContactManagerImpl contactManager = new ContactManagerImpl();
+         System.out.println("\n\nChecking method 'addNewContact()'");
          contactManager.addNewContact("Esha", "Good");
          contactManager.addNewContact( "Manoj", "Friendly");
          contactManager.addNewContact( "Mum", "Employee of the Month");
-         contactManager.addNewContact( "Esha", "Hardworking");
+         contactManager.addNewContact( "Dad", "Hardworking");
          contactManager.addNewContact("Raju", "Bossy");
+         
+         System.out.println("\n\nChecking method 'addFutureMeeting()'");
+         contactManager.addFutureMeeting(contactManager.getContactSet(), new GregorianCalendar(2014, 25, 02));
+         
+         System.out.println("\n\nChecking method 'getFutureMeetingList()'");
+         Contact Esha = new ContactImpl(2, "Esha", "OKworking");
+         contactManager.contactSet.add(Esha);
+         contactManager.getFutureMeetingList(Esha);
          
         
         
