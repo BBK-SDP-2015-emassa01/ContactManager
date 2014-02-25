@@ -57,20 +57,32 @@ public class ContactManagerImpl implements ContactManager {
             FileReader file = new FileReader("contacts.csv");
 	    BufferedReader buffer = new BufferedReader(file);
 				
+            //set booleans for processing
+            boolean contacts = false;
+            boolean meetings = false;
+            
             //blank line that will provide itself as the output from the line found in 
             String line = "";
-            if ( (line = buffer.readLine()) != null){ 
-                
-                if (line.substring(0,1).equals("C")){
-                    System.out.println("Yes!!!");
-                } else {
-                    System.out.println("No :(");
+            while ( (line = buffer.readLine()) != null){ 
+                String[] lineItemsArray = line.split(",");
+                if (lineItemsArray[0].equals("Contact_ID")){
+                    System.out.println(lineItemsArray[0]);
+                    contacts = true;
+                    meetings = false;
+                } else if (lineItemsArray[0].equals("Meeting_ID")){
+                System.out.println(lineItemsArray[0]);
+                    contacts = false;
+                    meetings = true;
                 }
-                //write that file and contruct stuff
-//                buffer.write(line); 
-//		buffer.newLine();
-//                
+                else {
+                    if(contacts){
+                        //do stuff
+                    }
+                    if(meetings){
+                        //do stuff
+                    }
                 
+            }
             }
 
             //must close this once complete
