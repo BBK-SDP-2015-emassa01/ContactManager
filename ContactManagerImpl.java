@@ -59,9 +59,17 @@ public class ContactManagerImpl implements ContactManager {
 				
             //blank line that will provide itself as the output from the line found in 
             String line = "";
-            while ( (line = buffer.readLine()) != null){ 
-                //write that file and contruct stuff
+            if ( (line = buffer.readLine()) != null){ 
                 
+                if (line.substring(0,1).equals("C")){
+                    System.out.println("Yes!!!");
+                } else {
+                    System.out.println("No :(");
+                }
+                //write that file and contruct stuff
+//                buffer.write(line); 
+//		buffer.newLine();
+//                
                 
             }
 
@@ -115,16 +123,18 @@ public class ContactManagerImpl implements ContactManager {
             System.out.println(meetingDataEntry);
         
             Object[] contactListForDataEntry;
-            String thisContact;
+            Object thisContact;
             //Get contactSet and convert to Array, and String to print in contacts.csv. 
             Set<Contact> workingContacts = m.getContacts();
             contactListForDataEntry = workingContacts.toArray();
 
             //contactListForDataEntry = new String[workingContacts.size()];
             for (int i = 0; i <contactListForDataEntry.length;i++ ){
-            thisContact = contactListForDataEntry[i].toString();
+            thisContact = contactListForDataEntry[i];
+            Contact c = (Contact) thisContact;
+            String thisContactName = c.getName();
             
-            meetingDataEntry = meetingDataEntry+thisContact+"\n,,";
+            meetingDataEntry = meetingDataEntry+thisContactName+";";
             if (m instanceof PastMeeting){
                 PastMeeting pMeeting = (PastMeeting) m;
                 String notes = pMeeting.getNotes();
