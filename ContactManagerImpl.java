@@ -98,16 +98,20 @@ public class ContactManagerImpl implements ContactManager {
         //meetings have an ID a Date and Contacts. Notes are associated with PastMeeting. Meetings are stored in the meetingList.
         
         //Write headers:
-        bufferWrite.write("Contact_ID, Contact_Name, Contact_Notes");
+        bufferWrite.write("Meeting_ID, Meeting_Date, Meeting_Name, Meeting_Notes");
         
         String meetingDataEntry = "";
         for (Meeting m:meetingList){
-            meetingDataEntry = m.getId()+","+ m.getDate()+"\n";
-            String contactListForDataEntry;
-            //HERE WORK WITH GET CONTACTSm.getContacts();
+            meetingDataEntry = m.getId()+","+ m.getDate();
+            String contactListForDataEntry = "";
+            //HERE WORK WITH GET CONTACTS
+            Set<Contact> workingContacts = m.getContacts();
+            for (Contact a:workingContacts){
+                contactListForDataEntry = ","+ a.getName() +","+ a.getNotes();
+            }
+            meetingDataEntry = meetingDataEntry+contactListForDataEntry;
             bufferWrite.write(meetingDataEntry);
         }
-        
         
         fileWrite.close();
         bufferWrite.close();
