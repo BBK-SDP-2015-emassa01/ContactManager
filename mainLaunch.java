@@ -27,8 +27,10 @@ public class mainLaunch {
          contactManager.addNewContact( "Dad", "Hardworking");
          contactManager.addNewContact("Raju", "Bossy");
          
+         //contactManager.flush();
+         
          System.out.println("\n\nChecking method 'addFutureMeeting()'");
-         contactManager.addFutureMeeting(contactManager.getContactSet(), new GregorianCalendar(2014, 25, 02));
+         contactManager.addFutureMeeting(contactManager.contactSet, new GregorianCalendar(2014, 25, 02));
          
          System.out.println("\n\nChecking method 'getFutureMeetingList()'");
          Contact Esha = new ContactImpl(2, "Esha", "OKworking");
@@ -40,7 +42,7 @@ public class mainLaunch {
          Meeting pastMeeting = new PastMeetingImpl(1235, contactManager.contactSet, new GregorianCalendar(2014, 23, 02), "Productive" );
          contactManager.getPastMeeting(1235);
          
-        
+        contactManager.flush();
         
     }
     

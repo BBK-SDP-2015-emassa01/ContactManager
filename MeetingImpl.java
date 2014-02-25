@@ -15,7 +15,6 @@ public class MeetingImpl implements Meeting{
     private static int id;
     private Calendar date;
     private Set<Contact> setOfContacts;
-    ContactManager data = new ContactManagerImpl();
 
     
     /**
