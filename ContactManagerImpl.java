@@ -61,6 +61,8 @@ public class ContactManagerImpl implements ContactManager {
             String line = "";
             while ( (line = buffer.readLine()) != null){ 
                 //write that file and contruct stuff
+                
+                
             }
 
             //must close this once complete
@@ -80,7 +82,33 @@ public class ContactManagerImpl implements ContactManager {
         }
         FileWriter fileWrite = new FileWriter("contacts.csv");
         BufferedWriter bufferWrite = new BufferedWriter(fileWrite);
+        
         //write to file the contacts and meetings
+        //contacts have an ID a Name and Notes and are stored in the contactSet.
+        
+        //Write headers:
+        bufferWrite.write("Contact_ID, Contact_Name, Contact_Notes");
+        
+        String contactDataEntry = "";
+        for (Contact c:contactSet){
+            contactDataEntry = c.getId()+","+ c.getName() +","+ c.getNotes() +"\n";
+            bufferWrite.write(contactDataEntry);
+        }
+        
+        //meetings have an ID a Date and Contacts. Notes are associated with PastMeeting. Meetings are stored in the meetingList.
+        
+        //Write headers:
+        bufferWrite.write("Contact_ID, Contact_Name, Contact_Notes");
+        
+        String meetingDataEntry = "";
+        for (Meeting m:meetingList){
+            meetingDataEntry = m.getId()+","+ m.getDate()+"\n";
+            String contactListForDataEntry;
+            //HERE WORK WITH GET CONTACTSm.getContacts();
+            bufferWrite.write(meetingDataEntry);
+        }
+        
+        
         fileWrite.close();
         bufferWrite.close();
         }catch (IOException e){
