@@ -5,6 +5,13 @@
  */
 
 package ContactManager;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -31,14 +38,56 @@ public class ContactManagerImpl implements ContactManager {
     Map<Integer, Contact> contactIDMap;
     Map<Integer,Set< Contact>> meetingIDAndContactSet;
 
-    public ContactManagerImpl(){
+    public ContactManagerImpl() throws FileNotFoundException{
         contactSet = new HashSet<Contact>(); 
         meetingList = new ArrayList<Meeting>(); 
         date = new GregorianCalendar();
         meetingIDMap = new HashMap<Integer, Meeting>(); //ids to meetings
         contactIDMap = new HashMap<Integer, Contact>(); //ids to contacts
         meetingIDAndContactSet = new HashMap<Integer,Set<Contact>>(); //links a meeting ID to a set of contacts.
+        
+        //bufferedReader must be called from within try/catch statement - to catch any IOException
+        File contactFile = new File("contacts.csv");
+        if (!contactFile.exists()){
+            throw new FileNotFoundException("File not found.");
+        }   
+           
+        //buffered reader to read the file
+        try {
+            FileReader file = new FileReader("contacts.csv");
+	    BufferedReader buffer = new BufferedReader(file);
+				
+            //blank line that will provide itself as the output from the line found in 
+            String line = "";
+            while ( (line = buffer.readLine()) != null){ 
+                //write that file and contruct stuff
+            }
+
+            //must close this once complete
+            file.close();
+	    buffer.close();
+        }
+        catch(IOException e){
+            System.out.println("An error has occurred");
+        }	
+	}
+    
+    public void writeContactsCSV(){
+        try{
+        File contactFile = new File("contacts.csv");
+        if (!contactFile.exists()){
+            contactFile.createNewFile();
+        }
+        FileWriter fileWrite = new FileWriter("contacts.csv");
+        BufferedWriter bufferWrite = new BufferedWriter(fileWrite);
+        //write to file the contacts and meetings
+        fileWrite.close();
+        bufferWrite.close();
+        }catch (IOException e){
+            System.out.println("An error has occurred");
+        }
     }
+    
             
     /**
     * Add a new meeting to be held in the future.
@@ -77,6 +126,7 @@ public class ContactManagerImpl implements ContactManager {
             futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
             //add meeting to list of meetings
             meetingList.add(futureMeeting);
+            meetingIDMap.put(futureMeeting.getId(), futureMeeting );
             }
             if (generatedID == 0){
                 throw new IllegalArgumentException("You have not successfully assigned an ID for that meeting.");
@@ -327,6 +377,7 @@ public class ContactManagerImpl implements ContactManager {
                 Meeting pastMeeting = new PastMeetingImpl(generatePastMeetingID, contacts, date, text);
                 //add meeting to the meeting list.
                 meetingList.add(pastMeeting);
+                meetingIDMap.put(pastMeeting.getId(), pastMeeting);
     }
 
     public void checkArgumentIsNotNull(Set<Contact> contacts){
@@ -412,6 +463,7 @@ public class ContactManagerImpl implements ContactManager {
             }
             Contact newContact = new ContactImpl(contactID, name, notes);
             contactSet.add(newContact);
+            contactIDMap.put(newContact.getId(), newContact);
     }
     
     /**
