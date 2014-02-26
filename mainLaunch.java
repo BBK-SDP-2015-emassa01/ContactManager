@@ -39,8 +39,11 @@ public class mainLaunch {
          contactManager.getFutureMeetingList(Esha);
          
          System.out.println("\n\nChecking method 'getPastMeeting()'");
-         contactManager.getPastMeeting(2); //no meeting
-         Meeting pastMeeting = new PastMeetingImpl(1235, contactManager.contactSet, new GregorianCalendar(2014, 23, 02), "Productive" );
+         
+         PastMeetingImpl pastMeeting = new PastMeetingImpl(1235, contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive" );
+         contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
+         //System.out.println(pastMeeting.getNotes());
+         
          contactManager.getPastMeeting(1235);
          
         contactManager.flush();
