@@ -173,7 +173,7 @@ public class ContactManagerImpl implements ContactManager {
         //meetings have an ID a Date and Contacts. Notes are associated with PastMeeting. Meetings are stored in the meetingList.
         
         //Write headers:
-        fileWrite.write("Meeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes, \n\n");
+        fileWrite.write("\n\n\n\n\n\nMeeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes, \n\n");
         System.out.println("Meeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes, \n");
         if (meetingList == null){
             throw new NullPointerException("Your contact list is empty.");
@@ -195,6 +195,9 @@ public class ContactManagerImpl implements ContactManager {
             int thisContactName = c.getId();
             
             meetingDataEntry = meetingDataEntry+thisContactName+";";
+
+            }
+            
             if (m instanceof PastMeeting){
                 PastMeeting pMeeting = (PastMeeting) m;
                 String notes = pMeeting.getNotes();
@@ -210,9 +213,10 @@ public class ContactManagerImpl implements ContactManager {
                 //do nothing
                 meetingDataEntry = meetingDataEntry;
             }
+            
+            fileWrite.write(meetingDataEntry+"\n");
         }
-        fileWrite.write(meetingDataEntry+"\n");
-        }
+
         fileWrite.close();
         bufferWrite.close();
         }catch (IOException e){
