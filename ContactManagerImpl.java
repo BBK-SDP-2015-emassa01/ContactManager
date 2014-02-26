@@ -12,10 +12,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +42,7 @@ public class ContactManagerImpl implements ContactManager {
     Map<Integer, Contact> contactIDMap;
     Map<Integer,Set< Contact>> meetingIDAndContactSet;
 
-    public ContactManagerImpl() throws FileNotFoundException{
+    public ContactManagerImpl() throws FileNotFoundException, ParseException{
         contactSet = new HashSet<Contact>(); 
         meetingList = new ArrayList<Meeting>(); 
         date = new GregorianCalendar();
@@ -65,6 +69,7 @@ public class ContactManagerImpl implements ContactManager {
             String line = "";
             while ( (line = buffer.readLine()) != null){ 
                 String[] lineItemsArray = line.split(",");
+                
                 if (lineItemsArray[0].equals("Contact_ID")){
                     System.out.println(lineItemsArray[0]);
                     contacts = true;
@@ -76,10 +81,34 @@ public class ContactManagerImpl implements ContactManager {
                 }
                 else {
                     if(contacts){
-                        //do stuff
+                        String contactName = lineItemsArray[1];
+                        int contactID = Integer.parseInt(lineItemsArray[0]);
+                        String contactNotes = lineItemsArray[2];
+                        
+                        Contact thisContact = new ContactImpl(contactID, contactName,contactNotes );
+                        contactSet.add(thisContact);
+                        contactIDMap.put(thisContact.getId(), thisContact);
+                        
+                                
                     }
                     if(meetings){
-                        //do stuff
+                        int meetingID;
+                        
+                        //parse and construct calendar object
+                        DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z YYYY");
+                        Date date = format.parse(lineItemsArray[1]);
+                        Calendar calDate = new GregorianCalendar();
+                        calDate.setTime(date);
+                        
+                        Contact[] thisSetOfContacts = lineItemsArray[2].split(";");
+                        for (int i = 0; i<thisSetOfContacts.length;i++){
+                            String temp = thisSetOfContacts[i];
+                        }
+                        Set<Contact> meetingContacts;
+                        
+                        
+                        
+                        String meetingNotes = "";
                     }
                 
             }
@@ -144,7 +173,7 @@ public class ContactManagerImpl implements ContactManager {
             for (int i = 0; i <contactListForDataEntry.length;i++ ){
             thisContact = contactListForDataEntry[i];
             Contact c = (Contact) thisContact;
-            String thisContactName = c.getName();
+            int thisContactName = c.getId();
             
             meetingDataEntry = meetingDataEntry+thisContactName+";";
             if (m instanceof PastMeeting){

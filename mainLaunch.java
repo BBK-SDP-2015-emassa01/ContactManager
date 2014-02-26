@@ -6,6 +6,7 @@
 
 package ContactManager;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.util.GregorianCalendar;
 import java.util.Set;
 /**
@@ -13,12 +14,12 @@ import java.util.Set;
  * @author Esha
  */
 public class mainLaunch {
-    public static void main(String[] args) throws FileNotFoundException{
+    public static void main(String[] args) throws FileNotFoundException, ParseException{
         mainLaunch mainScript = new mainLaunch();
         mainScript.launch();
     }
     
-    public void launch() throws FileNotFoundException {
+    public void launch() throws FileNotFoundException, ParseException {
          ContactManagerImpl contactManager = new ContactManagerImpl();
          System.out.println("\n\nChecking method 'addNewContact()'");
          contactManager.addNewContact("Esha", "Good");
@@ -30,7 +31,7 @@ public class mainLaunch {
          //contactManager.flush();
          
          System.out.println("\n\nChecking method 'addFutureMeeting()'");
-         contactManager.addFutureMeeting(contactManager.contactSet, new GregorianCalendar(2014, 25, 02));
+         contactManager.addFutureMeeting(contactManager.contactSet, new GregorianCalendar(2014, 02, 29, 15, 30));
          
          System.out.println("\n\nChecking method 'getFutureMeetingList()'");
          Contact Esha = new ContactImpl(2, "Esha", "OKworking");
