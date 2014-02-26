@@ -92,7 +92,10 @@ public class ContactManagerImpl implements ContactManager {
                                 
                     }
                     if(meetings){
-                        int meetingID;
+                        
+                        Set<Contact> meetingContacts = new HashSet<Contact>();
+                        
+                        int meetingID = Integer.parseInt(lineItemsArray[0]);
                         
                         //parse and construct calendar object
                         DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z YYYY");
@@ -100,18 +103,26 @@ public class ContactManagerImpl implements ContactManager {
                         Calendar calDate = new GregorianCalendar();
                         calDate.setTime(date);
                         
-                        Contact[] thisSetOfContacts = lineItemsArray[2].split(";");
-                        for (int i = 0; i<thisSetOfContacts.length;i++){
-                            String temp = thisSetOfContacts[i];
-                        }
-                        Set<Contact> meetingContacts;
+                        String thisMeetingContacts = lineItemsArray[2];
+                        String MeetingContacts = thisMeetingContacts.replaceAll(";", ",");
                         
-                        
+                        meetingContacts = getContacts(MeetingContacts);
                         
                         String meetingNotes = "";
+                    
+                        Calendar dateNow = new GregorianCalendar();
+                        if (calDate.after(dateNow)){
+                        //construct FutureMeetingImpl without notes
+                            Meeting futureMeeting = new FutureMeetingImpl(meetingID, meetingContacts, calDate);
+                        }
+                        
+                        if (calDate.before(dateNow)){
+                        //construct PastMeetingImpl with notes
+                            meetingNotes = lineItemsArray[3];
+                            Meeting pastMeeting = new PastMeetingImpl(meetingID, meetingContacts, calDate, meetingNotes);
+                        }
                     }
-                
-            }
+                }
             }
 
             //must close this once complete
@@ -169,7 +180,6 @@ public class ContactManagerImpl implements ContactManager {
             Set<Contact> workingContacts = m.getContacts();
             contactListForDataEntry = workingContacts.toArray();
 
-            //contactListForDataEntry = new String[workingContacts.size()];
             for (int i = 0; i <contactListForDataEntry.length;i++ ){
             thisContact = contactListForDataEntry[i];
             Contact c = (Contact) thisContact;
@@ -179,9 +189,12 @@ public class ContactManagerImpl implements ContactManager {
             if (m instanceof PastMeeting){
                 PastMeeting pMeeting = (PastMeeting) m;
                 String notes = pMeeting.getNotes();
-                meetingDataEntry = meetingDataEntry+ notes;
+                if (notes!=null){
+                meetingDataEntry = meetingDataEntry+ ","+notes;
+                }
             }
             else if (m instanceof FutureMeeting){
+                //do nothing
                 meetingDataEntry = meetingDataEntry;
             }
         }
@@ -617,7 +630,7 @@ public class ContactManagerImpl implements ContactManager {
     */
     public Set<Contact> getContacts(String name){
         
-        Set<Contact> theseContacts = null;
+        Set<Contact> theseContacts = new HashSet<Contact>();;
         try{
         for (Contact c: contactSet){
             if (c.getName().contentEquals(name)){
