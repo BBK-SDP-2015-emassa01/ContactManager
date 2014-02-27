@@ -6,6 +6,7 @@
 
 package ContactManager;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.GregorianCalendar;
 import java.util.Set;
@@ -14,18 +15,19 @@ import java.util.Set;
  * @author Esha
  */
 public class mainLaunch {
-    public static void main(String[] args) throws FileNotFoundException, ParseException{
+    public static void main(String[] args) throws FileNotFoundException, ParseException, IOException{
         mainLaunch mainScript = new mainLaunch();
         mainScript.launch();
     }
     
-    public void launch() throws FileNotFoundException, ParseException {
+    public void launch() throws FileNotFoundException, ParseException, IOException {
          ContactManagerImpl contactManager = new ContactManagerImpl();
          System.out.println("\n\nChecking method 'addNewContact()'");
          contactManager.addNewContact("Esha", "Good");
          contactManager.addNewContact( "Manoj", "Friendly");
          contactManager.addNewContact( "Mum", "Employee of the Month");
          contactManager.addNewContact( "Dad", "Hardworking");
+         contactManager.addNewContact("Raju", "Bossy");
          contactManager.addNewContact("Raju", "Bossy");
          
          //contactManager.flush();
@@ -36,17 +38,19 @@ public class mainLaunch {
          System.out.println("\n\nChecking method 'getFutureMeetingList()'");
          Contact Esha = new ContactImpl(2, "Esha", "OKworking");
          contactManager.contactSet.add(Esha);
-         contactManager.getFutureMeetingList(Esha);
+         System.out.println(contactManager.getFutureMeetingList(Esha).toString());
          
          System.out.println("\n\nChecking method 'getPastMeeting()'");
          
-         PastMeetingImpl pastMeeting = new PastMeetingImpl(1235, contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive" );
+         Meeting pastMeeting = new PastMeetingImpl(1235, contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive" );
+         contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
          contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
          //System.out.println(pastMeeting.getNotes());
          
-         contactManager.getPastMeeting(1235);
+         contactManager.getPastMeeting(pastMeeting.getId());
+         System.out.println(pastMeeting.getId());
          
-        contactManager.flush();
+       // contactManager.flush();
         
     }
     
