@@ -22,6 +22,7 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
         super(id, contacts, date);
         addNotes(notes);
     }
+
     
     public String getNotes(){
         if (this.notes.equals("")){

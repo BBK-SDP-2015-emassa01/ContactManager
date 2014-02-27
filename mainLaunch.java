@@ -47,7 +47,7 @@ public class mainLaunch {
          contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
          //System.out.println(pastMeeting.getNotes());
          
-         contactManager.getPastMeeting(pastMeeting.getId());
+         contactManager.getPastMeeting(339870630);
          System.out.println(pastMeeting.getId());
          
        // contactManager.flush();

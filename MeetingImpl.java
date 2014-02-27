@@ -21,7 +21,12 @@ public class MeetingImpl implements Meeting{
      * Meetings have unique IDs so using Set interface for additional Set stipulations,
      * that no two Meeting objects (e.g., m1 and m2) are equal (ie. it is never true 
      * that m1.equals(m2). 
-     * **/
+     *
+     * @param id Meeting id
+     * @param contacts meeting contacts
+     * @param date meeting date
+     
+     **/
     
     
     public MeetingImpl(int id, Set<Contact> contacts, Calendar date){

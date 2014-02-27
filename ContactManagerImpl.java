@@ -247,7 +247,7 @@ public class ContactManagerImpl implements ContactManager {
     **/
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
         Meeting futureMeeting;
-        int generatedID = 0;
+        int generatedID = 000001;
         boolean generatedIDIsNotTaken = false;
         // check that the contacts are not null.
         checkArgumentIsNotNull(contacts);
@@ -261,15 +261,17 @@ public class ContactManagerImpl implements ContactManager {
             if (!contactSet.containsAll(contacts)){
                 throw new IllegalArgumentException ("Unknown/non-existant contacts. ");
         }
-                
+            
+            if (!meetingList.contains(generatedID)){
+                generatedIDIsNotTaken = true;
+            }
+            
                 while(!generatedIDIsNotTaken){
                 Random random = new Random();
                 generatedID = random.nextInt();
                 generatedID= Math.abs(generatedID);
                 System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
-                if (!meetingList.contains(generatedID)){
-                        generatedIDIsNotTaken = true;
-                    }
+                
             // constructor, after all checks, create a future meeting.
             futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
             //add meeting to list of meetings
@@ -294,6 +296,7 @@ public class ContactManagerImpl implements ContactManager {
         //if there are no meetings in the list.
         if (meetingList.isEmpty()){
             System.out.println("The meeting list is currently empty.");
+            //PastMeeting a = new PastMeetingImpl(1, new HashSet<Contact>(), new GregorianCalendar(), "Esha");
             return null;
         }
         
@@ -312,6 +315,7 @@ public class ContactManagerImpl implements ContactManager {
             }
             else if (meetingList.get(i) instanceof PastMeeting){
                 PastMeeting result = (PastMeetingImpl) meetingList.get(i);
+                System.out.println("Retrieving past meeting..");
                 return result;
             }
         }
@@ -520,14 +524,15 @@ public class ContactManagerImpl implements ContactManager {
                 //create boolean to check the meetingID does not exist.
                 boolean generatedPastMeetingIDNotTaken = false;
                 
+                for (int i = 0; i < meetingList.size(); i++){
+                        if (meetingList.get(i).getId()!=generatePastMeetingID){
+                            generatedPastMeetingIDNotTaken = true;
+                        }
                 while(!generatedPastMeetingIDNotTaken){
                     Random random = new Random();
                     generatePastMeetingID = random.nextInt();
                     generatePastMeetingID= Math.abs(generatePastMeetingID);
-                    for (int i = 0; i < meetingList.size(); i++){
-                        if (meetingList.get(i).getId()!=generatePastMeetingID){
-                            generatedPastMeetingIDNotTaken = true;
-                        }
+                    
                     }
                    //using iterator //TODO fix infinate LOOP, maybe search the Set, or the HashMap instead??
 //                    for (Meeting m: meetingList){
