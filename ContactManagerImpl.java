@@ -301,12 +301,12 @@ public class ContactManagerImpl implements ContactManager {
         }
         
 //iterate through the list of meetings
-        if (meetingIDMap.containsKey(id)){
-            System.out.println("Yes has id");
-        }
-        if (!meetingIDMap.containsKey(id)){
-            System.out.println("No has id");
-        }
+//        if (meetingIDMap.containsKey(id)){
+//            System.out.println("Yes has id");
+//        }
+//        if (!meetingIDMap.containsKey(id)){
+//            System.out.println("No has id");
+//        }
         for (int i = 0; i<meetingList.size();i++){
         if (meetingList.get(i).getId()==id){
             //throw exception if a future meeting contains that id number
@@ -585,15 +585,34 @@ public class ContactManagerImpl implements ContactManager {
             throw new NullPointerException("Please enter a note for the past meeting: "); 
         }
         //iterate through meeting list to find meeting id
-        for (Meeting m:meetingList){
-           if (m.getId()==id){
-               
+        for (int i = 0; i<meetingList.size(); i++){
+           if (meetingList.get(i).getId()==id){
                //get current date and compare it to meeting date
                Calendar dateNow = new GregorianCalendar();
-               if (m.getDate().after(dateNow)){
+               
+               if (meetingList.get(i).getDate().after(dateNow)){
                    throw new IllegalStateException ("That meeting is set for a date in the future "
-                           + "so cannot be converted into a future meeting yet. ");
+                           + "so cannot be converted into a past meeting, and you cannot add notes yet. ");
                } 
+               //save all info for the meeting
+               int meetingID = meetingList.get(i).getId();
+               Set<Contact> meetingContacts = meetingList.get(i).getContacts();
+               Calendar meetingDate = meetingList.get(i).getDate();
+               String meetingNotes = text;
+               
+               //remove meeting from the list
+               meetingList.remove(i);
+               //remove meeting from the map
+               if (meetingIDMap.containsKey(id)){
+                   //meetingIDMap.get(id);
+                   meetingIDMap.remove(id);
+               }
+               
+               //contruct the past meeting
+               Meeting pMeeting = new PastMeetingImpl(meetingID, meetingContacts, meetingDate,meetingNotes );
+               meetingList.add(pMeeting);
+               meetingIDMap.put(id, pMeeting);
+               
 
                /* If I use the interface to construct here, I do not have the 'addNotes' method available. 
                *  Why? Is there an dependency between casting when using interfacees to construct?

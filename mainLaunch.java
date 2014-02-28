@@ -18,6 +18,8 @@ public class mainLaunch {
     public static void main(String[] args) throws FileNotFoundException, ParseException, IOException{
         mainLaunch mainScript = new mainLaunch();
         mainScript.launch();
+        
+        
     }
     
     public void launch() throws FileNotFoundException, ParseException, IOException {
@@ -29,6 +31,12 @@ public class mainLaunch {
          contactManager.addNewContact( "Dad", "Hardworking");
          contactManager.addNewContact("Raju", "Bossy");
          contactManager.addNewContact("Raju", "Bossy");
+         
+         Meeting p = new PastMeetingImpl(1, contactManager.contactSet, new GregorianCalendar(2011, 02, 29, 15, 30), "Good");
+         System.out.println(p instanceof Meeting);
+         System.out.println(p instanceof PastMeetingImpl);
+         System.out.println(p instanceof PastMeeting);
+         System.out.println(p instanceof FutureMeeting);
          
          //contactManager.flush();
          
