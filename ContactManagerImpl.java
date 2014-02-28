@@ -612,18 +612,7 @@ public class ContactManagerImpl implements ContactManager {
                Meeting pMeeting = new PastMeetingImpl(meetingID, meetingContacts, meetingDate,meetingNotes );
                meetingList.add(pMeeting);
                meetingIDMap.put(id, pMeeting);
-               
-
-               /* If I use the interface to construct here, I do not have the 'addNotes' method available. 
-               *  Why? Is there an dependency between casting when using interfacees to construct?
-               *  What happens if 'm' is already a pastMeeting, will there be an 'unable to cast' error?
-               */
-               //else cast to PastMeetingImpl to be able to addNotes
-               Meeting convertToPastMeeting = (PastMeetingImpl) m;
-               convertToPastMeeting.addNotes(text);  //NEED TO FIGURE THIS OUT... NEED TO CONTRUCT A MEETINGS AND ADD IT TO MAP.
-               //NEED TO REMOVE THE PAST MEETING OR THE 'NOW' PAST METING AND RECONSTRUCT WITH THE TEXT...AS THE NOTES...THINK ABOUT
-               //HOW I CAN TAKE OUT A FUTURE MEETING? DO I REMOVE FROM LIST AND MAP?
-               
+   
            } else throw new IllegalArgumentException("That meeting ID does not exist. ");  
         }
     }
