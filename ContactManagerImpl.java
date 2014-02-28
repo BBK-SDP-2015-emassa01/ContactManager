@@ -370,9 +370,9 @@ public class ContactManagerImpl implements ContactManager {
             return null;
         } else {
             //return the meeting with the given id
-        for (Meeting m: meetingList){
-        if (m.getId()==id){
-         return m;   
+        for (int i = 0; i<meetingList.size(); i++){
+        if (meetingList.get(i).getId()==id){
+         return meetingList.get(i);   
         }
         }
         //else return null with a message
@@ -535,6 +535,7 @@ public class ContactManagerImpl implements ContactManager {
                     
                     }
                    //using iterator //TODO fix infinate LOOP, maybe search the Set, or the HashMap instead??
+                //changed the call to boolean true to avoid this loop 
 //                    for (Meeting m: meetingList){
 //                    if (m.getId()!=generatePastMeetingID){
 //                        generatedPastMeetingIDNotTaken = true;
@@ -618,16 +619,17 @@ public class ContactManagerImpl implements ContactManager {
         boolean contactIdIsTaken = false;
         checkArgumentIsNotNull(name);
         checkArgumentIsNotNull(notes);
+        
+        if (!contactSet.contains(contactID)){
+                    contactIdIsTaken= true;
+                }
             
             while (!contactIdIsTaken){
                 Random idNumber = new Random();
                 contactID = idNumber.nextInt();
                 contactID= Math.abs(contactID);
                 System.out.println("Assined " + name + " ID NUMBER: \n" + contactID);
-                
-                if (!contactSet.contains(contactID)){
-                    contactIdIsTaken= true;
-                }
+
                 
             }
             Contact newContact = new ContactImpl(contactID, name, notes);
@@ -644,7 +646,7 @@ public class ContactManagerImpl implements ContactManager {
     */
     public Set<Contact> getContacts(int... ids){
         boolean foundId = false;
-        Set<Contact> theseContacts = null;
+        Set<Contact> theseContacts= new HashSet<Contact>();
         
         //check that all the id's entered exist.
         for (int checkedId:ids){
@@ -677,16 +679,19 @@ public class ContactManagerImpl implements ContactManager {
     */
     public Set<Contact> getContacts(String name){
         
+        checkArgumentIsNotNull(name);
+        
         Set<Contact> theseContacts = new HashSet<Contact>();;
-        try{
+
         for (Contact c: contactSet){
-            if (c.getName().contentEquals(name)){
+            if (c.getName().equals(name)){
             theseContacts.add(c);
                 
             }
-        } 
-        }catch (NullPointerException e){
-            e.printStackTrace();
+            
+            if (theseContacts.isEmpty()){
+                throw new NullPointerException("There are no contacts with that name.");
+            }
         }return theseContacts;
     }
     
