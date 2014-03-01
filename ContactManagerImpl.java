@@ -23,11 +23,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeSet;
 /**
- * Class to manage contacts and meetings
+ * Class to manage contacts and meetings 
  * @author Esha
  */
 public class ContactManagerImpl implements ContactManager {
@@ -47,7 +48,7 @@ public class ContactManagerImpl implements ContactManager {
         date = new GregorianCalendar();
         meetingIDMap = new HashMap<Integer, Meeting>(); //ids to meetings
         contactIDMap = new HashMap<Integer, Contact>(); //ids to contacts
-        contactIDAndMeetingList = new HashMap<Integer,List<Meeting>>(); //links a meeting ID to a set of contacts.
+        contactIDAndMeetingList = new HashMap<Integer,List<Meeting>>(); //links a contact ID to a list of meetings.
         
         //bufferedReader must be called from within try/catch statement - to catch any IOException
         File path = new File( "contacts.csv");
@@ -142,6 +143,7 @@ public class ContactManagerImpl implements ContactManager {
                             Meeting futureMeeting = new FutureMeetingImpl(meetingID, meetingContacts, calDate);
                             meetingList.add(futureMeeting);
                             meetingIDMap.put(meetingID,futureMeeting );
+                            addListOfMeetingsToContact(futureMeeting);
                         }
                         
                         String meetingNotes = "";
@@ -155,9 +157,10 @@ public class ContactManagerImpl implements ContactManager {
                                 meetingNotes = lineItemsArray[3];
                             }
                            
-                            PastMeeting pastMeeting = new PastMeetingImpl(meetingID, meetingContacts, calDate, meetingNotes);
+                            Meeting pastMeeting = new PastMeetingImpl(meetingID, meetingContacts, calDate, meetingNotes);
                             meetingList.add(pastMeeting);
                             meetingIDMap.put(meetingID,pastMeeting );
+                            addListOfMeetingsToContact(pastMeeting);
                         }
                     }
                 }
@@ -170,7 +173,35 @@ public class ContactManagerImpl implements ContactManager {
         e.printStackTrace();
         }
         }   
-        
+     
+        public void addListOfMeetingsToContact(Meeting m){
+            List<Meeting> thisList = new ArrayList<Meeting>();
+            
+            Set<Contact> mContacts;
+                
+            //only add meeting if the id is not already added. 
+            //At this stage there should not be any duplicates.
+            if (!contactIDAndMeetingList.containsKey(m.getId())){
+                mContacts = m.getContacts();
+                
+                Iterator<Contact> eachContact = mContacts.iterator();
+                while (eachContact.hasNext()){
+                    Contact thisContact = eachContact.next();
+                    
+                    if (contactIDAndMeetingList.containsKey(thisContact.getId())){
+                        thisList = contactIDAndMeetingList.get(thisContact.getId());
+                        
+                        thisList.add(m);
+                        contactIDAndMeetingList.put(thisContact.getId(), thisList);
+                    }
+                }
+                
+                
+            }
+            
+            contactIDAndMeetingList.put(m.getId(),thisList ); //link contact id to updatedmeeting list
+            
+        }
         
     /**
     * Add a new meeting to be held in the future.
@@ -215,6 +246,7 @@ public class ContactManagerImpl implements ContactManager {
             //add meeting to list of meetings
             meetingList.add(futureMeeting);
             meetingIDMap.put(futureMeeting.getId(), futureMeeting );
+            addListOfMeetingsToContact(futureMeeting);
             if (generatedID == 0){
                 throw new IllegalArgumentException("You have not successfully assigned an ID for that meeting.");
             } else {
@@ -228,6 +260,7 @@ public class ContactManagerImpl implements ContactManager {
             //add meeting to list of meetings
             meetingList.add(futureMeeting);
             meetingIDMap.put(futureMeeting.getId(), futureMeeting );
+            addListOfMeetingsToContact(futureMeeting);
             return id;
     }
     
@@ -474,7 +507,7 @@ public class ContactManagerImpl implements ContactManager {
                 
                 if(!generatedPastMeetingIDTaken){
                 //contruct a new past meeting with the ID, contacts, date and notes
-                PastMeeting pastMeeting = new PastMeetingImpl(generatePastMeetingID, contacts, date, text);
+                Meeting pastMeeting = new PastMeetingImpl(generatePastMeetingID, contacts, date, text);
                 //add meeting to the meeting list.
                 meetingList.add(pastMeeting);
                 meetingIDMap.put(pastMeeting.getId(), pastMeeting);
@@ -484,7 +517,7 @@ public class ContactManagerImpl implements ContactManager {
 
     //for testing meeting
     public void addNewPastMeeting(int ID , Set<Contact> contacts, Calendar date, String text){
-     PastMeeting pastMeeting = new PastMeetingImpl( ID , contacts,  date,  text);
+     Meeting pastMeeting = new PastMeetingImpl( ID , contacts,  date,  text);
                 //add meeting to the meeting list.
                 meetingList.add(pastMeeting);
                 meetingIDMap.put(pastMeeting.getId(), pastMeeting);
