@@ -202,8 +202,8 @@ public class ContactManagerImpl implements ContactManager {
                     generatedID = random.nextInt();
                     generatedID= Math.abs(generatedID);
                     System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
-                    if (meetingList.contains(generatedID)){
-                        generatedIDIsTaken = true;
+                    if (!meetingList.contains(generatedID)){
+                        generatedIDIsTaken = false;
                     } 
                 } while(generatedIDIsTaken);
                 
@@ -457,8 +457,8 @@ public class ContactManagerImpl implements ContactManager {
                     generatePastMeetingID = random.nextInt();
                     generatePastMeetingID= Math.abs(generatePastMeetingID);
                     for (int i = 0; i < meetingList.size(); i++){
-                        if (meetingList.get(i).getId()==generatePastMeetingID){
-                            generatedPastMeetingIDTaken = true;
+                        if (meetingList.get(i).getId()!=generatePastMeetingID){
+                            generatedPastMeetingIDTaken = false;
                         }
                     }
                 } while (generatedPastMeetingIDTaken);
@@ -574,14 +574,16 @@ public class ContactManagerImpl implements ContactManager {
             contactID = idNumber.nextInt();
             contactID= Math.abs(contactID);
             System.out.println("Assined " + name + " ID NUMBER: \n" + contactID);
-            if (contactSet.contains(contactID)){
-                contactIdIsTaken= true;
+            if (!contactSet.contains(contactID)){
+                contactIdIsTaken= false;
             }
         } while (contactIdIsTaken);
 
         Contact newContact = new ContactImpl(contactID, name, notes);
         contactSet.add(newContact);
         contactIDMap.put(newContact.getId(), newContact);
+        //need to write something to prevent two IDs being mapped to the same contact/meeting. 
+        //Currently I can add more than one!
     }
     
     /**

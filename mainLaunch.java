@@ -51,10 +51,13 @@ public class mainLaunch {
          System.out.println("\n\nChecking method 'getPastMeeting()'");
          
          Meeting pastMeeting = new PastMeetingImpl(1235, contactManager.getContactSet(), new GregorianCalendar(2012, 01, 02), "Productive" );
+         System.out.println("constructed pastmeetingimpl");
          contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
          contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
          //System.out.println(pastMeeting.getNotes());
+         System.out.println("done this");
          
+         System.out.println("getPastMeeting() number check");
          contactManager.getPastMeeting(339870630);
          System.out.println(pastMeeting.getId());
          
