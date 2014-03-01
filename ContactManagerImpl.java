@@ -31,14 +31,15 @@ import java.util.TreeSet;
  * @author Esha
  */
 public class ContactManagerImpl implements ContactManager {
-    Set<Contact> contactSet;
+    
+    private Set<Contact> contactSet;
     private List<Meeting> meetingList;
     private Calendar date; 
     
     // Structures to store meetingIDs and contactSets
-    Map<Integer, Meeting> meetingIDMap;
-    Map<Integer, Contact> contactIDMap;
-    Map<Integer,Set< Contact>> meetingIDAndContactSet;
+    private Map<Integer, Meeting> meetingIDMap;
+    private Map<Integer, Contact> contactIDMap;
+    private Map<Integer,Set< Contact>> meetingIDAndContactSet;
 
     public ContactManagerImpl() throws FileNotFoundException, ParseException, IOException{
         contactSet = new HashSet<Contact>(); 
@@ -57,7 +58,23 @@ public class ContactManagerImpl implements ContactManager {
            // checkIfFileExists();
         }  
     }
-        
+    
+    //for testing
+    public Set<Contact> getContactSet(){
+        return this.contactSet;
+    }
+    public List<Meeting> getMeetingList(){
+        return this.meetingList;
+    }
+    
+    public Map<Integer, Meeting> getMeetingMap(){
+        return this.meetingIDMap;
+    }
+
+    public Map<Integer, Contact> getContactMap(){
+        return this.contactIDMap;
+    }
+    
         public void checkIfFileExists() throws ParseException{
         //buffered reader to read the file
         try {
@@ -549,6 +566,14 @@ public class ContactManagerImpl implements ContactManager {
                 meetingIDMap.put(pastMeeting.getId(), pastMeeting);
     }
 
+    //for testing meeting
+    public void addNewPastMeeting(int ID , Set<Contact> contacts, Calendar date, String text){
+     PastMeeting pastMeeting = new PastMeetingImpl( ID , contacts,  date,  text);
+                //add meeting to the meeting list.
+                meetingList.add(pastMeeting);
+                meetingIDMap.put(pastMeeting.getId(), pastMeeting);
+    }
+                
     public void checkArgumentIsNotNull(Set<Contact> contacts){
         if (contacts==null){
             throw new NullPointerException("Please enter the contacts. "); 
@@ -616,6 +641,13 @@ public class ContactManagerImpl implements ContactManager {
            } else throw new IllegalArgumentException("That meeting ID does not exist. ");  
         }
     }
+    //for testing
+    public Contact addNewContact (int contactID, String name, String notes){
+        Contact newContact = new ContactImpl(contactID, name, notes);
+            contactSet.add(newContact);
+            contactIDMap.put(newContact.getId(), newContact);
+            return newContact;
+    }
     
     /**
     * Create a new contact with the specified name and notes.
@@ -655,30 +687,24 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if any of the IDs does not correspond to a real contact
     */
     public Set<Contact> getContacts(int... ids){
-        boolean foundId = false;
         Set<Contact> theseContacts= new HashSet<Contact>();
         
         //check that all the id's entered exist.
-        for (int checkedId:ids){
-            for (Contact checkContactId: contactSet){
-                if (checkContactId.getId() == checkedId){
-                foundId = true;
-                } else throw new IllegalArgumentException("The id: "+ checkedId + "does not correspond to a real contact. ");
-            } 
-        }
         
-        /*(...) in method means it can take a variable number of type 'int' values in its signature, 
-        * and will store them as ab array ready to iterate through.
-        */ 
         for (int id:ids){
-        for (Contact c: contactSet){
-            if (c.getId() == id){
-            theseContacts.add(c);
+            if (!contactIDMap.containsKey(id)){
+                throw new IllegalArgumentException("These ids do not all correspond to real contacts. ");
             } 
-        }
-        } 
-        return theseContacts;
+            
+        for (int i = 0; i <ids.length; i++){
+            if (contactIDMap.containsKey(ids[i])){
+                Contact toAdd = contactIDMap.get(ids[i]);
+                theseContacts.add(toAdd);
+                } else throw new IllegalArgumentException("The id: "+ ids[i] + "does not correspond to a real contact. ");
+            } 
+        }return theseContacts;
     }
+        
     
     /**
     * Returns a list with the contacts whose name contains that string.
@@ -725,10 +751,6 @@ public class ContactManagerImpl implements ContactManager {
         }catch(NullPointerException e){
             e.printStackTrace();
         }
-    }
-    
-    public Set<Contact> getContactSet(){
-        return this.contactSet;
     }
 
 }
