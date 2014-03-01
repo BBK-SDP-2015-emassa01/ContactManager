@@ -51,13 +51,13 @@ public class ContactManagerImpl implements ContactManager {
         contactIDAndMeetingList = new HashMap<Integer,List<Meeting>>(); //links a contact ID to a list of meetings.
         
         //bufferedReader must be called from within try/catch statement - to catch any IOException
-        File path = new File( "contacts.csv");
+        File path = new File( "contacts.txt");
         File contactFile = new File(path.getAbsolutePath());
         if (!contactFile.exists())
         {
             System.out.println("File not found.");
-            FileWriter contactsCSV = new FileWriter("contacts.csv");
-            BufferedWriter bufferWrite = new BufferedWriter(contactsCSV);
+            FileWriter contactsTXT = new FileWriter("contacts.txt");
+            BufferedWriter bufferWrite = new BufferedWriter(contactsTXT);
         }
             
           checkIfFileExists();
@@ -66,7 +66,7 @@ public class ContactManagerImpl implements ContactManager {
         public void checkIfFileExists() throws ParseException, IOException{
         //buffered reader to read the file
         try {
-            FileReader file = new FileReader("contacts.csv");
+            FileReader file = new FileReader("contacts.txt");
 	    BufferedReader buffer = new BufferedReader(file);
 				
             //set booleans for processing
@@ -713,19 +713,19 @@ public class ContactManagerImpl implements ContactManager {
 
     public void flush(){
         try{
-        File contactFile = new File("contacts.csv");
+        File contactFile = new File("contacts.txt");
         if (!contactFile.exists()){
             contactFile.createNewFile();
         }
-        FileWriter fileWrite = new FileWriter("contacts.csv");
+        FileWriter fileWrite = new FileWriter("contacts.txt");
         BufferedWriter bufferWrite = new BufferedWriter(fileWrite);
         
         //write to file the contacts and meetings
         //contacts have an ID a Name and Notes and are stored in the contactSet.
         
         //Write headers:
-        System.out.println("Contact_ID, Contact_Name, Contact_Notes");
-        fileWrite.write("Contact_ID, Contact_Name, Contact_Notes,\n");
+        System.out.println("CONTACT ID NUMBER , CONTACT NAME , CONTACT NOTES");
+        fileWrite.write("CONTACT ID NUMBER , CONTACT NAME , CONTACT NOTES ,\n");
         
         if (contactSet == null){
             throw new NullPointerException("Your contact list is empty.");
@@ -742,8 +742,8 @@ public class ContactManagerImpl implements ContactManager {
         //meetings have an ID a Date and Contacts. Notes are associated with PastMeeting. Meetings are stored in the meetingList.
         
         //Write headers:
-        fileWrite.write("Meeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes,");
-        System.out.println("Meeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes, \n");
+        fileWrite.write("MEETING ID NUMBER , MEETING DATE , MEETING ATTENDEE (ID NUMBERS) LIST , MEETING NOTES,");
+        System.out.println("MEETING ID NUMBER , MEETING DATE , MEETING ATTENDEE (ID NUMBERS) LIST , MEETING NOTES \n");
         if (meetingList == null){
             throw new NullPointerException("Your contact list is empty.");
         }
@@ -754,7 +754,7 @@ public class ContactManagerImpl implements ContactManager {
         
             Object[] contactListForDataEntry;
             Object thisContact;
-            //Get contactSet and convert to Array, and String to print in contacts.csv. 
+            //Get contactSet and convert to Array, and String to print in contacts.txt. 
             Set<Contact> workingContacts = m.getContacts();
             contactListForDataEntry = workingContacts.toArray();
 
