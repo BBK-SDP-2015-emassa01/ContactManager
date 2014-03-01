@@ -173,18 +173,20 @@ public class ContactManagerImpl implements ContactManager {
         e.printStackTrace();
         }
         }   
-     
+    
+        /**
+        * adds a meeting to a contact's list of meetings, if it has not already been added..
+        * @param m the meeting to add
+        **/
         public void addListOfMeetingsToContact(Meeting m){
             List<Meeting> thisList = new ArrayList<Meeting>();
+            Set<Contact> mContacts= mContacts = m.getContacts();
+            Iterator<Contact> eachContact = mContacts.iterator();
             
-            Set<Contact> mContacts;
-                
             //only add meeting if the id is not already added. 
             //At this stage there should not be any duplicates.
             if (!contactIDAndMeetingList.containsKey(m.getId())){
-                mContacts = m.getContacts();
-                
-                Iterator<Contact> eachContact = mContacts.iterator();
+
                 while (eachContact.hasNext()){
                     Contact thisContact = eachContact.next();
                     
@@ -195,12 +197,32 @@ public class ContactManagerImpl implements ContactManager {
                         contactIDAndMeetingList.put(thisContact.getId(), thisList);
                     }
                 }
-                
-                
             }
-            
             contactIDAndMeetingList.put(m.getId(),thisList ); //link contact id to updatedmeeting list
             
+        }
+        
+        /**
+        * Removes a meeting from a contact's list of meetings.
+        * @param m the meeting to add
+        **/
+        public void removeFromListOfMeetingsForContact(Meeting m){
+            List<Meeting> thisList = new ArrayList<Meeting>();
+            Set<Contact> mContacts= mContacts = m.getContacts();
+            Iterator<Contact> eachContact = mContacts.iterator();
+
+                while (eachContact.hasNext()){
+                    Contact thisContact = eachContact.next();
+                    
+                    if (contactIDAndMeetingList.containsKey(thisContact.getId())){
+                        thisList = contactIDAndMeetingList.get(thisContact.getId());
+                        
+                        thisList.remove(m);
+                        contactIDAndMeetingList.put(thisContact.getId(), thisList);
+                    }
+                }
+            contactIDAndMeetingList.put(m.getId(),thisList ); //link contact id to updatedmeeting list
+           
         }
         
     /**
@@ -576,12 +598,14 @@ public class ContactManagerImpl implements ContactManager {
                
                //remove meeting from the list
                meetingList.remove(i);
-               //remove meeting from the map
+               
+                //remove meeting from the map
                if (meetingIDMap.containsKey(id)){
                    //meetingIDMap.get(id);
                    meetingIDMap.remove(id);
                }
-               
+               //remove meeting from the contact to meetingList map.
+               removeFromListOfMeetingsForContact(meetingList.get(i)); 
                //contruct the past meeting
                Meeting pMeeting = new PastMeetingImpl(meetingID, meetingContacts, meetingDate,meetingNotes );
                meetingList.add(pMeeting);

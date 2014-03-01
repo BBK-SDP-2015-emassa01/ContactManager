@@ -45,6 +45,10 @@ public class mainLaunch {
          
          System.out.println("\n\nChecking method 'addFutureMeeting()'");
          contactManager.addFutureMeeting(2016, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
+         contactManager.addFutureMeeting(2017, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
+         contactManager.addFutureMeeting(2018, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
+         contactManager.addFutureMeeting(2019, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
+         System.out.println("HERE IT IS!"+contactManager.getFutureMeetingList(new GregorianCalendar(2016, 02, 29, 15, 30)));
          
          System.out.println("\n\nChecking method 'getFutureMeetingList()'");
          Contact Esha = new ContactImpl(2, "Esha", "OKworking");
