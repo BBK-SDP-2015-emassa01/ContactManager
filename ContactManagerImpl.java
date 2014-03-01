@@ -32,7 +32,7 @@ import java.util.TreeSet;
  */
 public class ContactManagerImpl implements ContactManager {
     
-    private Set<Contact> contactSet;
+     Set<Contact> contactSet;
     private List<Meeting> meetingList;
     private Calendar date; 
     
@@ -55,7 +55,7 @@ public class ContactManagerImpl implements ContactManager {
             System.out.println("File not found.");
             FileWriter contactsCSV = new FileWriter("contacts.csv");
             BufferedWriter bufferWrite = new BufferedWriter(contactsCSV);
-           // checkIfFileExists();
+            checkIfFileExists();
         }  
     }
     
@@ -168,91 +168,7 @@ public class ContactManagerImpl implements ContactManager {
             System.out.println("An error has occurred");
         }	
 	
-}
-    
-    public void writeContactsCSV(){
-        try{
-        File contactFile = new File("contacts.csv");
-        if (!contactFile.exists()){
-            contactFile.createNewFile();
-        }
-        FileWriter fileWrite = new FileWriter("contacts.csv");
-        BufferedWriter bufferWrite = new BufferedWriter(fileWrite);
-        
-        //write to file the contacts and meetings
-        //contacts have an ID a Name and Notes and are stored in the contactSet.
-        
-        //Write headers:
-        System.out.println("Contact_ID, Contact_Name, Contact_Notes");
-        fileWrite.write("Contact_ID, Contact_Name, Contact_Notes,\n");
-        
-        if (contactSet == null){
-            throw new NullPointerException("Your contact list is empty.");
-        }
-        
-        String contactDataEntry = "";
-        for (Contact c:contactSet){
-            contactDataEntry = c.getId()+","+ c.getName() +","+ c.getNotes();
-//            contactDataEntry = contactIDMap.get(c).getId()+","+ c.getName() +","+ c.getNotes();
-            System.out.println(contactDataEntry);
-            fileWrite.write(contactDataEntry+ "\n");
-        }
-        
-        //meetings have an ID a Date and Contacts. Notes are associated with PastMeeting. Meetings are stored in the meetingList.
-        
-        //Write headers:
-        fileWrite.write("Meeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes,");
-        System.out.println("Meeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes, \n");
-        if (meetingList == null){
-            throw new NullPointerException("Your contact list is empty.");
-        }
-        String meetingDataEntry = "";
-        for (Meeting m:meetingList){
-            meetingDataEntry = "\n"+m.getId()+","+ m.getDate().getTime()+",";
-            System.out.println(meetingDataEntry);
-        
-            Object[] contactListForDataEntry;
-            Object thisContact;
-            //Get contactSet and convert to Array, and String to print in contacts.csv. 
-            Set<Contact> workingContacts = m.getContacts();
-            contactListForDataEntry = workingContacts.toArray();
-
-            for (int i = 0; i <contactListForDataEntry.length;i++ ){
-            thisContact = contactListForDataEntry[i];
-            Contact c = (Contact) thisContact;
-            int thisContactName = c.getId();
-            
-            meetingDataEntry = meetingDataEntry+thisContactName+";";
-
-            }
-            
-            if (m instanceof PastMeeting){
-                PastMeeting pMeeting = (PastMeeting) m;
-                String notes = pMeeting.getNotes();
-                
-                if (notes==null){
-                    notes = "";
-                }
-                
-                meetingDataEntry = meetingDataEntry+ ","+notes;
-                
-            }
-            else if (m instanceof FutureMeeting){
-                //do nothing
-                meetingDataEntry = meetingDataEntry;
-            }
-            
-            fileWrite.write(meetingDataEntry+"");
-        }
-
-        fileWrite.close();
-        bufferWrite.close();
-        }catch (IOException e){
-            System.out.println("An error has occurred");
-        }
-    }
-    
-            
+}            
     /**
     * Add a new meeting to be held in the future.
     *
@@ -265,7 +181,7 @@ public class ContactManagerImpl implements ContactManager {
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
         Meeting futureMeeting;
         int generatedID = 000001;
-        boolean generatedIDIsNotTaken = false;
+        
         // check that the contacts are not null.
         checkArgumentIsNotNull(contacts);
         //check that the meeting is actually a future meeting (i.e., that time is valid). Use calendar class to validate the date
@@ -277,30 +193,32 @@ public class ContactManagerImpl implements ContactManager {
 
             if (!contactSet.containsAll(contacts)){
                 throw new IllegalArgumentException ("Unknown/non-existant contacts. ");
-        }
-            
-            if (!meetingList.contains(generatedID)){
-                generatedIDIsNotTaken = true;
             }
             
-                while(!generatedIDIsNotTaken){
-                Random random = new Random();
-                generatedID = random.nextInt();
-                generatedID= Math.abs(generatedID);
-                System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
+            boolean generatedIDIsTaken = true;
+
+                do{
+                    Random random = new Random();
+                    generatedID = random.nextInt();
+                    generatedID= Math.abs(generatedID);
+                    System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
+                    if (meetingList.contains(generatedID)){
+                        generatedIDIsTaken = true;
+                    } 
+                } while(generatedIDIsTaken);
                 
             // constructor, after all checks, create a future meeting.
             futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
             //add meeting to list of meetings
             meetingList.add(futureMeeting);
             meetingIDMap.put(futureMeeting.getId(), futureMeeting );
-            }
             if (generatedID == 0){
                 throw new IllegalArgumentException("You have not successfully assigned an ID for that meeting.");
             } else {
                 return generatedID;
             }
     }
+                
     
     /**
     * Returns the PAST meeting with the requested ID, or null if it there is none.
@@ -317,13 +235,7 @@ public class ContactManagerImpl implements ContactManager {
             return null;
         }
         
-//iterate through the list of meetings
-//        if (meetingIDMap.containsKey(id)){
-//            System.out.println("Yes has id");
-//        }
-//        if (!meetingIDMap.containsKey(id)){
-//            System.out.println("No has id");
-//        }
+        //iterate through the list of meetings
         for (int i = 0; i<meetingList.size();i++){
         if (meetingList.get(i).getId()==id){
             //throw exception if a future meeting contains that id number
@@ -539,32 +451,27 @@ public class ContactManagerImpl implements ContactManager {
                     }
                 
                 //create boolean to check the meetingID does not exist.
-                boolean generatedPastMeetingIDNotTaken = false;
-                
-                for (int i = 0; i < meetingList.size(); i++){
-                        if (meetingList.get(i).getId()!=generatePastMeetingID){
-                            generatedPastMeetingIDNotTaken = true;
-                        }
-                while(!generatedPastMeetingIDNotTaken){
+                boolean generatedPastMeetingIDTaken = true;
+                do {
                     Random random = new Random();
                     generatePastMeetingID = random.nextInt();
                     generatePastMeetingID= Math.abs(generatePastMeetingID);
-                    
+                    for (int i = 0; i < meetingList.size(); i++){
+                        if (meetingList.get(i).getId()==generatePastMeetingID){
+                            generatedPastMeetingIDTaken = true;
+                        }
                     }
-                   //using iterator //TODO fix infinate LOOP, maybe search the Set, or the HashMap instead??
-                //changed the call to boolean true to avoid this loop 
-//                    for (Meeting m: meetingList){
-//                    if (m.getId()!=generatePastMeetingID){
-//                        generatedPastMeetingIDNotTaken = true;
-//                    }
-//                    }
-                }
+                } while (generatedPastMeetingIDTaken);
+                
+                if(!generatedPastMeetingIDTaken){
                 //contruct a new past meeting with the ID, contacts, date and notes
                 PastMeeting pastMeeting = new PastMeetingImpl(generatePastMeetingID, contacts, date, text);
                 //add meeting to the meeting list.
                 meetingList.add(pastMeeting);
                 meetingIDMap.put(pastMeeting.getId(), pastMeeting);
+                }
     }
+    
 
     //for testing meeting
     public void addNewPastMeeting(int ID , Set<Contact> contacts, Calendar date, String text){
@@ -658,25 +565,23 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addNewContact(String name, String notes) {
         int contactID = 0;
-        boolean contactIdIsTaken = false;
+        boolean contactIdIsTaken = true;
         checkArgumentIsNotNull(name);
         checkArgumentIsNotNull(notes);
         
-        if (!contactSet.contains(contactID)){
-                    contactIdIsTaken= true;
-                }
-            
-            while (!contactIdIsTaken){
-                Random idNumber = new Random();
-                contactID = idNumber.nextInt();
-                contactID= Math.abs(contactID);
-                System.out.println("Assined " + name + " ID NUMBER: \n" + contactID);
-
-                
+        do{
+            Random idNumber = new Random();
+            contactID = idNumber.nextInt();
+            contactID= Math.abs(contactID);
+            System.out.println("Assined " + name + " ID NUMBER: \n" + contactID);
+            if (contactSet.contains(contactID)){
+                contactIdIsTaken= true;
             }
-            Contact newContact = new ContactImpl(contactID, name, notes);
-            contactSet.add(newContact);
-            contactIDMap.put(newContact.getId(), newContact);
+        } while (contactIdIsTaken);
+
+        Contact newContact = new ContactImpl(contactID, name, notes);
+        contactSet.add(newContact);
+        contactIDMap.put(newContact.getId(), newContact);
     }
     
     /**
@@ -739,8 +644,85 @@ public class ContactManagerImpl implements ContactManager {
     */
 
     public void flush(){
-        writeContactsCSV();
+        try{
+        File contactFile = new File("contacts.csv");
+        if (!contactFile.exists()){
+            contactFile.createNewFile();
+        }
+        FileWriter fileWrite = new FileWriter("contacts.csv");
+        BufferedWriter bufferWrite = new BufferedWriter(fileWrite);
+        
+        //write to file the contacts and meetings
+        //contacts have an ID a Name and Notes and are stored in the contactSet.
+        
+        //Write headers:
+        System.out.println("Contact_ID, Contact_Name, Contact_Notes");
+        fileWrite.write("Contact_ID, Contact_Name, Contact_Notes,\n");
+        
+        if (contactSet == null){
+            throw new NullPointerException("Your contact list is empty.");
+        }
+        
+        String contactDataEntry = "";
+        for (Contact c:contactSet){
+            contactDataEntry = c.getId()+","+ c.getName() +","+ c.getNotes();
+//            contactDataEntry = contactIDMap.get(c).getId()+","+ c.getName() +","+ c.getNotes();
+            System.out.println(contactDataEntry);
+            fileWrite.write(contactDataEntry+ "\n");
+        }
+        
+        //meetings have an ID a Date and Contacts. Notes are associated with PastMeeting. Meetings are stored in the meetingList.
+        
+        //Write headers:
+        fileWrite.write("Meeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes,");
+        System.out.println("Meeting_ID, Meeting_Date, Meeting_Attendees, Meeting_Notes, \n");
+        if (meetingList == null){
+            throw new NullPointerException("Your contact list is empty.");
+        }
+        String meetingDataEntry = "";
+        for (Meeting m:meetingList){
+            meetingDataEntry = "\n"+m.getId()+","+ m.getDate().getTime()+",";
+            System.out.println(meetingDataEntry);
+        
+            Object[] contactListForDataEntry;
+            Object thisContact;
+            //Get contactSet and convert to Array, and String to print in contacts.csv. 
+            Set<Contact> workingContacts = m.getContacts();
+            contactListForDataEntry = workingContacts.toArray();
 
+            for (int i = 0; i <contactListForDataEntry.length;i++ ){
+            thisContact = contactListForDataEntry[i];
+            Contact c = (Contact) thisContact;
+            int thisContactName = c.getId();
+            
+            meetingDataEntry = meetingDataEntry+thisContactName+";";
+
+            }
+            
+            if (m instanceof PastMeeting){
+                PastMeeting pMeeting = (PastMeeting) m;
+                String notes = pMeeting.getNotes();
+                
+                if (notes==null){
+                    notes = "";
+                }
+                
+                meetingDataEntry = meetingDataEntry+ ","+notes;
+                
+            }
+            else if (m instanceof FutureMeeting){
+                //do nothing
+                meetingDataEntry = meetingDataEntry;
+            }
+            
+            fileWrite.write(meetingDataEntry+"");
+        }
+
+        fileWrite.close();
+        bufferWrite.close();
+        }catch (IOException e){
+            System.out.println("An error has occurred");
+        }
     }
     
     public void getContactIdFromSet(Set<Contact> nameOfContactSetToSearch, Contact name){
