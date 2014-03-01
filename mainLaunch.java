@@ -30,7 +30,10 @@ public class mainLaunch {
          contactManager.addNewContact( "Mum", "Employee of the Month");
          contactManager.addNewContact( "Dad", "Hardworking");
          contactManager.addNewContact("Raju", "Bossy");
-         contactManager.addNewContact("Raju", "Bossy");
+         contactManager.addNewContact("Tiger", "Bark");
+         contactManager.addNewContact("Goldy", "Meow");
+         contactManager.addNewContact("dragon", "ribbit");
+         
          
 //         Meeting p = new PastMeetingImpl(1, contactManager.getContactSet(), new GregorianCalendar(2011, 02, 29, 15, 30), "Good");
 //         System.out.println(p instanceof Meeting);
@@ -41,23 +44,30 @@ public class mainLaunch {
          //contactManager.flush();
          
          System.out.println("\n\nChecking method 'addFutureMeeting()'");
-         contactManager.addFutureMeeting(contactManager.contactSet, new GregorianCalendar(2014, 02, 29, 15, 30));
+         contactManager.addFutureMeeting(2016, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
          
          System.out.println("\n\nChecking method 'getFutureMeetingList()'");
          Contact Esha = new ContactImpl(2, "Esha", "OKworking");
-         contactManager.contactSet.add(Esha);
+         contactManager.getContactSet().add(Esha);
          //System.out.println(contactManager.getFutureMeetingList(Esha).toString());
          
-         System.out.println("\n\nChecking method 'getPastMeeting()'");
+         System.out.println("\n\nChecking method 'getPastMeetingList()'");
          
          Meeting pastMeeting = new PastMeetingImpl(1235, contactManager.getContactSet(), new GregorianCalendar(2012, 01, 02), "Productive" );
+         contactManager.getMeetingList().add(pastMeeting);
+         contactManager.getMeetingMap().put(1235, pastMeeting);
          System.out.println("constructed pastmeetingimpl");
-         contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
-         contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
+         contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2012, 01, 02), "Productive");
+         //contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
          //System.out.println(pastMeeting.getNotes());
          System.out.println("done this");
+         System.out.println("instance contactset length = "+ contactManager.getContactSet().size());
+         System.out.println("instance contactidmap length = "+ contactManager.getContactMap().size());
+         System.out.println("getFutureMeeting()"+contactManager.getFutureMeeting(2016));
+         System.out.println("meeting ids past" + contactManager.getMeetingList().get(0).getId());
+         System.out.println("\n\ngetPastMeeting()"+contactManager.getPastMeeting(2));
          
-         System.out.println("getPastMeeting() number check");
+//         System.out.println("getPastMeeting() number check");
          contactManager.getPastMeeting(339870630);
          System.out.println(pastMeeting.getId());
          

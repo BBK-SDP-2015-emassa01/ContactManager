@@ -32,14 +32,14 @@ import java.util.TreeSet;
  */
 public class ContactManagerImpl implements ContactManager {
     
-     Set<Contact> contactSet;
+    private Set<Contact> contactSet;
     private List<Meeting> meetingList;
     private Calendar date; 
     
     // Structures to store meetingIDs and contactSets
     private Map<Integer, Meeting> meetingIDMap;
     private Map<Integer, Contact> contactIDMap;
-    private Map<Integer,Set< Contact>> meetingIDAndContactSet;
+    private Map<Integer,List< Meeting>> contactIDAndMeetingList ;
 
     public ContactManagerImpl() throws FileNotFoundException, ParseException, IOException{
         contactSet = new HashSet<Contact>(); 
@@ -47,35 +47,22 @@ public class ContactManagerImpl implements ContactManager {
         date = new GregorianCalendar();
         meetingIDMap = new HashMap<Integer, Meeting>(); //ids to meetings
         contactIDMap = new HashMap<Integer, Contact>(); //ids to contacts
-        meetingIDAndContactSet = new HashMap<Integer,Set<Contact>>(); //links a meeting ID to a set of contacts.
+        contactIDAndMeetingList = new HashMap<Integer,List<Meeting>>(); //links a meeting ID to a set of contacts.
         
         //bufferedReader must be called from within try/catch statement - to catch any IOException
-        File contactFile = new File("contacts.csv");
-        if (!contactFile.exists()){
+        File path = new File( "contacts.csv");
+        File contactFile = new File(path.getAbsolutePath());
+        if (!contactFile.exists())
+        {
             System.out.println("File not found.");
             FileWriter contactsCSV = new FileWriter("contacts.csv");
             BufferedWriter bufferWrite = new BufferedWriter(contactsCSV);
-            checkIfFileExists();
-        }  
+        }
+            
+          checkIfFileExists();
     }
     
-    //for testing
-    public Set<Contact> getContactSet(){
-        return this.contactSet;
-    }
-    public List<Meeting> getMeetingList(){
-        return this.meetingList;
-    }
-    
-    public Map<Integer, Meeting> getMeetingMap(){
-        return this.meetingIDMap;
-    }
-
-    public Map<Integer, Contact> getContactMap(){
-        return this.contactIDMap;
-    }
-    
-        public void checkIfFileExists() throws ParseException{
+        public void checkIfFileExists() throws ParseException, IOException{
         //buffered reader to read the file
         try {
             FileReader file = new FileReader("contacts.csv");
@@ -121,6 +108,8 @@ public class ContactManagerImpl implements ContactManager {
                         
                         Set<Contact> meetingContacts = new HashSet<Contact>();
                         
+                        
+                        
                         int meetingID = Integer.parseInt(lineItemsArray[0]);
                         System.out.println(meetingID);
                         
@@ -130,17 +119,24 @@ public class ContactManagerImpl implements ContactManager {
                         Calendar calDate = new GregorianCalendar();
                         calDate.setTime(date);
                         System.out.println("timemeeting"+calDate.getTime());
+                       
+                        String thisMeetingContacts =lineItemsArray[2];
+                        String[] MeetingContacts = thisMeetingContacts.split(";");
+                        int[] MeetingContactsIds = new int[MeetingContacts.length];
                         
-                        String thisMeetingContacts = lineItemsArray[2];
-                        String MeetingContacts = thisMeetingContacts.replaceAll(";", ",");
+                        for (int i = 0; i<MeetingContactsIds.length; i++){
+                            MeetingContactsIds[i] = Integer.parseInt(MeetingContacts[i]);
+                        }
                         
-                        meetingContacts = getContacts(MeetingContacts);
-                        System.out.println(meetingContacts);
+                        System.out.println("ids to string"+MeetingContactsIds.toString());
+                        meetingContacts = getContacts(MeetingContactsIds);
                         
-                        String meetingNotes;
+                        
+                        
                     
                         Calendar dateNow = new GregorianCalendar();
                         System.out.println("timemeeting"+dateNow);
+                        
                         if (calDate.after(dateNow)){
                         //construct FutureMeetingImpl without notes
                             Meeting futureMeeting = new FutureMeetingImpl(meetingID, meetingContacts, calDate);
@@ -148,10 +144,17 @@ public class ContactManagerImpl implements ContactManager {
                             meetingIDMap.put(meetingID,futureMeeting );
                         }
                         
+                        String meetingNotes = "";
+                        
                         if (calDate.before(dateNow)){
-                        //construct PastMeetingImpl with notes
-                            meetingNotes = lineItemsArray[3];
-                            System.out.println(meetingNotes);
+                            
+                            if (lineItemsArray.length == 3){
+                                meetingNotes = "";
+                            }
+                            if (lineItemsArray.length == 4){
+                                meetingNotes = lineItemsArray[3];
+                            }
+                           
                             PastMeeting pastMeeting = new PastMeetingImpl(meetingID, meetingContacts, calDate, meetingNotes);
                             meetingList.add(pastMeeting);
                             meetingIDMap.put(meetingID,pastMeeting );
@@ -159,16 +162,16 @@ public class ContactManagerImpl implements ContactManager {
                     }
                 }
             }
-
-            //must close this once complete
-            file.close();
-	    buffer.close();
+                    //must close this once complete
+                    file.close();
+                    buffer.close();
         }
-        catch(IOException e){
-            System.out.println("An error has occurred");
-        }	
-	
-}            
+        catch (IOException e){
+        e.printStackTrace();
+        }
+        }   
+        
+        
     /**
     * Add a new meeting to be held in the future.
     *
@@ -218,6 +221,16 @@ public class ContactManagerImpl implements ContactManager {
                 return generatedID;
             }
     }
+    
+    //for testing
+    public int addFutureMeeting(int id, Set<Contact> contacts, Calendar date){
+        Meeting futureMeeting = new FutureMeetingImpl(id, contacts, date);
+            //add meeting to list of meetings
+            meetingList.add(futureMeeting);
+            meetingIDMap.put(futureMeeting.getId(), futureMeeting );
+            return id;
+    }
+    
                 
     
     /**
@@ -228,32 +241,27 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the future
     */
     public PastMeeting getPastMeeting(int id){
+        PastMeeting result = null;
         //if there are no meetings in the list.
         if (meetingList.isEmpty()){
             System.out.println("The meeting list is currently empty.");
             //PastMeeting a = new PastMeetingImpl(1, new HashSet<Contact>(), new GregorianCalendar(), "Esha");
             return null;
         }
-        
-        //iterate through the list of meetings
-        for (int i = 0; i<meetingList.size();i++){
-        if (meetingList.get(i).getId()==id){
             //throw exception if a future meeting contains that id number
-            if (meetingList.get(i) instanceof FutureMeeting){
+            Meeting meeting = meetingIDMap.get(id);
+            if (meeting instanceof FutureMeeting){
             throw new IllegalArgumentException("The id is already used for a future meeting.");
             }
-            else if (meetingList.get(i) instanceof PastMeeting){
-                PastMeeting result = (PastMeetingImpl) meetingList.get(i);
+            else if (meeting instanceof PastMeeting){
+                result = (PastMeetingImpl) meeting;
                 System.out.println("Retrieving past meeting..");
-                return result;
-            }
-        }
-        
-        }
-        //otherwise return null.
-        System.out.println("There is no past meeting with that id number.");
-        return null;
+            }return result;
     }
+//        //otherwise return null.
+//        System.out.println("There is no past meeting with that id number.");
+//        return null;
+//    }
 
 
     /**
@@ -264,26 +272,27 @@ public class ContactManagerImpl implements ContactManager {
     * @throws IllegalArgumentException if there is a meeting with that ID happening in the past
     */
     public FutureMeeting getFutureMeeting(int id){
+        FutureMeeting result = null;
         //if there are no meetings in the list.
         if (meetingList.isEmpty()){
             System.out.println("The meeting list is currently empty.");
             return null;
         }
-        //iterate through the list of meeting
-        for (int i = 0; i <meetingList.size(); i++){
-            if (meetingList.get(i).getId()==id){
-                //throw IllegalArgumentException if there is a meeting with that id in the past
-                if (meetingList.get(i) instanceof PastMeeting){
-                throw new IllegalArgumentException("The id is already used for a past meeting.");
-            }
-            } else if (meetingList.get(i) instanceof FutureMeeting){
-                FutureMeeting toReturn = (FutureMeeting) meetingList.get(i);
-                return toReturn;
-            }
+        Meeting meeting = meetingIDMap.get(id);
+        if (meetingIDMap.containsKey(id)){
+            System.out.println("Found meeting: " + id);
         }
+            if (meeting instanceof PastMeeting){
+            throw new IllegalArgumentException("The id is already used for a past meeting.");
+            }
+            else if (meeting instanceof FutureMeeting){
+                result = (FutureMeetingImpl) meeting;
+                System.out.println("Retrieving future meeting..");
+                
+            }return result;
         //otherwise return null.
-        System.out.println("There is no future meeting with that id number.");
-        return null;
+//        System.out.println("There is no future meeting with that id number.");
+//        return null;
     }
     
     /**
@@ -696,6 +705,7 @@ public class ContactManagerImpl implements ContactManager {
             thisContact = contactListForDataEntry[i];
             Contact c = (Contact) thisContact;
             int thisContactName = c.getId();
+            String contactName = c.getName();
             
             meetingDataEntry = meetingDataEntry+thisContactName+";";
 
@@ -735,6 +745,22 @@ public class ContactManagerImpl implements ContactManager {
         }catch(NullPointerException e){
             e.printStackTrace();
         }
+    }
+    
+    //for testing
+    public Set<Contact> getContactSet(){
+        return this.contactSet;
+    }
+    public List<Meeting> getMeetingList(){
+        return this.meetingList;
+    }
+    
+    public Map<Integer, Meeting> getMeetingMap(){
+        return this.meetingIDMap;
+    }
+
+    public Map<Integer, Contact> getContactMap(){
+        return this.contactIDMap;
     }
 
 }
