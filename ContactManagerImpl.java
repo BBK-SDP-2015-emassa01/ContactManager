@@ -258,7 +258,7 @@ public class ContactManagerImpl implements ContactManager {
                     generatedID = random.nextInt();
                     generatedID= Math.abs(generatedID);
                     System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
-                    if (!meetingList.contains(generatedID)){
+                    if (!meetingIDMap.containsKey(generatedID)){
                         generatedIDIsTaken = false;
                     } 
                 } while(generatedIDIsTaken);
