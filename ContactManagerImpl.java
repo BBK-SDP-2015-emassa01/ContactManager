@@ -357,21 +357,21 @@ public class ContactManagerImpl implements ContactManager {
     * @return the meeting with the requested ID, or null if it there is none.
     */
     public Meeting getMeeting(int id){
+        Meeting result = null;
         //if there are no meetings in the list.
         if (meetingList.isEmpty()){
             System.out.println("The meeting list is currently empty.");
             return null;
         } else {
-            //return the meeting with the given id
-        for (int i = 0; i<meetingList.size(); i++){
-        if (meetingList.get(i).getId()==id){
-         return meetingList.get(i);   
+            //return the meeting with the given idMeeting meeting = meetingIDMap.get(id);
+        if (meetingIDMap.containsKey(id)){
+            System.out.println("Found meeting: " + id);
+            result = meetingIDMap.get(id);
+            
         }
-        }
-        //else return null with a message
-        System.out.println("There is no meeting with the requested id.");
-      } return null;   
+        }return result;
     }
+
     
     /**
     * Returns the list of future meetings scheduled with this contact.
