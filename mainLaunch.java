@@ -51,16 +51,16 @@ public class mainLaunch {
          System.out.println("HERE IT IS!"+contactManager.getFutureMeetingList(new GregorianCalendar(2016, 02, 29, 15, 30)));
          
          System.out.println("\n\nChecking method 'getFutureMeetingList()'");
-         Contact Esha = new ContactImpl(2, "Esha", "OKworking");
-         contactManager.getContactSet().add(Esha);
+         //Contact Esha = new ContactImpl(2, "Esha", "OKworking");
+         //contactManager.getContactSet().add(Esha);
          //System.out.println(contactManager.getFutureMeetingList(Esha).toString());
          
          System.out.println("\n\nChecking method 'getFutureMeetingList()'");
-         Object [] meetings = contactManager.getFutureMeetingList(Esha).toArray();
-         for (int i = 0; i< meetings.length; i++){
-             Meeting m = (MeetingImpl) meetings[i];
-             System.out.println("meeting"+ m.getId());
-         }
+         //Object [] meetings = contactManager.getFutureMeetingList(Esha).toArray();
+//         for (int i = 0; i< meetings.length; i++){
+//             Meeting m = (MeetingImpl) meetings[i];
+//             System.out.println("meeting"+ m.getId());
+//         }
        
          
          Meeting pastMeeting = new PastMeetingImpl(1235, contactManager.getContactSet(), new GregorianCalendar(2012, 01, 02), "Productive" );

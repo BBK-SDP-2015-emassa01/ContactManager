@@ -53,20 +53,23 @@ public class ContactManagerImpl implements ContactManager {
         //bufferedReader must be called from within try/catch statement - to catch any IOException
         File path = new File( "contacts.txt");
         File contactFile = new File(path.getAbsolutePath());
-        if (!contactFile.exists())
-        {
+        if (contactFile.exists()){
+            System.out.println("File found!");
+            checkIfFileExists();
+        }
+        if (!contactFile.exists()){
             System.out.println("File not found.");
             FileWriter contactsTXT = new FileWriter("contacts.txt");
             BufferedWriter bufferWrite = new BufferedWriter(contactsTXT);
         }
-            
-          checkIfFileExists();
     }
     
         public void checkIfFileExists() throws ParseException, IOException{
         //buffered reader to read the file
         try {
-            FileReader file = new FileReader("contacts.txt");
+            File path = new File( "contacts.txt");
+            File contactFile = new File(path.getAbsolutePath());
+            FileReader file = new FileReader(contactFile);
 	    BufferedReader buffer = new BufferedReader(file);
 				
             //set booleans for processing
@@ -78,16 +81,86 @@ public class ContactManagerImpl implements ContactManager {
             while ( (line = buffer.readLine()) != null){ 
                 String[] lineItemsArray = line.split(",");
                 
-                if (lineItemsArray[0].equals("Contact_ID")){
+                if (lineItemsArray[0].equals("CONTACT ID NUMBER")){
                     System.out.println(lineItemsArray[0]);
                     contacts = true;
                     meetings = false;
+//                    if((contacts==true) && (meetings ==false)){
+//                        int contactID = (Integer.parseInt(lineItemsArray[0]));
+//
+//                        System.out.println(lineItemsArray[0]);
+//                        String contactName = lineItemsArray[1];
+//                        System.out.println(lineItemsArray[1]);
+//                        String contactNotes = lineItemsArray[2];
+//                        System.out.println(contactNotes);
+//                        
+//                        Contact thisContact = new ContactImpl(contactID, contactName,contactNotes );
+//                        contactSet.add(thisContact);
+//                        contactIDMap.put(thisContact.getId(), thisContact);          
+//                    }
                 } 
                 
-                else if (lineItemsArray[0].equals("Meeting_ID")){
+                else if (lineItemsArray[0].equals("MEETING ID NUMBER")){
                 System.out.println(lineItemsArray[0]);
                     contacts = false;
                     meetings = true;
+//                    if((meetings == true) && (contacts == false)){
+//                        
+//                        Set<Contact> meetingContacts = new HashSet<Contact>();
+//
+//                        int meetingID = Integer.parseInt(lineItemsArray[0]);
+//                        System.out.println(meetingID);
+//                        
+//                        //parse and construct calendar object
+//                        DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z YYYY");
+//                        Date date = format.parse(lineItemsArray[1]);
+//                        
+//                        Calendar calDate = new GregorianCalendar();
+//                        calDate.setTime(date);
+//                        
+//                        System.out.println("Date/time of meeting to enter: "+calDate.getTime());
+//                       
+//                        String thisMeetingContacts =lineItemsArray[2];
+//                        String[] MeetingContacts = thisMeetingContacts.split(";");
+//                        
+//                        int[] MeetingContactsIds = new int[MeetingContacts.length];
+//                        
+//                        for (int i = 0; i<MeetingContactsIds.length; i++){
+//                            MeetingContactsIds[i] = Integer.parseInt(MeetingContacts[i].trim());
+//                            System.out.println("Contact ID for meeting (gathered): " + MeetingContacts[i].trim());
+//                        }
+//                        
+//                        System.out.println("Contact IDs at meeting : "+MeetingContactsIds.toString());
+//                        meetingContacts = getContacts(MeetingContactsIds);
+//                        
+//                        Calendar dateNow = new GregorianCalendar();
+//                        System.out.println("Current date/time: "+dateNow);
+//                        
+//                        if (calDate.after(dateNow)){
+//                        //construct FutureMeetingImpl without notes
+//                            Meeting futureMeeting = new FutureMeetingImpl(meetingID, meetingContacts, calDate);
+//                            meetingList.add(futureMeeting);
+//                            meetingIDMap.put(meetingID,futureMeeting );
+//                            addListOfMeetingsToContact(futureMeeting);
+//                        }
+//                        
+//                        String meetingNotes = "";
+//                        
+//                        if (calDate.before(dateNow)){
+//                            
+//                            if (lineItemsArray.length == 3){
+//                                meetingNotes = "";
+//                            }
+//                            if (lineItemsArray.length == 4){
+//                                meetingNotes = lineItemsArray[3];
+//                            }
+//                           
+//                            Meeting pastMeeting = new PastMeetingImpl(meetingID, meetingContacts, calDate, meetingNotes);
+//                            meetingList.add(pastMeeting);
+//                            meetingIDMap.put(meetingID,pastMeeting );
+//                            addListOfMeetingsToContact(pastMeeting);
+//                        }
+//                    }
                 }
                 else {
                     if((contacts==true) && (meetings ==false)){
@@ -115,26 +188,27 @@ public class ContactManagerImpl implements ContactManager {
                         //parse and construct calendar object
                         DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z YYYY");
                         Date date = format.parse(lineItemsArray[1]);
+                        
                         Calendar calDate = new GregorianCalendar();
                         calDate.setTime(date);
-                        System.out.println("timemeeting"+calDate.getTime());
+                        
+                        System.out.println("Date/time of meeting to enter: "+calDate.getTime());
                        
                         String thisMeetingContacts =lineItemsArray[2];
                         String[] MeetingContacts = thisMeetingContacts.split(";");
+                        
                         int[] MeetingContactsIds = new int[MeetingContacts.length];
                         
                         for (int i = 0; i<MeetingContactsIds.length; i++){
-                            MeetingContactsIds[i] = Integer.parseInt(MeetingContacts[i]);
+                            MeetingContactsIds[i] = Integer.parseInt(MeetingContacts[i].trim());
+                            System.out.println("Contact ID for meeting (gathered): " + MeetingContacts[i].trim());
                         }
                         
-                        System.out.println("ids to string"+MeetingContactsIds.toString());
+                        System.out.println("Contact IDs at meeting : "+MeetingContactsIds.toString());
                         meetingContacts = getContacts(MeetingContactsIds);
                         
-                        
-                        
-                    
                         Calendar dateNow = new GregorianCalendar();
-                        System.out.println("timemeeting"+dateNow);
+                        System.out.println("Current date/time: "+dateNow);
                         
                         if (calDate.after(dateNow)){
                         //construct FutureMeetingImpl without notes
@@ -655,19 +729,13 @@ public class ContactManagerImpl implements ContactManager {
     public Set<Contact> getContacts(int... ids){
         Set<Contact> theseContacts= new HashSet<Contact>();
         
-        //check that all the id's entered exist.
-        
-        for (int id:ids){
-            if (!contactIDMap.containsKey(id)){
-                throw new IllegalArgumentException("These ids do not all correspond to real contacts. ");
-            } 
+        //check that all the id's entered exist. 
             
         for (int i = 0; i <ids.length; i++){
             if (contactIDMap.containsKey(ids[i])){
                 Contact toAdd = contactIDMap.get(ids[i]);
                 theseContacts.add(toAdd);
-                } else throw new IllegalArgumentException("The id: "+ ids[i] + "does not correspond to a real contact. ");
-            } 
+                } else throw new IllegalArgumentException("The id: "+ ids[i] + " does not correspond to a real contact. ");
         }return theseContacts;
     }
         
@@ -718,7 +786,8 @@ public class ContactManagerImpl implements ContactManager {
         
         //Write headers:
         System.out.println("CONTACT ID NUMBER , CONTACT NAME , CONTACT NOTES");
-        fileWrite.write("CONTACT ID NUMBER , CONTACT NAME , CONTACT NOTES ,");
+        fileWrite.write("CONTACT ID NUMBER,CONTACT NAME,CONTACT NOTES,");
+       
         
         if (contactSet == null){
             throw new NullPointerException("Your contact list is empty.");
@@ -729,14 +798,15 @@ public class ContactManagerImpl implements ContactManager {
             contactDataEntry = c.getId()+","+ c.getName() +","+ c.getNotes();
 //            contactDataEntry = contactIDMap.get(c).getId()+","+ c.getName() +","+ c.getNotes();
             System.out.println(contactDataEntry);
-            fileWrite.write(contactDataEntry+ "\n");
+            fileWrite.write("\n"+contactDataEntry);
         }
+        fileWrite.write("\n");
         
         //meetings have an ID a Date and Contacts. Notes are associated with PastMeeting. Meetings are stored in the meetingList.
         
         //Write headers:
-        fileWrite.write("MEETING ID NUMBER , MEETING DATE , MEETING ATTENDEE (ID NUMBERS) LIST , MEETING NOTES,");
         System.out.println("MEETING ID NUMBER , MEETING DATE , MEETING ATTENDEE (ID NUMBERS) LIST , MEETING NOTES ");
+        fileWrite.write("MEETING ID NUMBER,MEETING DATE,MEETING ATTENDEE (ID NUMBERS) LIST,MEETING NOTES");
         if (meetingList == null){
             throw new NullPointerException("Your contact list is empty.");
         }
