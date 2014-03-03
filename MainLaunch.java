@@ -15,10 +15,10 @@ import java.util.Set;
  *
  * @author Esha
  */
-public class mainLaunch {
+public class MainLaunch {
 
     public static void main(String[] args) throws FileNotFoundException, ParseException, IOException {
-        mainLaunch mainScript = new mainLaunch();
+        MainLaunch mainScript = new MainLaunch();
         mainScript.launch();
 
     }

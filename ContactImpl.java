@@ -21,7 +21,6 @@ public class ContactImpl implements Contact {
         setID(id);
         setName(name);
         addNotes(notes);
-        id++;
     }
 
     public int getId() {
