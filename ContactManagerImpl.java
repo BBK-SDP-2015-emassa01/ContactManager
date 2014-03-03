@@ -218,7 +218,7 @@ public class ContactManagerImpl implements ContactManager {
                         thisList = contactIDAndMeetingList.get(thisContact.getId());
                         
                         thisList.remove(m);
-                        contactIDAndMeetingList.put(thisContact.getId(), thisList);
+                        //contactIDAndMeetingList.put(thisContact.getId(), thisList);
                     }
                 }
             contactIDAndMeetingList.put(m.getId(),thisList ); //link contact id to updatedmeeting list
@@ -563,48 +563,52 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addMeetingNotes(int id, String text){
         //check meeitng exists
-        if(!contactIDAndMeetingList.containsKey(id)) {
+        if(!meetingList.contains(id)) {
             throw new IllegalArgumentException("That meeting ID does not exist. ");
         }  
+        
+        //get current date to compare it to meeting date
+        Calendar dateNow = new GregorianCalendar();
         
         //check there are notes to add.
         if (text==null){
             throw new NullPointerException("Please enter a note for the past meeting: "); 
         }
-        //iterate through meeting list to find meeting id
-        for (int i = 0; i<meetingList.size(); i++){
-           if (meetingList.get(i).getId()==id){
-               //get current date and compare it to meeting date
-               Calendar dateNow = new GregorianCalendar();
-               
-               if (meetingList.get(i).getDate().after(dateNow)){
+        //Find meeting id
+        Meeting meetingToAddNotes = meetingList.get(id);
+        if (meetingToAddNotes.getDate().after(dateNow)){
                    throw new IllegalStateException ("That meeting is set for a date in the future "
                            + "so cannot be converted into a past meeting, and you cannot add notes yet. ");
                } 
-               //save all info for the meeting
-               int meetingID = meetingList.get(i).getId();
-               Set<Contact> meetingContacts = meetingList.get(i).getContacts();
-               Calendar meetingDate = meetingList.get(i).getDate();
+               //get all info for the meeting
+               int meetingID = meetingToAddNotes.getId();
+               Set<Contact> meetingContacts = meetingToAddNotes.getContacts();
+               Calendar meetingDate = meetingToAddNotes.getDate();
                String meetingNotes = text;
                
                //remove meeting from the list
-               meetingList.remove(i);
+               for (int i = 0; i<meetingList.size();i++){
+                   Meeting m = meetingList.get(i);
+                   if (m.getId()==id){
+                   meetingList.remove(m);
+                   }
+               }
                
                 //remove meeting from the map
                if (meetingIDMap.containsKey(id)){
                    //meetingIDMap.get(id);
                    meetingIDMap.remove(id);
                }
-               //remove meeting from the contact to meetingList map.
-               removeFromListOfMeetingsForContact(meetingList.get(i)); 
+               
                //contruct the past meeting
                Meeting pMeeting = new PastMeetingImpl(meetingID, meetingContacts, meetingDate,meetingNotes );
                meetingList.add(pMeeting);
                meetingIDMap.put(id, pMeeting);
-               addListOfMeetingsToContact(pMeeting);
-   
-           } 
-        }
+               
+               //do I need to remove meeting from the contact to meetingList map? 
+               //The map holds 'meetings' - but nothing is updated in this structure by adding notes.
+               //This method also adds the new meeting to the contactIDAndMeetings
+               //removeFromListOfMeetingsForContact(); 
     }
     //for testing
     public Contact addNewContact (int contactID, String name, String notes){
@@ -622,16 +626,17 @@ public class ContactManagerImpl implements ContactManager {
     * @throws NullPointerException if the name or the notes are null
     */
     public void addNewContact(String name, String notes) {
-        int contactID = 0;
-        boolean contactIdIsTaken = true;
+        int contactID;
+        
         checkArgumentIsNotNull(name);
         checkArgumentIsNotNull(notes);
         
+        boolean contactIdIsTaken = true;
         do{
             Random idNumber = new Random();
             contactID = idNumber.nextInt();
             contactID= Math.abs(contactID);
-            System.out.println("Assined " + name + " ID NUMBER: \n" + contactID);
+            System.out.println("Assined: " + name + " ID NUMBER: " + contactID);
             if (!contactSet.contains(contactID)){
                 contactIdIsTaken= false;
             }
@@ -641,7 +646,8 @@ public class ContactManagerImpl implements ContactManager {
         contactSet.add(newContact);
         contactIDMap.put(newContact.getId(), newContact);
         //need to write something to prevent two IDs being mapped to the same contact/meeting. 
-        //Currently I can add more than one!
+        //Currently I can add more than one, perhaps because I was using the 'testing' addNewContact 
+        //method rather than this one. TO CHECK
     }
     
     /**
@@ -786,6 +792,7 @@ public class ContactManagerImpl implements ContactManager {
         }
     }
     
+    //method not used yet.
     public void getContactIdFromSet(Set<Contact> nameOfContactSetToSearch, Contact name){
         try{
         if (nameOfContactSetToSearch.contains(name)){
