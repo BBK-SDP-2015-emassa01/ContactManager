@@ -108,9 +108,7 @@ public class ContactManagerImpl implements ContactManager {
                     if((meetings == true) && (contacts == false)){
                         
                         Set<Contact> meetingContacts = new HashSet<Contact>();
-                        
-                        
-                        
+
                         int meetingID = Integer.parseInt(lineItemsArray[0]);
                         System.out.println(meetingID);
                         
@@ -236,7 +234,7 @@ public class ContactManagerImpl implements ContactManager {
     **/
     public int addFutureMeeting(Set<Contact> contacts, Calendar date){
         Meeting futureMeeting;
-        int generatedID = 000001;
+        int generatedID;
         
         // check that the contacts are not null.
         checkArgumentIsNotNull(contacts);
@@ -269,11 +267,8 @@ public class ContactManagerImpl implements ContactManager {
             meetingList.add(futureMeeting);
             meetingIDMap.put(futureMeeting.getId(), futureMeeting );
             addListOfMeetingsToContact(futureMeeting);
-            if (generatedID == 0){
-                throw new IllegalArgumentException("You have not successfully assigned an ID for that meeting.");
-            } else {
-                return generatedID;
-            }
+            
+            return generatedID;
     }
     
     //for testing
@@ -483,7 +478,7 @@ public class ContactManagerImpl implements ContactManager {
     */
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
         //make a new pastMeeting id number
-        int generatePastMeetingID = 0;
+        int generatePastMeetingID;
         checkArgumentIsNotNull(contacts);
         checkArgumentIsNotNull(date);
         checkArgumentIsNotNull(text);
@@ -723,7 +718,7 @@ public class ContactManagerImpl implements ContactManager {
         
         //Write headers:
         System.out.println("CONTACT ID NUMBER , CONTACT NAME , CONTACT NOTES");
-        fileWrite.write("CONTACT ID NUMBER , CONTACT NAME , CONTACT NOTES ,\n");
+        fileWrite.write("CONTACT ID NUMBER , CONTACT NAME , CONTACT NOTES ,");
         
         if (contactSet == null){
             throw new NullPointerException("Your contact list is empty.");
@@ -741,14 +736,14 @@ public class ContactManagerImpl implements ContactManager {
         
         //Write headers:
         fileWrite.write("MEETING ID NUMBER , MEETING DATE , MEETING ATTENDEE (ID NUMBERS) LIST , MEETING NOTES,");
-        System.out.println("MEETING ID NUMBER , MEETING DATE , MEETING ATTENDEE (ID NUMBERS) LIST , MEETING NOTES \n");
+        System.out.println("MEETING ID NUMBER , MEETING DATE , MEETING ATTENDEE (ID NUMBERS) LIST , MEETING NOTES ");
         if (meetingList == null){
             throw new NullPointerException("Your contact list is empty.");
         }
         String meetingDataEntry = "";
         for (Meeting m:meetingList){
             meetingDataEntry = "\n"+m.getId()+","+ m.getDate().getTime()+",";
-            System.out.println(meetingDataEntry);
+            
         
             Object[] contactListForDataEntry;
             Object thisContact;
@@ -781,9 +776,10 @@ public class ContactManagerImpl implements ContactManager {
                 //do nothing
                 meetingDataEntry = meetingDataEntry;
             }
-            
-            fileWrite.write(meetingDataEntry+"");
+
         }
+        System.out.println("This id: "+meetingDataEntry);
+        fileWrite.write(meetingDataEntry+"");
 
         fileWrite.close();
         bufferWrite.close();

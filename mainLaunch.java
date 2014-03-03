@@ -81,6 +81,7 @@ public class mainLaunch {
          contactManager.getPastMeeting(339870630);
          System.out.println(pastMeeting.getId());
          
+         System.out.println("flush()");
         contactManager.flush();
         
     }
