@@ -3,68 +3,67 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ContactManager;
+
 import java.util.Calendar;
 import java.util.Set;
+
 /**
  *
  * @author Esha
  */
-public class MeetingImpl implements Meeting{
+public class MeetingImpl implements Meeting {
+
     private static int id;
     private Calendar date;
     private Set<Contact> setOfContacts;
 
-    
     /**
-     * Meetings have unique IDs so using Set interface for additional Set stipulations,
-     * that no two Meeting objects (e.g., m1 and m2) are equal (ie. it is never true 
-     * that m1.equals(m2). 
+     * Meetings have unique IDs so using Set interface for additional Set
+     * stipulations, that no two Meeting objects (e.g., m1 and m2) are equal
+     * (ie. it is never true that m1.equals(m2).
      *
      * @param id Meeting id
      * @param contacts meeting contacts
      * @param date meeting date
-     
-     **/
-    
-    
-    public MeetingImpl(int id, Set<Contact> contacts, Calendar date){
+     *
+     *
+     */
+    public MeetingImpl(int id, Set<Contact> contacts, Calendar date) {
         setId(id);
         setDate(date);
-        setContacts(contacts);  
+        setContacts(contacts);
     }
-    
-    
-    public int getId(){
+
+    public int getId() {
         return this.id;
     }
-    
-    public void setId(int id){
+
+    public void setId(int id) {
         this.id = id;
-       
+
     }
-    
-    public Calendar getDate(){
+
+    public Calendar getDate() {
         return this.date;
     }
-    
-    public void setDate(Calendar date){
+
+    public void setDate(Calendar date) {
         this.date = date;
     }
-    
+
     /**
-     * Return the details of people that attended the meeting.
-     * The list contains a minimum of one contact (if there were
-     * just two people: the user and the contact) and may contain an
-     * arbitrary number of them.
+     * Return the details of people that attended the meeting. The list contains
+     * a minimum of one contact (if there were just two people: the user and the
+     * contact) and may contain an arbitrary number of them.
+     *
      * @return the details of people that attended the meeting.
      */
-    public Set<Contact> getContacts(){
+    public Set<Contact> getContacts() {
         return this.setOfContacts; //check this implementation fits the documentation at a later stage.
     }
-    
-    public void setContacts(Set<Contact> contacts){
-        this.setOfContacts=contacts;
+
+    public void setContacts(Set<Contact> contacts) {
+        this.setOfContacts = contacts;
     }
 }
