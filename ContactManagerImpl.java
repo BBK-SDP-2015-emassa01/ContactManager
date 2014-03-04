@@ -19,11 +19,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeSet;
@@ -404,6 +406,8 @@ public class ContactManagerImpl implements ContactManager {
                 }
             }
         }
+        SortDate sortDate = new SortDate();
+        Collections.sort(listOfFutureMeetings, sortDate);
         return listOfFutureMeetings;
     }
 
@@ -430,6 +434,8 @@ public class ContactManagerImpl implements ContactManager {
             }
         }
         // else, if no meetings scheduled -- will return null.
+        SortDate sortDate = new SortDate();
+        Collections.sort(listOfFutureMeetings, sortDate);
         return listOfFutureMeetings;
     }
 
@@ -463,11 +469,14 @@ public class ContactManagerImpl implements ContactManager {
             contactMeetings = contactIDAndMeetingList.get(contact.getId());
             for (int i = 0; i < contactMeetings.size(); i++) {
                 if (contactMeetings.get(i).getDate().before(dateToday)) {
+                    System.out.println("got it");
                     PastMeeting toAdd = (PastMeeting) contactMeetings.get(i);
                     listOfPastMeetings.add(toAdd);
                 }
             }
         }
+        SortDate sortDate = new SortDate();
+        Collections.sort(listOfPastMeetings, sortDate);
         return listOfPastMeetings;
     }
 
@@ -728,7 +737,6 @@ public class ContactManagerImpl implements ContactManager {
             String contactDataEntry = "";
             for (Contact c : contactSet) {
                 contactDataEntry = c.getId() + "," + c.getName() + "," + c.getNotes();
-//            contactDataEntry = contactIDMap.get(c).getId()+","+ c.getName() +","+ c.getNotes();
                 System.out.println(contactDataEntry);
                 fileWrite.write("\n" + contactDataEntry);
             }
@@ -769,7 +777,7 @@ public class ContactManagerImpl implements ContactManager {
 
                     meetingDataEntry = meetingDataEntry + "," + notes;
                 }
-                //co nothing if FutureMeeting
+                //do nothing if FutureMeeting
             }
 
             System.out.println("This id: " + meetingDataEntry);

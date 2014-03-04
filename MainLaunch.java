@@ -26,6 +26,14 @@ public class MainLaunch {
     public void launch() throws FileNotFoundException, ParseException, IOException {
         ContactManagerImpl contactManager = new ContactManagerImpl();
         System.out.println("\n\nChecking method 'addNewContact()'");
+        
+        Contact Esha = new ContactImpl(2, "Esha", "OKworking");
+        System.out.println("Esha " + Esha);
+        contactManager.getContactSet().add(Esha);
+        System.out.println("getContactSet"+contactManager.getContactSet());
+        contactManager.getContactMap().put(Esha.getId(), Esha);
+        
+        
         contactManager.addNewContact("Esha", "Good");
         contactManager.addNewContact("Manoj", "Friendly");
         contactManager.addNewContact("Mum", "Employee of the Month");
@@ -47,10 +55,17 @@ public class MainLaunch {
         contactManager.addFutureMeeting(2018, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
         contactManager.addFutureMeeting(2019, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
         System.out.println("HERE IT IS!" + contactManager.getFutureMeetingList(new GregorianCalendar(2016, 02, 29, 15, 30)));
-
+        
+        contactManager.addNewPastMeeting(1, contactManager.getContactSet(), new GregorianCalendar(2011, 02, 29, 15, 30), "text");
+        contactManager.addNewPastMeeting(3, contactManager.getContactSet(), new GregorianCalendar(2010, 02, 29, 15, 30), "text");
+        contactManager.addNewPastMeeting(4, contactManager.getContactSet(), new GregorianCalendar(2009, 02, 29, 15, 30), "text");
+        contactManager.addNewPastMeeting(5 ,contactManager.getContactSet(), new GregorianCalendar(2008, 02, 29, 15, 30), "text");
+        System.out.println("HERE IT IS-->>>>!" + contactManager.getPastMeetingList(Esha));
+        
+        
         System.out.println("\n\nChecking method 'getFutureMeetingList()'");
-         //Contact Esha = new ContactImpl(2, "Esha", "OKworking");
-        //contactManager.getContactSet().add(Esha);
+         
+        //
         //System.out.println(contactManager.getFutureMeetingList(Esha).toString());
 
         System.out.println("\n\nChecking method 'getFutureMeetingList()'");
