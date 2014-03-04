@@ -636,8 +636,10 @@ public class ContactManagerImpl implements ContactManager {
             contactID = idNumber.nextInt(Integer.MAX_VALUE);
             System.out.println("Assined: " + name + " ID NUMBER: " + contactID);
             
-            if (!contactSet.contains(contactID)) {
+            for (Contact c:contactSet){
+            if (c.getId()!=contactID) {
                 contactIdIsTaken = false;
+            }
             }
         } while (contactIdIsTaken);
 
@@ -645,6 +647,7 @@ public class ContactManagerImpl implements ContactManager {
         contactSet.add(newContact);
         contactIDMap.put(newContact.getId(), newContact);
     }
+        
 
     /**
      * Returns a list containing the contacts that correspond to the IDs.
@@ -703,12 +706,14 @@ public class ContactManagerImpl implements ContactManager {
      */
     public void flush() {
         FileWriter fileWrite = null;
+        boolean createNewFile = true;
         try {
             File contactFile = new File("contacts.txt");
             if (!contactFile.exists()) {
-                boolean createNewFile = contactFile.createNewFile();
+                createNewFile = contactFile.createNewFile();
             }
-            fileWrite = new FileWriter("contacts.txt");
+            if(createNewFile)
+                fileWrite = new FileWriter("contacts.txt");
 
             //write to file the contacts and meetings
             //contacts have an ID a Name and Notes and are stored in the contactSet.
