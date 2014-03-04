@@ -172,10 +172,10 @@ public class ContactManagerImpl implements ContactManager {
                 //must close this once complete
                 file.close();
                 buffer.close();
-            }catch (IOException ex){
+            } catch (IOException ex) {
                 System.out.println("I/O exception. Buffer or File may have been 'null'.");
                 ex.printStackTrace();
-            } 
+            }
         }
     }
 
@@ -564,12 +564,12 @@ public class ContactManagerImpl implements ContactManager {
      */
     public void addMeetingNotes(int id, String text) {
         //check meeitng exists
-        for (int i = 0; i<meetingList.size(); i++){
-        if (meetingList.get(i).getId()==id) {
-            System.out.println("Found the meeting : " + id);
-        } else {
-            throw new IllegalArgumentException("That meeting ID does not exist. ");
-        }
+        for (int i = 0; i < meetingList.size(); i++) {
+            if (meetingList.get(i).getId() == id) {
+                System.out.println("Found the meeting : " + id);
+            } else {
+                throw new IllegalArgumentException("That meeting ID does not exist. ");
+            }
         }
         //get current date to compare it to meeting date
         Calendar dateNow = new GregorianCalendar();
@@ -635,11 +635,11 @@ public class ContactManagerImpl implements ContactManager {
             Random idNumber = new Random();
             contactID = idNumber.nextInt(Integer.MAX_VALUE);
             System.out.println("Assined: " + name + " ID NUMBER: " + contactID);
-            
-            for (Contact c:contactSet){
-            if (c.getId()!=contactID) {
-                contactIdIsTaken = false;
-            }
+
+            for (Contact c : contactSet) {
+                if (c.getId() != contactID) {
+                    contactIdIsTaken = false;
+                }
             }
         } while (contactIdIsTaken);
 
@@ -647,7 +647,6 @@ public class ContactManagerImpl implements ContactManager {
         contactSet.add(newContact);
         contactIDMap.put(newContact.getId(), newContact);
     }
-        
 
     /**
      * Returns a list containing the contacts that correspond to the IDs.
@@ -712,8 +711,9 @@ public class ContactManagerImpl implements ContactManager {
             if (!contactFile.exists()) {
                 createNewFile = contactFile.createNewFile();
             }
-            if(createNewFile)
+            if (createNewFile) {
                 fileWrite = new FileWriter("contacts.txt");
+            }
 
             //write to file the contacts and meetings
             //contacts have an ID a Name and Notes and are stored in the contactSet.
@@ -743,7 +743,7 @@ public class ContactManagerImpl implements ContactManager {
             }
             String meetingDataEntry = "";//StringBuffer() does not work when I parse the contacts and meetings from the contacts.txt file at startup.
             for (Meeting m : meetingList) {
-                meetingDataEntry = meetingDataEntry +"\n" + m.getId() + "," + m.getDate().getTime() + ",";
+                meetingDataEntry = meetingDataEntry + "\n" + m.getId() + "," + m.getDate().getTime() + ",";
 
                 Object[] contactListForDataEntry;
                 Object thisContact;
@@ -767,11 +767,11 @@ public class ContactManagerImpl implements ContactManager {
                         notes = "";
                     }
 
-                    meetingDataEntry = meetingDataEntry +"," + notes;
+                    meetingDataEntry = meetingDataEntry + "," + notes;
                 }
                 //co nothing if FutureMeeting
             }
-            
+
             System.out.println("This id: " + meetingDataEntry);
             fileWrite.write(meetingDataEntry + "");
         } catch (IOException e) {
