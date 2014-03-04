@@ -5,7 +5,6 @@
  */
 package ContactManager;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
 /**
