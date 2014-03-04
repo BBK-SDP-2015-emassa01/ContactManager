@@ -6,6 +6,7 @@
 
 package ContactManager;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -17,11 +18,11 @@ public class SortDate implements Comparator<Meeting> {
 
     @Override
     public int compare(Meeting o1, Meeting o2) {
-        if( o1.getDate() == null || o2.getDate() ==null){
-        throw new NullPointerException("You entered a null Meeting to compare.");
-    }
         if (!(o1 instanceof Meeting) || !(o2 instanceof Meeting)){
             throw new ClassCastException("Cannot cast this object to class 'Meeting' to carry out comparison.");
+        }
+        if( o1.getDate() == null || o2.getDate() ==null){
+        throw new NullPointerException("You entered a null Meeting to compare.");
         }
         return o1.getDate().compareTo(o2.getDate());
     }
