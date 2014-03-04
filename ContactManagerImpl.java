@@ -166,20 +166,16 @@ public class ContactManagerImpl implements ContactManager {
             }
 
         } catch (IOException e) {
-            file.close();
-            buffer.close();
             e.printStackTrace();
         } finally {
             try {
                 //must close this once complete
                 file.close();
                 buffer.close();
-            } catch (IOException ex) {
-                file.close();
-                buffer.close();
+            }catch (IOException ex){
                 System.out.println("I/O exception. Buffer or File may have been 'null'.");
                 ex.printStackTrace();
-            }
+            } 
         }
     }
 
@@ -270,8 +266,7 @@ public class ContactManagerImpl implements ContactManager {
 
         do {
             Random random = new Random();
-            generatedID = random.nextInt();
-            generatedID = Math.abs(generatedID);
+            generatedID = random.nextInt(Integer.MAX_VALUE);
             System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
             if (!meetingIDMap.containsKey(generatedID)) {
                 generatedIDIsTaken = false;
@@ -508,8 +503,7 @@ public class ContactManagerImpl implements ContactManager {
         boolean generatedPastMeetingIDTaken = true;
         do {
             Random random = new Random();
-            generatePastMeetingID = random.nextInt();
-            generatePastMeetingID = Math.abs(generatePastMeetingID);
+            generatePastMeetingID = random.nextInt(Integer.MAX_VALUE);
 
             if (!contactIDAndMeetingList.containsKey(generatePastMeetingID)) {
                 generatedPastMeetingIDTaken = false;
@@ -570,10 +564,13 @@ public class ContactManagerImpl implements ContactManager {
      */
     public void addMeetingNotes(int id, String text) {
         //check meeitng exists
-        if (!meetingList.contains(id)) {
+        for (int i = 0; i<meetingList.size(); i++){
+        if (meetingList.get(i).getId()==id) {
+            System.out.println("Found the meeting : " + id);
+        } else {
             throw new IllegalArgumentException("That meeting ID does not exist. ");
         }
-
+        }
         //get current date to compare it to meeting date
         Calendar dateNow = new GregorianCalendar();
 
@@ -636,9 +633,9 @@ public class ContactManagerImpl implements ContactManager {
         boolean contactIdIsTaken = true;
         do {
             Random idNumber = new Random();
-            contactID = idNumber.nextInt();
-            contactID = Math.abs(contactID);
+            contactID = idNumber.nextInt(Integer.MAX_VALUE);
             System.out.println("Assined: " + name + " ID NUMBER: " + contactID);
+            
             if (!contactSet.contains(contactID)) {
                 contactIdIsTaken = false;
             }
@@ -709,7 +706,7 @@ public class ContactManagerImpl implements ContactManager {
         try {
             File contactFile = new File("contacts.txt");
             if (!contactFile.exists()) {
-                contactFile.createNewFile();
+                boolean createNewFile = contactFile.createNewFile();
             }
             fileWrite = new FileWriter("contacts.txt");
 
@@ -739,9 +736,9 @@ public class ContactManagerImpl implements ContactManager {
             if (meetingList == null) {
                 throw new NullPointerException("Your contact list is empty.");
             }
-            String meetingDataEntry = "";
+            String meetingDataEntry = "";//StringBuffer() does not work when I parse the contacts and meetings from the contacts.txt file at startup.
             for (Meeting m : meetingList) {
-                meetingDataEntry = "\n" + m.getId() + "," + m.getDate().getTime() + ",";
+                meetingDataEntry = meetingDataEntry +"\n" + m.getId() + "," + m.getDate().getTime() + ",";
 
                 Object[] contactListForDataEntry;
                 Object thisContact;
@@ -765,13 +762,11 @@ public class ContactManagerImpl implements ContactManager {
                         notes = "";
                     }
 
-                    meetingDataEntry = meetingDataEntry + "," + notes;
-
-                } else if (m instanceof FutureMeeting) {
-                    //do nothing
+                    meetingDataEntry = meetingDataEntry +"," + notes;
                 }
-
+                //co nothing if FutureMeeting
             }
+            
             System.out.println("This id: " + meetingDataEntry);
             fileWrite.write(meetingDataEntry + "");
         } catch (IOException e) {
