@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -78,6 +79,9 @@ public class MainLaunch {
         contactManager.getMeetingMap().put(1235, pastMeeting);
         System.out.println("constructed pastmeetingimpl");
         contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2012, 01, 02), "Productive");
+        contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2011, 01, 02), "Productive");
+        contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2010, 01, 02), "Productive");
+        contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2009, 01, 02), "Productive");
         //contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
         //System.out.println(pastMeeting.getNotes());
         System.out.println("done this");
@@ -115,7 +119,15 @@ public class MainLaunch {
         contactManager.getMeetingMap().put(five.getId(), five);
         contactManager.getMeetingMap().put(six.getId(), six);
         System.out.println("Does the set contain esha?"+ contactManager.getContactSet().contains(Esha));
-        System.out.println("HERE IT IS-->>>>!" + contactManager.getFutureMeetingList(Esha));
+        List<Meeting> meetings = contactManager.getFutureMeetingList(Esha);
+        for (int i = 0; i<meetings.size(); i++){
+            System.out.println("yup"+meetings.get(i).getDate().getTime());
+        }
+        
+        List<PastMeeting> meetingsP = contactManager.getPastMeetingList(Esha);
+        for (int i = 0; i<meetingsP.size(); i++){
+            System.out.println(meetingsP.get(i).getDate().getTime());
+        }
 
         System.out.println("flush()");
         contactManager.flush();
