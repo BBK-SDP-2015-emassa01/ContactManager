@@ -798,7 +798,7 @@ public class ContactManagerImpl implements ContactManager {
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
-        }
+        }//did not use system.exit(0); because it would exit whenever the user flushed(), which could be an intermittent save rather than an exit.
     }
 
     //for testing
