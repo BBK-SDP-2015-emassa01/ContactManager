@@ -108,7 +108,6 @@ public class MainLaunch {
         System.out.println("Does the set contain esha?"+ contactManager.getContactSet().contains(Esha));
         System.out.println("HERE IT IS-->>>>!" + contactManager.getPastMeetingList(Esha));
         
-        Calendar future = new GregorianCalendar(2016, 01, 02);
         Meeting four = new FutureMeetingImpl(4, contactManager.getContactSet(), past);
         Meeting five = new FutureMeetingImpl(5, contactManager.getContactSet(), past);
         Meeting six = new FutureMeetingImpl(6, contactManager.getContactSet(), past);

@@ -177,7 +177,28 @@ public class ContactManagerImpl implements ContactManager {
             }
         }
     }
-
+    
+    /**
+     * adds a meeting to the meetingList, meetingIDMap and List of Meetings and contacts (contactIDAndMeetingList)
+     * @param m meeting the meeting to add
+     */
+    public void addToMeetingStructures(Meeting m){
+        meetingList.add(m);
+        meetingIDMap.put(m.getId(), m);
+        addListOfMeetingsToContact(m);
+    }
+    
+    
+    /**
+     * adds a contact to the contactSet, contctIDMap and List of Meetings and contacts (contactIDAndMeetingList)
+     * @param c contact  to add
+     */
+    public void addContactToStructures(Contact c){
+        contactSet.add(c);
+        contactIDMap.put(c.getId(), c);
+    }
+            
+            
     /**
      * adds a meeting to a contact's list of meetings, if it has not already
      * been added..
@@ -264,8 +285,7 @@ public class ContactManagerImpl implements ContactManager {
         boolean generatedIDIsTaken = true;
 
         do {
-            Random random = new Random();
-            generatedID = random.nextInt(Integer.MAX_VALUE);
+            generatedID = getRandomID();
             System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
             if (!meetingIDMap.containsKey(generatedID)) {
                 generatedIDIsTaken = false;
@@ -275,9 +295,7 @@ public class ContactManagerImpl implements ContactManager {
         // constructor, after all checks, create a future meeting.
         futureMeeting = new FutureMeetingImpl(generatedID, contacts, date);
         //add meeting to list of meetings
-        meetingList.add(futureMeeting);
-        meetingIDMap.put(futureMeeting.getId(), futureMeeting);
-        addListOfMeetingsToContact(futureMeeting);
+        addToMeetingStructures(futureMeeting);
 
         return generatedID;
     }
@@ -286,12 +304,22 @@ public class ContactManagerImpl implements ContactManager {
     public int addFutureMeeting(int id, Set<Contact> contacts, Calendar date) {
         Meeting futureMeeting = new FutureMeetingImpl(id, contacts, date);
         //add meeting to list of meetings
-        meetingList.add(futureMeeting);
-        meetingIDMap.put(futureMeeting.getId(), futureMeeting);
-        addListOfMeetingsToContact(futureMeeting);
+        addToMeetingStructures(futureMeeting);
         return id;
     }
-
+    
+    /**
+     * returns a random positive number to be assigned to an id
+     * @return id the number that will be returned
+     */
+    public int getRandomID(){
+            Random random = new Random();
+            int generatedID = random.nextInt(Integer.MAX_VALUE);
+            return generatedID;
+    }
+    
+    
+    
     /**
      * Returns the PAST meeting with the requested ID, or null if it there is
      * none.
@@ -508,8 +536,7 @@ public class ContactManagerImpl implements ContactManager {
         //create boolean to check the meetingID does not exist.
         boolean generatedPastMeetingIDTaken = true;
         do {
-            Random random = new Random();
-            generatePastMeetingID = random.nextInt(Integer.MAX_VALUE);
+            generatePastMeetingID = getRandomID();
 
             if (!contactIDAndMeetingList.containsKey(generatePastMeetingID)) {
                 generatedPastMeetingIDTaken = false;
@@ -520,9 +547,7 @@ public class ContactManagerImpl implements ContactManager {
             //contruct a new past meeting with the ID, contacts, date and notes
             Meeting pastMeeting = new PastMeetingImpl(generatePastMeetingID, contacts, date, text);
             //add meeting to the meeting list.
-            meetingList.add(pastMeeting);
-            meetingIDMap.put(pastMeeting.getId(), pastMeeting);
-            addListOfMeetingsToContact(pastMeeting);
+            addToMeetingStructures(pastMeeting);
         }
     }
 
@@ -530,9 +555,7 @@ public class ContactManagerImpl implements ContactManager {
     public void addNewPastMeeting(int ID, Set<Contact> contacts, Calendar date, String text) {
         Meeting pastMeeting = new PastMeetingImpl(ID, contacts, date, text);
         //add meeting to the meeting list.
-        meetingList.add(pastMeeting);
-        meetingIDMap.put(pastMeeting.getId(), pastMeeting);
-        addListOfMeetingsToContact(pastMeeting);
+        addToMeetingStructures(pastMeeting);
     }
 
     public void checkArgumentIsNotNull(Set<Contact> contacts) {
@@ -618,8 +641,7 @@ public class ContactManagerImpl implements ContactManager {
     //for testing
     public Contact addNewContact(int contactID, String name, String notes) {
         Contact newContact = new ContactImpl(contactID, name, notes);
-        contactSet.add(newContact);
-        contactIDMap.put(newContact.getId(), newContact);
+        addContactToStructures(newContact);
         return newContact;
     }
 
@@ -638,8 +660,7 @@ public class ContactManagerImpl implements ContactManager {
 
         boolean contactIdIsTaken = true;
         do {
-            Random idNumber = new Random();
-            contactID = idNumber.nextInt(Integer.MAX_VALUE);
+            contactID = getRandomID();
             System.out.println("Assined: " + name + " ID NUMBER: " + contactID);
 
             for (Contact c : contactSet) {
@@ -650,9 +671,11 @@ public class ContactManagerImpl implements ContactManager {
         } while (contactIdIsTaken);
 
         Contact newContact = new ContactImpl(contactID, name, notes);
-        contactSet.add(newContact);
-        contactIDMap.put(newContact.getId(), newContact);
+        addContactToStructures(newContact);
     }
+    
+    
+    
 
     /**
      * Returns a list containing the contacts that correspond to the IDs.
