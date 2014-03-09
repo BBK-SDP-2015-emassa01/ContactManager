@@ -78,7 +78,6 @@ public class ContactManagerImpl implements ContactManager {
             boolean contacts = false;
             boolean meetings = false;
 
-            //blank line that will provide itself as the output from the line found in 
             String line;
             while ((line = buffer.readLine()) != null) {
                 String[] lineItemsArray = line.split(",");
@@ -177,28 +176,30 @@ public class ContactManagerImpl implements ContactManager {
             }
         }
     }
-    
+
     /**
-     * adds a meeting to the meetingList, meetingIDMap and List of Meetings and contacts (contactIDAndMeetingList)
+     * adds a meeting to the meetingList, meetingIDMap and List of Meetings and
+     * contacts (contactIDAndMeetingList)
+     *
      * @param m meeting the meeting to add
      */
-    public void addToMeetingStructures(Meeting m){
+    public void addToMeetingStructures(Meeting m) {
         meetingList.add(m);
         meetingIDMap.put(m.getId(), m);
         addListOfMeetingsToContact(m);
     }
-    
-    
+
     /**
-     * adds a contact to the contactSet, contctIDMap and List of Meetings and contacts (contactIDAndMeetingList)
-     * @param c contact  to add
+     * adds a contact to the contactSet, contctIDMap and List of Meetings and
+     * contacts (contactIDAndMeetingList)
+     *
+     * @param c contact to add
      */
-    public void addContactToStructures(Contact c){
+    public void addContactToStructures(Contact c) {
         contactSet.add(c);
         contactIDMap.put(c.getId(), c);
     }
-            
-            
+
     /**
      * adds a meeting to a contact's list of meetings, if it has not already
      * been added..
@@ -248,7 +249,6 @@ public class ContactManagerImpl implements ContactManager {
                 thisList = contactIDAndMeetingList.get(thisContact.getId());
 
                 thisList.remove(m);
-                //contactIDAndMeetingList.put(thisContact.getId(), thisList);
             }
         }
         contactIDAndMeetingList.put(m.getId(), thisList); //link contact id to updatedmeeting list
@@ -269,7 +269,6 @@ public class ContactManagerImpl implements ContactManager {
         Meeting futureMeeting;
         int generatedID;
 
-        // check that the contacts are not null.
         checkArgumentIsNotNull(contacts);
         //check that the meeting is actually a future meeting (i.e., that time is valid). Use calendar class to validate the date
         this.date = new GregorianCalendar();
@@ -277,7 +276,6 @@ public class ContactManagerImpl implements ContactManager {
             throw new IllegalArgumentException("You entered a date in the past. Please try again: ");
         }
         //go through the entire Set of contacts and check that each and every one of them exists
-
         if (!contactSet.containsAll(contacts)) {
             throw new IllegalArgumentException("Unknown/non-existant contacts. ");
         }
@@ -300,26 +298,33 @@ public class ContactManagerImpl implements ContactManager {
         return generatedID;
     }
 
-    //for testing
+    /**
+     * Add a new meeting to be held in the future.
+     *
+     * @param contacts a list of contacts that will participate in the meeting
+     * @param date the date on which the meeting will take place
+     * @return the ID for the meeting
+     *
+     */
+    //for purposes of testing in the main method only
     public int addFutureMeeting(int id, Set<Contact> contacts, Calendar date) {
         Meeting futureMeeting = new FutureMeetingImpl(id, contacts, date);
         //add meeting to list of meetings
         addToMeetingStructures(futureMeeting);
         return id;
     }
-    
+
     /**
      * returns a random positive number to be assigned to an id
+     *
      * @return id the number that will be returned
      */
-    public int getRandomID(){
-            Random random = new Random();
-            int generatedID = random.nextInt(Integer.MAX_VALUE);
-            return generatedID;
+    public int getRandomID() {
+        Random random = new Random();
+        int generatedID = random.nextInt(Integer.MAX_VALUE);
+        return generatedID;
     }
-    
-    
-    
+
     /**
      * Returns the PAST meeting with the requested ID, or null if it there is
      * none.
@@ -415,9 +420,6 @@ public class ContactManagerImpl implements ContactManager {
         Calendar dateToday = new GregorianCalendar();
         //create a list of future meetings to return
         List<Meeting> listOfFutureMeetings = new ArrayList<Meeting>();
-        //possibly use a tree for chronological order
-        //Set<Meeting> chronologicalTreeFutureMeetings = new TreeSet<Meeting>();
-
         //check that the contact exists
         if (!contactSet.contains(contact)) {
             throw new IllegalArgumentException("This contact does not exist. ");
@@ -480,8 +482,6 @@ public class ContactManagerImpl implements ContactManager {
         //create a list of past meetings to return
         List<PastMeeting> listOfPastMeetings = new ArrayList<PastMeeting>();
 
-        //possibly use a tree for chronological order
-        //Set<PastMeeting> chronologicalTreePastMeetings = new TreeSet<PastMeeting>();
         //check that the contact exists
         if (!contactSet.contains(contact)) {
             throw new IllegalArgumentException("This contact does not exist. ");
@@ -550,26 +550,50 @@ public class ContactManagerImpl implements ContactManager {
             addToMeetingStructures(pastMeeting);
         }
     }
-
-    //for testing meeting
+ 
+    /**
+     * Create a new record for a meeting that took place in the past.
+     *
+     * @param contacts a list of participants
+     * @param date the date on which the meeting took place
+     * @param text messages to be added about the meeting.
+     */
+    //For testing addNewPastMeeting() only. 
     public void addNewPastMeeting(int ID, Set<Contact> contacts, Calendar date, String text) {
         Meeting pastMeeting = new PastMeetingImpl(ID, contacts, date, text);
         //add meeting to the meeting list.
         addToMeetingStructures(pastMeeting);
     }
 
+    /**
+     * Create a new record for a meeting that took place in the past.
+     *
+     * @param contacts a list of participants
+     * @throws NullPointerException if any of the arguments is null
+     */
     public void checkArgumentIsNotNull(Set<Contact> contacts) {
         if (contacts == null) {
             throw new NullPointerException("Please enter the contacts. ");
         }
     }
-
+    /**
+     * Create a new record for a meeting that took place in the past.
+     *
+     * @param date a date of meeting
+     * @throws NullPointerException if any of the arguments is null
+     */
     public void checkArgumentIsNotNull(Calendar date) {
         if (date == null) {
             throw new NullPointerException("Please enter a date for the meeting.");
         }
     }
-
+    
+    /**
+     * Create a new record for a meeting that took place in the past.
+     *
+     * @param text a note from a meeting, or note for a contact. 
+     * @throws NullPointerException if any of the arguments is null
+     */
     public void checkArgumentIsNotNull(String text) {
         if (text == null) {
             throw new NullPointerException("Please enter a note for the meeting: ");
@@ -638,7 +662,14 @@ public class ContactManagerImpl implements ContactManager {
         meetingIDMap.put(id, pMeeting);
     }
 
-    //for testing
+    /**
+     * Create a new contact with the specified name and notes.
+     * @param contactID the id number of the contact.
+     * @param name the name of the contact.
+     * @param notes notes to be added about the contact.
+     * @return a new Contact object
+     */
+    //For testing addNewContact() method in main script only.
     public Contact addNewContact(int contactID, String name, String notes) {
         Contact newContact = new ContactImpl(contactID, name, notes);
         addContactToStructures(newContact);
@@ -673,9 +704,6 @@ public class ContactManagerImpl implements ContactManager {
         Contact newContact = new ContactImpl(contactID, name, notes);
         addContactToStructures(newContact);
     }
-    
-    
-    
 
     /**
      * Returns a list containing the contacts that correspond to the IDs.
@@ -708,17 +736,12 @@ public class ContactManagerImpl implements ContactManager {
      * @throws NullPointerException if the parameter is null
      */
     public Set<Contact> getContacts(String name) {
-
         checkArgumentIsNotNull(name);
-
         Set<Contact> theseContacts = new HashSet<Contact>();;
-
         for (Contact c : contactSet) {
             if (c.getName().equals(name)) {
                 theseContacts.add(c);
-
             }
-
             if (theseContacts.isEmpty()) {
                 throw new NullPointerException("There are no contacts with that name.");
             }
@@ -727,7 +750,7 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
-     * Save all data to disk.
+     * Saves all data to disk.
      *
      * This method must be executed when the program is closed and when/if the
      * user requests it.
@@ -813,7 +836,11 @@ public class ContactManagerImpl implements ContactManager {
         }
     }
 
-    //method not used yet.
+    /* Method to search for and print out the name and id number of the contact provided within the contactSet to search.
+    * @param nameOfContactSetToSearch, the contactSet to search for the name
+    * @param name, contact name
+    */
+    //For testing purposes in a main() script.
     public void getContactIdFromSet(Set<Contact> nameOfContactSetToSearch, Contact name) {
         try {
             if (nameOfContactSetToSearch.contains(name)) {
@@ -824,19 +851,30 @@ public class ContactManagerImpl implements ContactManager {
         }//did not use system.exit(0); because it would exit whenever the user flushed(), which could be an intermittent save rather than an exit.
     }
 
-    //for testing
+    /* Getter for this.contactSet
+    * @return this.contactSet
+    */
     public Set<Contact> getContactSet() {
         return this.contactSet;
     }
 
+    /* Getter for this.meetingList
+    * @return this.meetingList
+    */
     public List<Meeting> getMeetingList() {
         return this.meetingList;
     }
 
+    /* Getter for this.meetingIDMap
+    * @return this.meetingIDMap
+    */
     public Map<Integer, Meeting> getMeetingMap() {
         return this.meetingIDMap;
     }
 
+    /* Getter for this.contactIDMap
+    * @return this.contactIDMap
+    */
     public Map<Integer, Contact> getContactMap() {
         return this.contactIDMap;
     }
