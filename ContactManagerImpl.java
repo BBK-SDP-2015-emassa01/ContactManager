@@ -55,11 +55,11 @@ public class ContactManagerImpl implements ContactManager {
         File path = new File("contacts.txt");
         File contactFile = new File(path.getAbsolutePath());
         if (contactFile.exists()) {
-            System.out.println("File found!");
+            System.out.println("Contacts.txt file found!");
             checkIfFileExists();
         }
         if (!contactFile.exists()) {
-            System.out.println("File not found.");
+            System.out.println("Contacts.txt file not found.");
 
         }
     }
@@ -83,22 +83,16 @@ public class ContactManagerImpl implements ContactManager {
                 String[] lineItemsArray = line.split(",");
 
                 if (lineItemsArray[0].equals("CONTACT ID NUMBER")) {
-                    System.out.println(lineItemsArray[0]);
                     contacts = true;
                     meetings = false;
                 } else if (lineItemsArray[0].equals("MEETING ID NUMBER")) {
-                    System.out.println(lineItemsArray[0]);
                     contacts = false;
                     meetings = true;
                 } else {
                     if ((contacts == true) && (meetings == false)) {
-                        System.out.println(lineItemsArray[0]);
                         int contactID = (Integer.parseInt(lineItemsArray[0]));
-                        System.out.println(lineItemsArray[0]);
                         String contactName = lineItemsArray[1];
-                        System.out.println(lineItemsArray[1]);
                         String contactNotes = lineItemsArray[2];
-                        System.out.println(contactNotes);
 
                         Contact thisContact = new ContactImpl(contactID, contactName, contactNotes);
                         contactSet.add(thisContact);
@@ -106,11 +100,8 @@ public class ContactManagerImpl implements ContactManager {
 
                     }
                     if ((meetings == true) && (contacts == false)) {
-
                         Set<Contact> meetingContacts;
-
                         int meetingID = Integer.parseInt(lineItemsArray[0]);
-                        System.out.println(meetingID);
 
                         //parse and construct calendar object
                         DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z YYYY");
@@ -119,8 +110,6 @@ public class ContactManagerImpl implements ContactManager {
                         Calendar calDate = new GregorianCalendar();
                         calDate.setTime(date);
 
-                        System.out.println("Date/time of meeting to enter: " + calDate.getTime());
-
                         String thisMeetingContacts = lineItemsArray[2];
                         String[] MeetingContacts = thisMeetingContacts.split(";");
 
@@ -128,12 +117,9 @@ public class ContactManagerImpl implements ContactManager {
 
                         for (int i = 0; i < MeetingContactsIds.length; i++) {
                             MeetingContactsIds[i] = Integer.parseInt(MeetingContacts[i].trim());
-                            System.out.println("Contact ID for meeting (gathered): " + MeetingContacts[i].trim());
                         }
                         meetingContacts = getContacts(MeetingContactsIds);
-
                         Calendar dateNow = new GregorianCalendar();
-                        System.out.println("Current date/time: " + dateNow);
 
                         if (calDate.after(dateNow)) {
                             //construct FutureMeetingImpl without notes
@@ -284,7 +270,6 @@ public class ContactManagerImpl implements ContactManager {
 
         do {
             generatedID = getRandomID();
-            System.out.println("\nAssined Meeting ID NUMBER: \n" + generatedID);
             if (!meetingIDMap.containsKey(generatedID)) {
                 generatedIDIsTaken = false;
             }
@@ -371,13 +356,12 @@ public class ContactManagerImpl implements ContactManager {
         Meeting meeting = meetingIDMap.get(id);
         if (meetingIDMap.containsKey(id)) {
             System.out.println("Found meeting: " + id);
-        }
-        if (meeting instanceof PastMeeting) {
-            throw new IllegalArgumentException("The id is already used for a past meeting.");
-        } else if (meeting instanceof FutureMeeting) {
-            result = (FutureMeetingImpl) meeting;
-            System.out.println("Retrieving future meeting..");
-
+            if (meeting instanceof PastMeeting) {
+                throw new IllegalArgumentException("The id is already used for a past meeting.");
+            } else if (meeting instanceof FutureMeeting) {
+                result = (FutureMeetingImpl) meeting;
+                System.out.println("Retrieving future meeting..");
+            }
         }
         return result;
     }
@@ -397,9 +381,7 @@ public class ContactManagerImpl implements ContactManager {
         } else {
             //return the meeting with the given id
             if (meetingIDMap.containsKey(id)) {
-                System.out.println("Found meeting: " + id);
                 result = meetingIDMap.get(id);
-
             }
         }
         return result;
@@ -494,7 +476,6 @@ public class ContactManagerImpl implements ContactManager {
             contactMeetings = contactIDAndMeetingList.get(contact.getId());
             for (int i = 0; i < contactMeetings.size(); i++) {
                 if (contactMeetings.get(i).getDate().before(dateToday)) {
-                    System.out.println("got it");
                     PastMeeting toAdd = (PastMeeting) contactMeetings.get(i);
                     listOfPastMeetings.add(toAdd);
                 }
@@ -550,7 +531,7 @@ public class ContactManagerImpl implements ContactManager {
             addToMeetingStructures(pastMeeting);
         }
     }
- 
+
     /**
      * Create a new record for a meeting that took place in the past.
      *
@@ -576,6 +557,7 @@ public class ContactManagerImpl implements ContactManager {
             throw new NullPointerException("Please enter the contacts. ");
         }
     }
+
     /**
      * Create a new record for a meeting that took place in the past.
      *
@@ -587,11 +569,11 @@ public class ContactManagerImpl implements ContactManager {
             throw new NullPointerException("Please enter a date for the meeting.");
         }
     }
-    
+
     /**
      * Create a new record for a meeting that took place in the past.
      *
-     * @param text a note from a meeting, or note for a contact. 
+     * @param text a note from a meeting, or note for a contact.
      * @throws NullPointerException if any of the arguments is null
      */
     public void checkArgumentIsNotNull(String text) {
@@ -664,6 +646,7 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * Create a new contact with the specified name and notes.
+     *
      * @param contactID the id number of the contact.
      * @param name the name of the contact.
      * @param notes notes to be added about the contact.
@@ -692,7 +675,6 @@ public class ContactManagerImpl implements ContactManager {
         boolean contactIdIsTaken = true;
         do {
             contactID = getRandomID();
-            System.out.println("Assined: " + name + " ID NUMBER: " + contactID);
 
             for (Contact c : contactSet) {
                 if (c.getId() != contactID) {
@@ -770,7 +752,6 @@ public class ContactManagerImpl implements ContactManager {
             //write to file the contacts and meetings
             //contacts have an ID a Name and Notes and are stored in the contactSet.
             //Write headers:
-            System.out.println("CONTACT ID NUMBER , CONTACT NAME , CONTACT NOTES");
             fileWrite.write("CONTACT ID NUMBER,CONTACT NAME,CONTACT NOTES,");
 
             if (contactSet == null) {
@@ -780,14 +761,12 @@ public class ContactManagerImpl implements ContactManager {
             String contactDataEntry = "";
             for (Contact c : contactSet) {
                 contactDataEntry = c.getId() + "," + c.getName() + "," + c.getNotes();
-                System.out.println(contactDataEntry);
                 fileWrite.write("\n" + contactDataEntry);
             }
             fileWrite.write("\n");
 
             //meetings have an ID a Date and Contacts. Notes are associated with PastMeeting. Meetings are stored in the meetingList.
             //Write headers:
-            System.out.println("MEETING ID NUMBER , MEETING DATE , MEETING ATTENDEE (ID NUMBERS) LIST , MEETING NOTES ");
             fileWrite.write("MEETING ID NUMBER,MEETING DATE,MEETING ATTENDEE (ID NUMBERS) LIST,MEETING NOTES");
             if (meetingList == null) {
                 throw new NullPointerException("Your contact list is empty.");
@@ -823,7 +802,6 @@ public class ContactManagerImpl implements ContactManager {
                 //do nothing if FutureMeeting
             }
 
-            System.out.println("This id: " + meetingDataEntry);
             fileWrite.write(meetingDataEntry + "");
         } catch (IOException e) {
             System.out.println("An error has occurred");
@@ -837,14 +815,13 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /* Method to search for and print out the name and id number of the contact provided within the contactSet to search.
-    * @param nameOfContactSetToSearch, the contactSet to search for the name
-    * @param name, contact name
-    */
+     * @param nameOfContactSetToSearch, the contactSet to search for the name
+     * @param name, contact name
+     */
     //For testing purposes in a main() script.
     public void getContactIdFromSet(Set<Contact> nameOfContactSetToSearch, Contact name) {
         try {
             if (nameOfContactSetToSearch.contains(name)) {
-                System.out.println("The ID of contact " + name.getName() + " is " + name.getId());
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -852,29 +829,29 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /* Getter for this.contactSet
-    * @return this.contactSet
-    */
+     * @return this.contactSet
+     */
     public Set<Contact> getContactSet() {
         return this.contactSet;
     }
 
     /* Getter for this.meetingList
-    * @return this.meetingList
-    */
+     * @return this.meetingList
+     */
     public List<Meeting> getMeetingList() {
         return this.meetingList;
     }
 
     /* Getter for this.meetingIDMap
-    * @return this.meetingIDMap
-    */
+     * @return this.meetingIDMap
+     */
     public Map<Integer, Meeting> getMeetingMap() {
         return this.meetingIDMap;
     }
 
     /* Getter for this.contactIDMap
-    * @return this.contactIDMap
-    */
+     * @return this.contactIDMap
+     */
     public Map<Integer, Contact> getContactMap() {
         return this.contactIDMap;
     }
