@@ -55,11 +55,11 @@ public class ContactManagerImpl implements ContactManager {
         File path = new File("contacts.txt");
         File contactFile = new File(path.getAbsolutePath());
         if (contactFile.exists()) {
-            System.out.println("Contacts.txt file found!");
+            System.out.println("Contacts.txt file found. \nReading from and writing to this file ...");
             checkIfFileExists();
         }
         if (!contactFile.exists()) {
-            System.out.println("Contacts.txt file not found.");
+            System.out.println("Contacts.txt file not found. \nCreating a new 'contacts.txt' file ...");
 
         }
     }

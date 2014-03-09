@@ -27,12 +27,12 @@ public class MainLaunch {
 
     public void launch() throws FileNotFoundException, ParseException, IOException {
         ContactManagerImpl contactManager = new ContactManagerImpl();
-        System.out.println("\n\nChecking method 'addNewContact()'");
+        //System.out.println("\n\nChecking method 'addNewContact()'");
 
         Contact Esha = new ContactImpl(2, "Esha", "OKworking");
-        System.out.println("Esha " + Esha);
+        //System.out.println("Esha " + Esha);
         contactManager.getContactSet().add(Esha);
-        System.out.println("getContactSet" + contactManager.getContactSet());
+        //System.out.println("getContactSet" + contactManager.getContactSet());
         contactManager.getContactMap().put(Esha.getId(), Esha);
 
         contactManager.addNewContact("Esha", "Good");
@@ -50,12 +50,12 @@ public class MainLaunch {
 //         System.out.println(p instanceof PastMeeting);
 //         System.out.println(p instanceof FutureMeeting);
         //contactManager.flush();
-        System.out.println("\n\nChecking method 'addFutureMeeting()'");
+        //System.out.println("\n\nChecking method 'addFutureMeeting()'");
         contactManager.addFutureMeeting(contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
         contactManager.addFutureMeeting(contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
         contactManager.addFutureMeeting(2018, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
         contactManager.addFutureMeeting(2019, contactManager.getContactSet(), new GregorianCalendar(2016, 02, 29, 15, 30));
-        System.out.println("HERE IT IS!" + contactManager.getFutureMeetingList(new GregorianCalendar(2016, 02, 29, 15, 30)));
+        //System.out.println("HERE IT IS!" + contactManager.getFutureMeetingList(new GregorianCalendar(2016, 02, 29, 15, 30)));
 
         contactManager.addNewPastMeeting(1, contactManager.getContactSet(), new GregorianCalendar(2011, 02, 29, 15, 30), "text");
         contactManager.addNewPastMeeting(3, contactManager.getContactSet(), new GregorianCalendar(2010, 02, 29, 15, 30), "text");
@@ -63,11 +63,11 @@ public class MainLaunch {
         contactManager.addNewPastMeeting(5, contactManager.getContactSet(), new GregorianCalendar(2008, 02, 29, 15, 30), "text");
         
 
-        System.out.println("\n\nChecking method 'getFutureMeetingList()'");
+        //System.out.println("\n\nChecking method 'getFutureMeetingList()'");
 
         //
         //System.out.println(contactManager.getFutureMeetingList(Esha).toString());
-        System.out.println("\n\nChecking method 'getFutureMeetingList()'");
+        //System.out.println("\n\nChecking method 'getFutureMeetingList()'");
         //Object [] meetings = contactManager.getFutureMeetingList(Esha).toArray();
 //         for (int i = 0; i< meetings.length; i++){
 //             Meeting m = (MeetingImpl) meetings[i];
@@ -77,23 +77,23 @@ public class MainLaunch {
         Meeting pastMeeting = new PastMeetingImpl(1235, contactManager.getContactSet(), new GregorianCalendar(2012, 01, 02), "Productive");
         contactManager.getMeetingList().add(pastMeeting);
         contactManager.getMeetingMap().put(1235, pastMeeting);
-        System.out.println("constructed pastmeetingimpl");
+        //System.out.println("constructed pastmeetingimpl");
         contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2012, 01, 02), "Productive");
         contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2011, 01, 02), "Productive");
         contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2010, 01, 02), "Productive");
         contactManager.addNewPastMeeting(contactManager.getContactSet(), new GregorianCalendar(2009, 01, 02), "Productive");
         //contactManager.addNewPastMeeting(contactManager.contactSet, new GregorianCalendar(2012, 01, 02), "Productive");
         //System.out.println(pastMeeting.getNotes());
-        System.out.println("done this");
-        System.out.println("instance contactset length = " + contactManager.getContactSet().size());
-        System.out.println("instance contactidmap length = " + contactManager.getContactMap().size());
-        System.out.println("getFutureMeeting()" + contactManager.getFutureMeeting(2016));
-        System.out.println("meeting ids past" + contactManager.getMeetingList().get(0).getId());
-        System.out.println("\n\ngetPastMeeting()" + contactManager.getPastMeeting(2));
+//        System.out.println("done this");
+//        System.out.println("instance contactset length = " + contactManager.getContactSet().size());
+//        System.out.println("instance contactidmap length = " + contactManager.getContactMap().size());
+//        System.out.println("getFutureMeeting()" + contactManager.getFutureMeeting(2016));
+//        System.out.println("meeting ids past" + contactManager.getMeetingList().get(0).getId());
+//        System.out.println("\n\ngetPastMeeting()" + contactManager.getPastMeeting(2));
 
 //         System.out.println("getPastMeeting() number check");
         contactManager.getPastMeeting(339870630);
-        System.out.println(pastMeeting.getId());
+        //System.out.println(pastMeeting.getId());
         
         Calendar past = new GregorianCalendar(2012, 01, 02);
         Meeting one = new PastMeetingImpl(1, contactManager.getContactSet(), past,"Google");
@@ -105,8 +105,8 @@ public class MainLaunch {
         contactManager.getMeetingMap().put(one.getId(), one);
         contactManager.getMeetingMap().put(two.getId(), two);
         contactManager.getMeetingMap().put(three.getId(), three);
-        System.out.println("Does the set contain esha?"+ contactManager.getContactSet().contains(Esha));
-        System.out.println("HERE IT IS-->>>>!" + contactManager.getPastMeetingList(Esha));
+//        System.out.println("Does the set contain esha?"+ contactManager.getContactSet().contains(Esha));
+//        System.out.println("HERE IT IS-->>>>!" + contactManager.getPastMeetingList(Esha));
         
         Meeting four = new FutureMeetingImpl(4, contactManager.getContactSet(), past);
         Meeting five = new FutureMeetingImpl(5, contactManager.getContactSet(), past);
@@ -117,18 +117,18 @@ public class MainLaunch {
         contactManager.getMeetingMap().put(four.getId(), four);
         contactManager.getMeetingMap().put(five.getId(), five);
         contactManager.getMeetingMap().put(six.getId(), six);
-        System.out.println("Does the set contain esha?"+ contactManager.getContactSet().contains(Esha));
+        //System.out.println("Does the set contain esha?"+ contactManager.getContactSet().contains(Esha));
         List<Meeting> meetings = contactManager.getFutureMeetingList(Esha);
         for (int i = 0; i<meetings.size(); i++){
-            System.out.println("yup"+meetings.get(i).getDate().getTime());
+            //System.out.println("yup"+meetings.get(i).getDate().getTime());
         }
         
         List<PastMeeting> meetingsP = contactManager.getPastMeetingList(Esha);
         for (int i = 0; i<meetingsP.size(); i++){
-            System.out.println(meetingsP.get(i).getDate().getTime());
+            //System.out.println(meetingsP.get(i).getDate().getTime());
         }
 
-        System.out.println("flush()");
+        //System.out.println("flush()");
         contactManager.flush();
 
     }
